@@ -3,7 +3,7 @@
 # Create your views here.
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Question, Choice
+from .models import Question, Choice, TreeInfo
 from django.urls import reverse, reverse_lazy
 from django.views import View, generic
 from django.utils import timezone
@@ -11,11 +11,11 @@ from utils import get_object_or_404
 
 class IndexView(generic.ListView):
     template_name = "TreeInfo/index.html"
-    context_object_name = "latest_question_list"
+    context_object_name = "tree_info_list"
 
     def get_queryset(self):
-        """Return the last five published questions."""
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
+        """Return the complete list of available trees."""
+        return TreeInfo.objects.filter(published=True).order_by("name")
 
 class DetailView(generic.DetailView):
     model = Question
