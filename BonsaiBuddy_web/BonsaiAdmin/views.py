@@ -1,24 +1,25 @@
 from django.shortcuts import render
 from django.views.generic.edit import FormView
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from .forms import CreateForm
 from django.urls import reverse_lazy
 from django.views.generic import View
 from mongoengine.errors import NotUniqueError
 from django.contrib import messages
 
-class IndexView(View):
+class IndexView(PermissionRequiredMixin, View):
+    permission_required = 'TreeInfo.change_content'
+
     def get(self, request):
         return render(request, "BonsaiAdmin/index.html")
 
 # Create your views here.
-class CreateTreeInfoFormView(UserPassesTestMixin, FormView):
+class CreateTreeInfoFormView(PermissionRequiredMixin, FormView):
+    permission_required = 'TreeInfo.change_content'
+
     template_name = 'BonsaiAdmin/create_treeinfo.html'
     form_class = CreateForm
     success_url = reverse_lazy("BonsaiAdmin:index")
-
-    def test_func(self):
-        return self.request.user.has_perm('TreeInfo.change_content')
 
     def form_valid(self, form):
         try:
