@@ -3,9 +3,9 @@ from django.test import TestCase
 import mongoengine
 from BonsaiBuddy import settings
 
-def get_object_or_404(klass, pk):
+def get_object_or_404(klass, **kwargs):
     try:
-        obj = klass.objects.get(pk=pk)
+        obj = klass.objects.get(**kwargs)
     except klass.DoesNotExist:
         raise Http404(f"{klass.__name__} does not exist")
     return obj

@@ -6,7 +6,6 @@ from django.shortcuts import render
 from .models import Question, Choice, TreeInfo
 from django.urls import reverse, reverse_lazy
 from django.views import View, generic
-from django.utils import timezone
 from utils import get_object_or_404
 
 class IndexView(generic.ListView):
@@ -17,14 +16,14 @@ class IndexView(generic.ListView):
         """Return the complete list of available trees."""
         return TreeInfo.objects.filter(published=True).order_by("name")
 
-class DetailView(generic.DetailView):
-    model = Question
+class DetailView(View):
+    model = TreeInfo
     template_name = "TreeInfo/detail.html"
-    context_object_name = "question"
+    context_object_name = "tree_info"
 
-    def get_queryset(self):
-        """Return the last five published questions."""
-        return Question.objects.filter(pub_date__lte=timezone.now())
+    def get(self, request, pk):
+        question = get_object_or_404(self.model, name=pk)
+        return render(request, self.template_name, {self.context_object_name: question})
 
 class ResultsView(DetailView):
     template_name = "TreeInfo/results.html"
