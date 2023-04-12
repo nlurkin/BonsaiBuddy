@@ -1,5 +1,15 @@
 {% extends "base_generic.html" %}
 
+{% block message %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 <form action="{% url 'BonsaiAdmin:treeinfo_create' %}" method="post">
     {% csrf_token %}

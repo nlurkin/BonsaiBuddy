@@ -4,6 +4,9 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from .forms import CreateForm
 from django.urls import reverse_lazy
 from django.views.generic import View
+from mongoengine.errors import NotUniqueError
+from django.contrib import messages
+
 class IndexView(View):
     def get(self, request):
         return render(request, "BonsaiAdmin/index.html")
@@ -18,5 +21,9 @@ class CreateTreeInfoFormView(UserPassesTestMixin, FormView):
         return self.request.user.has_perm('TreeInfo.change_content')
 
     def form_valid(self, form):
-        form.create()
+        try:
+            form.create()
+        except NotUniqueError:
+            messages.error(self.request, "Tree already exists in database.")
+            return super().form_invalid(form)
         return super().form_valid(form)
