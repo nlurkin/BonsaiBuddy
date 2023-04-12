@@ -1,0 +1,17 @@
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'TreeInfo/style.css' %}">
+</head>
+<body>
+    {% if latest_question_list %}
+    <ul>
+        {% for question in latest_question_list %}
+        <li><a href="{% url 'TreeInfo:detail' question.id %}">{{ question.question_text }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No TreeInfo are available.</p>
+    {% endif %}
+</body>
+</html>
