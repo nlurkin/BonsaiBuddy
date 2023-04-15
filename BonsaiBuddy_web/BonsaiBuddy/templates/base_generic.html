@@ -15,15 +15,17 @@
       {% block sidebar %}
         <ul class="sidebar-nav">
           {% for item in menu_items%}
-            {% if item.itype == "submenu" %}
-              <li>{{ item.display }}</li>
-              <ul class="sidebar-nav">
-                {% for subitem in item.submenu %}
-                  <li><a href="{% url subitem.urlref %}">{{ subitem.display }}</a></li>
-                {% endfor %}
-              </ul>
-            {% else  %}
-              <li><a href="{% url item.urlref %}">{{ item.display }}</a></li>
+            {% if item.permission is None or item.permission in perms %}
+              {% if item.itype == "submenu" %}
+                <li>{{ item.display }}</li>
+                <ul class="sidebar-nav">
+                  {% for subitem in item.submenu %}
+                    <li><a href="{% url subitem.urlref %}">{{ subitem.display }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% else  %}
+                <li><a href="{% url item.urlref %}">{{ item.display }}</a></li>
+              {% endif %}
             {% endif %}
           {% endfor %}
         </ul>
