@@ -1,8 +1,9 @@
-from BonsaiBuddy.menus import MenuItem
+from BonsaiBuddy.menus import MenuItem, MenuMixin
 
-menu_context = {"menu_items": [
-    MenuItem("Admin", "BonsaiAdmin:index"),
-    MenuItem("TreeInfo", submenu=[
-        MenuItem("Create", "BonsaiAdmin:treeinfo_create")
-    ])
-]}
+class AdminMenuMixin(MenuMixin):
+    menu_context = {"menu_items": [
+        MenuItem("Admin", "BonsaiAdmin:index"),
+        MenuItem("TreeInfo", submenu=[
+            MenuItem("Create", "BonsaiAdmin:treeinfo_create")
+        ])
+    ]}
