@@ -1,9 +1,6 @@
-<html>
-<head>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'TreeInfo/style.css' %}">
-</head>
-<body>
+{% extends "base_generic.html" %}
+
+{% block content %}
     {% if tree_info_list %}
     <ul>
         {% for tree in tree_info_list %}
@@ -13,5 +10,4 @@
     {% else %}
     <p>No TreeInfo are available.</p>
     {% endif %}
-</body>
-</html>
+{% endblock %}
