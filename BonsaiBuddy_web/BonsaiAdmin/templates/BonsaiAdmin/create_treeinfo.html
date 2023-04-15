@@ -11,7 +11,11 @@
 {% endblock %}
 
 {% block content %}
+{% if which_action == "create" %}
 <form action="{% url 'BonsaiAdmin:treeinfo_create' %}" method="post">
+{% else %}
+<form action="{% url 'BonsaiAdmin:treeinfo_update' pk %}" method="post">
+{% endif %}
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit">

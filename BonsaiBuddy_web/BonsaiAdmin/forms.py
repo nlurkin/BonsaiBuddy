@@ -10,3 +10,8 @@ class CreateForm(forms.Form):
     def create(self):
         q = TreeInfo(**self.cleaned_data)
         q.save()
+
+    def update(self):
+        pk = self.cleaned_data["name"]
+        original = TreeInfo.objects.get(name=pk)
+        original.update(**self.cleaned_data)
