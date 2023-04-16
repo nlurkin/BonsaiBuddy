@@ -1,6 +1,7 @@
 from BonsaiBuddy.menus import MenuItem, MenuMixin
+import copy
 
 class AdminMenuMixin(MenuMixin):
-    menu_context = {**MenuMixin.menu_context}
+    menu_context = MenuMixin.get_init_menu_context()
     menu_context["TreeInfo"][1].set_submenu([MenuItem("Create", "BonsaiAdmin:treeinfo_create")])
 

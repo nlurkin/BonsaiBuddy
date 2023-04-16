@@ -1,3 +1,5 @@
+import copy
+
 class MenuItem(object):
     def __init__(self, display, urlref=None, submenu=None, permission=None):
         if submenu:
@@ -27,3 +29,7 @@ class MenuMixin(object):
 
     def build_menu_context(self):
         return {"menu_items": [v[1] for v in sorted(self.menu_context.values(), key=lambda x: x[0])]}
+
+    @staticmethod
+    def get_init_menu_context():
+        return {**copy.deepcopy(MenuMixin.menu_context)}
