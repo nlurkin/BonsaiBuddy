@@ -2,7 +2,7 @@ import mongoengine
 from django.db import models
 
 
-class MyModel(models.Model):
+class TreeInfoPermissionModel(models.Model):
     class Meta:
         permissions = (
             ('change_content', 'Content administrators'),
