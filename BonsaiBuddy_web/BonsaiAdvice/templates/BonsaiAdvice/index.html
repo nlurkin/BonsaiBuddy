@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if bonsai_techniques %}
+    <ul>
+        {% for technique in bonsai_techniques %}
+        <!-- <li><a href="{% url 'TreeInfo:detail' tree.name %}">{{ tree.name }}</a></li> -->
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No techniques are available.</p>
+    {% endif %}
+{% endblock %}

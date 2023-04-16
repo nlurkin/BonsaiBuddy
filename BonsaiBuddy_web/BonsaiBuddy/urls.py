@@ -22,6 +22,7 @@ urlpatterns = [
     path("", RedirectView.as_view(pattern_name="TreeInfo:index")),
     path("TreeInfo/", include("TreeInfo.urls")),
     path("admin/", include("BonsaiAdmin.urls")),
+    path("advice/", include("BonsaiAdvice.urls")),
     path('djangoadmin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
