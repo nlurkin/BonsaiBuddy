@@ -4,4 +4,7 @@
     <h1>{{ tree_info.name }}</h1>
     {{ tree_info.latin_name}}
     <p>{{ tree_info.description}}</p>
+    {% if 'TreeInfo.change_content' in perms %}
+    <p><a href="{% url 'BonsaiAdmin:treeinfo_update' pk=tree_info.name %}">Update</a></p>
+    {% endif %}
 {% endblock %}
