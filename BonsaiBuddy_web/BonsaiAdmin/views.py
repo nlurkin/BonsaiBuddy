@@ -14,7 +14,7 @@ class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
     permission_required = 'TreeInfo.change_content'
 
     def get(self, request):
-        return render(request, "BonsaiAdmin/index.html", self.menu_context)
+        return render(request, "BonsaiAdmin/index.html", self.build_menu_context())
 
 # Create your views here.
 class TreeInfoFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
