@@ -22,4 +22,4 @@ class DetailView(TreeInfoMenuMixin, View):
 
     def get(self, request, pk):
         question = get_object_or_404(self.model, name=pk)
-        return render(request, self.template_name, {**self.menu_context, self.context_object_name: question})
+        return render(request, self.template_name, {**self.build_menu_context(), self.context_object_name: question})
