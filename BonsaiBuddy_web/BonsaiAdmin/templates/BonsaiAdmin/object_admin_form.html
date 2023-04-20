@@ -12,9 +12,9 @@
 
 {% block content %}
 {% if which_action == "create" %}
-<form action="{% url 'BonsaiAdmin:technique_create' %}" method="post">
+<form action="{% url rev_url %}" method="post">
 {% else %}
-<form action="{% url 'BonsaiAdmin:technique_update' pk %}" method="post">
+<form action="{% url rev_url pk %}" method="post">
 {% endif %}
     {% csrf_token %}
     {{ form.as_p }}

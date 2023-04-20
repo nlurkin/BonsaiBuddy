@@ -21,7 +21,7 @@ class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
 class TreeInfoFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
     permission_required = 'TreeInfo.change_content'
 
-    template_name = 'BonsaiAdmin/create_treeinfo.html'
+    template_name = 'BonsaiAdmin/object_admin_form.html'
     form_class = TreeInfoForm
     success_url = reverse_lazy("BonsaiAdmin:index")
 
@@ -29,8 +29,10 @@ class TreeInfoFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
         top = super().get_context_data(**kwargs)
         if "pk" in top:
             top["which_action"] = "update"
+            top["rev_url"] = 'BonsaiAdmin:treeinfo_update'
         else:
             top["which_action"] = "create"
+            top["rev_url"] = 'BonsaiAdmin:treeinfo_create'
         return top
 
     def get(self, request, *args, **kwargs):
@@ -53,7 +55,7 @@ class TreeInfoFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
 class BonsaiTechniqueFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
     permission_required = 'BonsaiAdvice.change_content'
 
-    template_name = 'BonsaiAdmin/create_technique.html'
+    template_name = 'BonsaiAdmin/object_admin_form.html'
     form_class = BonsaiTechniqueForm
     success_url = reverse_lazy("BonsaiAdmin:index")
 
@@ -61,8 +63,10 @@ class BonsaiTechniqueFormView(AdminMenuMixin, PermissionRequiredMixin, FormView)
         top = super().get_context_data(**kwargs)
         if "pk" in top:
             top["which_action"] = "update"
+            top["rev_url"] = 'BonsaiAdmin:technique_update'
         else:
             top["which_action"] = "create"
+            top["rev_url"] = 'BonsaiAdmin:technique_update'
         return top
 
     def get(self, request, *args, **kwargs):
