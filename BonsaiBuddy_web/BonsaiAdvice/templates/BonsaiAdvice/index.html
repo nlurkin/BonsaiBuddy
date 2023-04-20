@@ -4,7 +4,7 @@
     {% if bonsai_techniques %}
     <ul>
         {% for technique in bonsai_techniques %}
-        <!-- <li><a href="{% url 'TreeInfo:detail' tree.name %}">{{ tree.name }}</a></li> -->
+        <li><a href="{% url 'BonsaiAdvice:technique_detail' technique.short_name %}">{{ technique.display_name }}</a></li>
         {% endfor %}
     </ul>
     {% else %}
