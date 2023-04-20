@@ -68,9 +68,9 @@ class BonsaiTechniqueFormView(AdminMenuMixin, PermissionRequiredMixin, FormView)
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if "pk" in context:
-            tree = get_object_or_404(BonsaiTechnique, name=context["pk"])
+            tree = get_object_or_404(BonsaiTechnique, short_name=context["pk"])
             form = self.form_class(initial={**tree.to_mongo().to_dict(), "update": True})
-            form.fields["name"].widget.attrs["readonly"] = True
+            form.fields["short_name"].widget.attrs["readonly"] = True
             context['form'] = form
 
         return self.render_to_response(context)
