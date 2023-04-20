@@ -15,7 +15,7 @@
     {% if bonsai_objectives %}
     <ul>
         {% for objective in bonsai_objectives %}
-        <li><a href="">{{ objective.display_name }}</a></li>
+        <li><a href="{% url 'BonsaiAdvice:objective_detail' objective.short_name %}">{{ objective.display_name }}</a></li>
         {% endfor %}
     </ul>
     {% else %}
