@@ -17,68 +17,51 @@ class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
     def get(self, request):
         return render(request, "BonsaiAdmin/index.html", self.build_menu_context())
 
+class MyFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
+    success_url = reverse_lazy("BonsaiAdmin:index")
+    template_name = 'BonsaiAdmin/object_admin_form.html'
+
+    def get_context_data(self, **kwargs):
+        top = super().get_context_data(**kwargs)
+        if "pk" in top:
+            top["rev_url"] = f"BonsaiAdmin:{self.url_update_name}"
+        else:
+            top["rev_url"] = f"BonsaiAdmin:{self.url_create_name}"
+        return top
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        if "pk" in context:
+            kwargs = {self.index_name: context["pk"]}
+            obj_instance = get_object_or_404(self.object_class, **kwargs)
+            form = self.form_class(initial={**obj_instance.to_mongo().to_dict(), "update": True})
+            form.fields[self.index_name].widget.attrs["readonly"] = True
+            context['form'] = form
+
+        return self.render_to_response(context)
+
+    def form_valid(self, form):
+        try:
+            form.create_update()
+        except NotUniqueError:
+            messages.error(self.request, f"{self.object_class.__name__} already exists in database.")
+            return super().form_invalid(form)
+        return super().form_valid(form)
+
 # Create your views here.
-class TreeInfoFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
+class TreeInfoFormView(MyFormView):
     permission_required = 'TreeInfo.change_content'
-
-    template_name = 'BonsaiAdmin/object_admin_form.html'
+    url_update_name = "treeinfo_update"
+    url_create_name = "treeinfo_create"
     form_class = TreeInfoForm
-    success_url = reverse_lazy("BonsaiAdmin:index")
+    index_name = "name"
+    object_class = TreeInfo
 
-    def get_context_data(self, **kwargs):
-        top = super().get_context_data(**kwargs)
-        if "pk" in top:
-            top["rev_url"] = 'BonsaiAdmin:treeinfo_update'
-        else:
-            top["rev_url"] = 'BonsaiAdmin:treeinfo_create'
-        return top
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        if "pk" in context:
-            tree = get_object_or_404(TreeInfo, name=context["pk"])
-            form = self.form_class(initial={**tree.to_mongo().to_dict(), "update": True})
-            form.fields["name"].widget.attrs["readonly"] = True
-            context['form'] = form
-
-        return self.render_to_response(context)
-
-    def form_valid(self, form):
-        try:
-            form.create_update()
-        except NotUniqueError:
-            messages.error(self.request, "Tree already exists in database.")
-            return super().form_invalid(form)
-        return super().form_valid(form)
-class BonsaiTechniqueFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
+class BonsaiTechniqueFormView(MyFormView):
     permission_required = 'BonsaiAdvice.change_content'
-
-    template_name = 'BonsaiAdmin/object_admin_form.html'
+    url_update_name = "technique_update"
+    url_create_name = "technique_create"
     form_class = BonsaiTechniqueForm
-    success_url = reverse_lazy("BonsaiAdmin:index")
-
-    def get_context_data(self, **kwargs):
-        top = super().get_context_data(**kwargs)
-        if "pk" in top:
-            top["rev_url"] = 'BonsaiAdmin:technique_update'
-        else:
-            top["rev_url"] = 'BonsaiAdmin:technique_create'
-        return top
-
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        if "pk" in context:
-            tree = get_object_or_404(BonsaiTechnique, short_name=context["pk"])
-            form = self.form_class(initial={**tree.to_mongo().to_dict(), "update": True})
-            form.fields["short_name"].widget.attrs["readonly"] = True
-            context['form'] = form
-
-        return self.render_to_response(context)
-
-    def form_valid(self, form):
-        try:
-            form.create_update()
-        except NotUniqueError:
-            messages.error(self.request, "Technique already exists in database.")
-            return super().form_invalid(form)
-        return super().form_valid(form)
+    index_name = "short_name"
+    object_class = BonsaiTechnique
