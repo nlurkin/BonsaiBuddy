@@ -17,10 +17,12 @@ class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
         top["bonsai_techniques"] = BonsaiTechnique.objects.filter(published=True).order_by("short_name")
         top["bonsai_objectives"] = BonsaiObjective.objects.filter(published=True).order_by("short_name")
         return top
+
+class TechniqueView(BonsaiAdviceMenuMixin, View):
     model = BonsaiTechnique
     template_name = "BonsaiAdvice/detail_technique.html"
     context_object_name = "technique"
 
     def get(self, request, pk):
-        technique = get_object_or_404(self.model, short_name=pk)
-        return render(request, self.template_name, {**self.build_menu_context(), self.context_object_name: technique})
+        obj_instance = get_object_or_404(self.model, short_name=pk)
+        return render(request, self.template_name, {**self.build_menu_context(), self.context_object_name: obj_instance})
