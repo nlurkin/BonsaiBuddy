@@ -6,4 +6,6 @@ urlpatterns = [
   path("", views.IndexView.as_view(), name="index"),
   path("treeinfo/create", views.TreeInfoFormView.as_view(), name="treeinfo_create", ),
   path("treeinfo/<pk>/update", views.TreeInfoFormView.as_view(), name="treeinfo_update"),
+  path("technique/create", views.BonsaiTechniqueFormView.as_view(), name="technique_create"),
+  path("technique/<pk>/update", views.BonsaiTechniqueFormView.as_view(), name="technique_update"),
 ]

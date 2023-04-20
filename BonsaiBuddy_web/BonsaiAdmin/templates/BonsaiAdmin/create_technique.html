@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block message %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if which_action == "create" %}
+<form action="{% url 'BonsaiAdmin:technique_create' %}" method="post">
+{% else %}
+<form action="{% url 'BonsaiAdmin:technique_update' pk %}" method="post">
+{% endif %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
