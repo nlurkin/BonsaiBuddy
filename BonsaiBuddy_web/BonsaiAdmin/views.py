@@ -28,10 +28,8 @@ class TreeInfoFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
         if "pk" in top:
-            top["which_action"] = "update"
             top["rev_url"] = 'BonsaiAdmin:treeinfo_update'
         else:
-            top["which_action"] = "create"
             top["rev_url"] = 'BonsaiAdmin:treeinfo_create'
         return top
 
@@ -62,11 +60,9 @@ class BonsaiTechniqueFormView(AdminMenuMixin, PermissionRequiredMixin, FormView)
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
         if "pk" in top:
-            top["which_action"] = "update"
             top["rev_url"] = 'BonsaiAdmin:technique_update'
         else:
-            top["which_action"] = "create"
-            top["rev_url"] = 'BonsaiAdmin:technique_update'
+            top["rev_url"] = 'BonsaiAdmin:technique_create'
         return top
 
     def get(self, request, *args, **kwargs):

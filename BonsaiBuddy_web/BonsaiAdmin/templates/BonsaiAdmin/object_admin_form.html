@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-{% if which_action == "create" %}
+{% if "create" in rev_url %}
 <form action="{% url rev_url %}" method="post">
 {% else %}
 <form action="{% url rev_url pk %}" method="post">
