@@ -1,6 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+    <h2>Bonsai Techniques</h2>
     {% if bonsai_techniques %}
     <ul>
         {% for technique in bonsai_techniques %}
@@ -9,5 +10,15 @@
     </ul>
     {% else %}
     <p>No techniques are available.</p>
+    {% endif %}
+    <h2>Bonsai Objectives</h2>
+    {% if bonsai_objectives %}
+    <ul>
+        {% for objective in bonsai_objectives %}
+        <li><a href="">{{ objective.display_name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No objectives are available.</p>
     {% endif %}
 {% endblock %}
