@@ -19,5 +19,4 @@ class DetailView(BonsaiAdviceMenuMixin, View):
 
     def get(self, request, pk):
         technique = get_object_or_404(self.model, short_name=pk)
-        print(self.menu_context)
         return render(request, self.template_name, {**self.build_menu_context(), self.context_object_name: technique})
