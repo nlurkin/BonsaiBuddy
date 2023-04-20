@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from .forms import TreeInfoForm, BonsaiTechniqueForm
+from .forms import TreeInfoForm, BonsaiTechniqueForm, BonsaiObjectiveForm
 from django.urls import reverse_lazy
 from django.views.generic import View
 from mongoengine.errors import NotUniqueError
 from django.contrib import messages
 from .menu import AdminMenuMixin
 from TreeInfo.models import TreeInfo
-from BonsaiAdvice.models import BonsaiTechnique
+from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective
 from utils import get_object_or_404
 
 class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
@@ -65,3 +65,11 @@ class BonsaiTechniqueFormView(MyFormView):
     form_class = BonsaiTechniqueForm
     index_name = "short_name"
     object_class = BonsaiTechnique
+
+class BonsaiObjectiveFormView(MyFormView):
+    permission_required = 'BonsaiAdvice.change_content'
+    url_update_name = "objective_update"
+    url_create_name = "objective_create"
+    form_class = BonsaiObjectiveForm
+    index_name = "short_name"
+    object_class = BonsaiObjective
