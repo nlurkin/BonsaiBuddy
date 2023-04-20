@@ -1,0 +1,9 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>{{ technique.display_name }}</h1>
+    <p>{{ tree_info.description}}</p>
+    {% if 'BonsaiAdvice.change_content' in perms %}
+    <p><a href="{% url 'BonsaiAdmin:technique_update' pk=technique.short_name %}">Update</a></p>
+    {% endif %}
+{% endblock %}
