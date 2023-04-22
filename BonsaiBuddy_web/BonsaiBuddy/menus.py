@@ -20,6 +20,7 @@ class MenuMixin(object):
         "TreeInfo": (0, MenuItem("TreeInfo", "TreeInfo:index")),
         "Advices": (1, MenuItem("Advices", "BonsaiAdvice:index")),
         "Admin": (2, MenuItem("Admin", "BonsaiAdmin:index", permission="TreeInfo.change_content")),
+        "Login": (3, MenuItem("Login", "login")),
     }
 
     def get_context_data(self, **kwargs):
