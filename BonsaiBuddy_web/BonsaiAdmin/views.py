@@ -12,7 +12,11 @@ from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective
 from utils import get_object_or_404
 
 class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
-    permission_required = 'TreeInfo.change_content'
+    permission_required = ['TreeInfo.change_content', "BonsaiAdvice.change_content"]
+
+    def has_permission(self):
+        user = self.request.user
+        return any(user.has_perm(_) for _ in self.permission_required)
 
     def get(self, request):
         return render(request, "BonsaiAdmin/index.html", self.build_menu_context(request))
