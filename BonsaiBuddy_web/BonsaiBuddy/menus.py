@@ -1,7 +1,7 @@
 import copy
 
 class MenuItem(object):
-    def __init__(self, display, urlref=None, submenu=None, permissions=None):
+    def __init__(self, display, urlref=None, submenu=None, permissions=None, requires_auth=False):
         if submenu:
             self.itype = "submenu"
         else:
@@ -11,6 +11,7 @@ class MenuItem(object):
         self.submenu = submenu
         self.permissions = [permissions] if isinstance(permissions, str) else permissions
         self.current_user = None
+        self.requires_auth = requires_auth
 
     def set_submenu(self, submenu):
         self.itype = "submenu"
@@ -24,10 +25,13 @@ class MenuItem(object):
         return self
 
     def is_displayable(self):
-        perms_ok = True
-        if self.permissions is not None:
-            perms_ok = any(self.current_user.has_perm(_) for _ in self.permissions)
-        return perms_ok
+        auth_ok = False
+        perms_ok = False
+        if self.permissions is None or any(self.current_user.has_perm(_) for _ in self.permissions):
+            perms_ok = True
+        if not self.requires_auth or self.current_user.is_authenticated:
+            auth_ok = True
+        return perms_ok and auth_ok
 
     def display(self):
         return self._display
