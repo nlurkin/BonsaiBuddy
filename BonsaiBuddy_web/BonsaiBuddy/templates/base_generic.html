@@ -16,7 +16,7 @@
         <ul class="sidebar-nav">
           <h3>Welcome {{request.user.username}}</h3>
           {% for item in menu_items %}
-            {% if item.permission is None or item.permission in perms %}
+            {% if item.is_displayable %}
               {% if item.itype == "submenu" %}
                 {% if item.urlref is not None %}
                   <li><a href="{% url item.urlref %}">{{ item.display }}</a></li>

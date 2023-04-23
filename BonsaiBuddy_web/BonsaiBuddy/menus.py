@@ -10,19 +10,25 @@ class MenuItem(object):
         self._display = display
         self.submenu = submenu
         self.permission = permission
+        self.current_user = None
 
     def set_submenu(self, submenu):
         self.itype = "submenu"
         self.submenu = submenu
 
-    def is_authenticated(self, status):
+    def set_user(self, user):
+        self.current_user = user
         return self
 
-    @property
+    def is_displayable(self):
+        perms_ok = True
+        if self.permission is not None:
+            perms_ok = any(self.current_user.has_perm(_) for _ in self.permission)
+        return perms_ok
+
     def display(self):
         return self._display
 
-    @property
     def urlref(self):
         return self._urlref
 
@@ -30,28 +36,23 @@ class LoginMenuItem(MenuItem):
     def __init__(self):
         super().__init__("Login", "login")
 
-    def is_authenticated(self, status):
-        if status:
-            self._display = "Logout"
-            self._urlref = "logout"
-        else:
-            self._display = "Login"
-            self._urlref = "login"
-        return self
-
-    @property
     def display(self):
-        return self._display
+        if self.current_user and self.current_user.is_authenticated:
+            return "Logout"
+        else:
+            return "Login"
 
-    @property
     def urlref(self):
-        return self._urlref
+        if self.current_user and self.current_user.is_authenticated:
+            return "logout"
+        else:
+            return "login"
 
 class MenuMixin(object):
     menu_context = {
         "TreeInfo": (0, MenuItem("TreeInfo", "TreeInfo:index")),
         "Advices": (1, MenuItem("Advices", "BonsaiAdvice:index")),
-        "Admin": (2, MenuItem("Admin", "BonsaiAdmin:index", permission="TreeInfo.change_content")),
+        "Admin": (2, MenuItem("Admin", "BonsaiAdmin:index", permission=["BonsaiAdvice.change_content", "TreeInfo.change_content"])),
         "Login": (3, LoginMenuItem()),
     }
 
@@ -61,8 +62,7 @@ class MenuMixin(object):
         return context
 
     def build_menu_context(self, request):
-        auth_status = request.user.is_authenticated
-        return {"menu_items": [v[1].is_authenticated(auth_status) for v in sorted(self.menu_context.values(), key=lambda x: x[0])]}
+        return {"menu_items": [v[1].set_user(request.user) for v in sorted(self.menu_context.values(), key=lambda x: x[0])]}
 
     @staticmethod
     def get_init_menu_context():
