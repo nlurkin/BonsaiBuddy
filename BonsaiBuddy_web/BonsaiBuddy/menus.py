@@ -9,9 +9,7 @@ class MenuItem(object):
         self._urlref = urlref
         self._display = display
         self.submenu = submenu
-        if isinstance(permissions, str):
-            permissions = [permissions]
-        self.permissions = permissions
+        self.permissions = [permissions] if isinstance(permissions, str) else permissions
         self.current_user = None
 
     def set_submenu(self, submenu):
