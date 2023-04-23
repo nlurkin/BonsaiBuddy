@@ -25,7 +25,9 @@
                 {% endif %}
                 <ul class="sidebar-nav">
                   {% for subitem in item.submenu %}
-                    <li><a href="{% url subitem.urlref %}">{{ subitem.display }}</a></li>
+                    {% if subitem.is_displayable %}
+                      <li><a href="{% url subitem.urlref %}">{{ subitem.display }}</a></li>
+                    {% endif %}
                   {% endfor %}
                 </ul>
               {% else  %}

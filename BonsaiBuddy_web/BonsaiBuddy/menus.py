@@ -20,6 +20,9 @@ class MenuItem(object):
 
     def set_user(self, user):
         self.current_user = user
+        if self.submenu:
+            for subitem in self.submenu:
+                subitem.set_user(user)
         return self
 
     def is_displayable(self):
