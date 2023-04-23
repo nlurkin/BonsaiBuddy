@@ -1,7 +1,7 @@
 import copy
 
 class MenuItem(object):
-    def __init__(self, display, urlref=None, submenu=None, permission=None):
+    def __init__(self, display, urlref=None, submenu=None, permissions=None):
         if submenu:
             self.itype = "submenu"
         else:
@@ -9,7 +9,9 @@ class MenuItem(object):
         self._urlref = urlref
         self._display = display
         self.submenu = submenu
-        self.permission = permission
+        if isinstance(permissions, str):
+            permissions = [permissions]
+        self.permissions = permissions
         self.current_user = None
 
     def set_submenu(self, submenu):
@@ -22,8 +24,8 @@ class MenuItem(object):
 
     def is_displayable(self):
         perms_ok = True
-        if self.permission is not None:
-            perms_ok = any(self.current_user.has_perm(_) for _ in self.permission)
+        if self.permissions is not None:
+            perms_ok = any(self.current_user.has_perm(_) for _ in self.permissions)
         return perms_ok
 
     def display(self):
@@ -52,7 +54,7 @@ class MenuMixin(object):
     menu_context = {
         "TreeInfo": (0, MenuItem("TreeInfo", "TreeInfo:index")),
         "Advices": (1, MenuItem("Advices", "BonsaiAdvice:index")),
-        "Admin": (2, MenuItem("Admin", "BonsaiAdmin:index", permission=["BonsaiAdvice.change_content", "TreeInfo.change_content"])),
+        "Admin": (2, MenuItem("Admin", "BonsaiAdmin:index", permissions=["BonsaiAdvice.change_content", "TreeInfo.change_content"])),
         "Login": (3, LoginMenuItem()),
     }
 
