@@ -15,7 +15,7 @@ class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
     permission_required = 'TreeInfo.change_content'
 
     def get(self, request):
-        return render(request, "BonsaiAdmin/index.html", self.build_menu_context())
+        return render(request, "BonsaiAdmin/index.html", self.build_menu_context(request))
 
 class MyFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
     success_url = reverse_lazy("BonsaiAdmin:index")

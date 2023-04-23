@@ -25,7 +25,7 @@ class TechniqueView(BonsaiAdviceMenuMixin, View):
 
     def get(self, request, pk):
         obj_instance = get_object_or_404(self.model, short_name=pk)
-        return render(request, self.template_name, {**self.build_menu_context(), self.context_object_name: obj_instance})
+        return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: obj_instance})
 
 class ObjectiveView(BonsaiAdviceMenuMixin, View):
     model = BonsaiObjective
@@ -34,4 +34,4 @@ class ObjectiveView(BonsaiAdviceMenuMixin, View):
 
     def get(self, request, pk):
         obj_instance = get_object_or_404(self.model, short_name=pk)
-        return render(request, self.template_name, {**self.build_menu_context(), self.context_object_name: obj_instance})
+        return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: obj_instance})
