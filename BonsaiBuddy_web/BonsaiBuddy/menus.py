@@ -59,8 +59,9 @@ class MenuMixin(object):
     menu_context = {
         "TreeInfo": (0, MenuItem("TreeInfo", "TreeInfo:index")),
         "Advices": (1, MenuItem("Advices", "BonsaiAdvice:index")),
-        "Admin": (2, MenuItem("Admin", "BonsaiAdmin:index", permissions=["BonsaiAdvice.change_content", "TreeInfo.change_content"])),
-        "Login": (3, LoginMenuItem()),
+        "Profile": (2, MenuItem("Profile", "Profile:detail", requires_auth=True)),
+        "Admin": (3, MenuItem("Admin", "BonsaiAdmin:index", permissions=["BonsaiAdvice.change_content", "TreeInfo.change_content"])),
+        "Login": (4, LoginMenuItem()),
     }
 
     def get_context_data(self, **kwargs):
