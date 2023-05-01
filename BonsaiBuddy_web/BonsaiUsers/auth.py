@@ -1,5 +1,6 @@
 from django.contrib.auth.backends import BaseBackend
 from BonsaiUsers.models import User, UserProfile
+from django.utils import timezone
 import bcrypt
 
 
@@ -11,6 +12,8 @@ class DjangoBackend(BaseBackend):
             # Check the password
             if not bcrypt.checkpw(password.encode("utf-8"), up.password):
                 return None
+            up.last_login = timezone.now()
+            up.save()
         except UserProfile.DoesNotExist:
             return None
 
