@@ -4,7 +4,7 @@ from django.views import View, generic
 from .models import UserProfile
 from utils import get_object_or_404
 from django.http import Http404
-from .forms import CustomUserCreationForm, UpdateUserProfileForm
+from .forms import CustomUserCreationForm, UpdateUserProfileForm, ModifyPasswordForm
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views
@@ -56,3 +56,16 @@ class ProfileUpdateView(BonsaiUsersMenuMixin, generic.FormView):
         form.save(self.request.user.username)
         return super().form_valid(form)
 
+class ModifyPasswordView(BonsaiUsersMenuMixin, generic.FormView):
+    form_class = ModifyPasswordForm
+    success_url = reverse_lazy("Profile:detail")
+    template_name = "registration/password_change.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def form_valid(self, form):
+        form.save(self.request.user.username)
+        return super().form_valid(form)
