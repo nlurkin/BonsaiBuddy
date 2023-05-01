@@ -61,3 +61,11 @@ class CustomUserCreationForm(forms.Form):
         user = UserProfile(username=username)
         user.create_user(password)
         return username, password
+
+class UpdateUserProfileForm(forms.Form):
+    country = forms.CharField(widget=forms.Select(choices=[("unknown", "Unknown"), ("belgium", "Belgium")]))
+
+    def save(self, username):
+        user = UserProfile.objects.get(username=username)
+        user.country = self.cleaned_data.get("country")
+        user.save()

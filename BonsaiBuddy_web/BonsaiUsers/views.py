@@ -4,7 +4,7 @@ from django.views import View, generic
 from .models import UserProfile
 from utils import get_object_or_404
 from django.http import Http404
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UpdateUserProfileForm
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views
@@ -37,3 +37,22 @@ class MyLoginView(BonsaiUsersMenuMixin, views.LoginView):
         context = super().get_context_data(**kwargs)
         context.update(self.build_menu_context(self.request))
         return context
+
+class ProfileUpdateView(BonsaiUsersMenuMixin, generic.FormView):
+    success_url = reverse_lazy("Profile:detail")
+    template_name = 'BonsaiUsers/profile_form.html'
+    form_class = UpdateUserProfileForm
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        user = UserProfile.objects.get(username=request.user.username)
+        form = self.form_class(initial={**user.to_mongo().to_dict(), "update": True})
+        context['form'] = form
+
+        return self.render_to_response(context)
+
+    def form_valid(self, form):
+        form.save(self.request.user.username)
+        return super().form_valid(form)
+
