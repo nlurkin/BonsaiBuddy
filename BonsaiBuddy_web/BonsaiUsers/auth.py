@@ -8,7 +8,7 @@ class DjangoBackend(BaseBackend):
     def authenticate(self, request, username=None, password=None):
         # Check the user profile exists
         try:
-            up = UserProfile.objects.get(username=username)
+            up = UserProfile.get_user(username)
             # Check the password
             if not bcrypt.checkpw(password.encode("utf-8"), up.password):
                 return None

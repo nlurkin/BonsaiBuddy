@@ -43,7 +43,7 @@ class ProfileUpdateView(BonsaiUsersMenuMixin, generic.FormView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        user = UserProfile.objects.get(username=request.user.username)
+        user = UserProfile.get_user(request.user.username)
         form = self.form_class(initial={**user.to_mongo().to_dict(), "update": True})
         context['form'] = form
 

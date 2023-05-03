@@ -67,7 +67,7 @@ class UpdateUserProfileForm(forms.Form):
     country = forms.CharField(widget=forms.Select(choices=[("unknown", "Unknown"), ("belgium", "Belgium")]))
 
     def save(self, username):
-        user = UserProfile.objects.get(username=username)
+        user = UserProfile.get_user(username)
         user.country = self.cleaned_data.get("country")
         user.save()
 
@@ -114,7 +114,7 @@ class ModifyPasswordForm(forms.Form):
     def clean_old_password(self):
         old_password = self.cleaned_data.get("old_password")
         if old_password:
-            up = UserProfile.objects.get(username=self.user.username)
+            up = UserProfile.get_user(self.user.username)
             if not bcrypt.checkpw(old_password.encode("utf-8"), up.password):
                 self.add_error("old_password", "The old password is incorrect")
         return old_password
@@ -133,5 +133,5 @@ class ModifyPasswordForm(forms.Form):
 
     def save(self, username):
         password = self.cleaned_data.get("password2")
-        user = UserProfile.objects.get(username=username)
+        user = UserProfile.get_user(username)
         user.update_password(password)

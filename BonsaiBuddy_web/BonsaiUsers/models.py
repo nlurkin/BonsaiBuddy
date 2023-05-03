@@ -29,5 +29,9 @@ class UserProfile(mongoengine.Document):
         self.last_pwd_update = timezone.now()
         self.save()
 
+    @staticmethod
+    def get_user(username):
+        return UserProfile.objects.get(username=username)
+
     def __str__(self):
         return self.username
