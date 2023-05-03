@@ -59,11 +59,6 @@ class CustomUserCreationForm(PasswordValidationClass, forms.Form):
         user.create_user(password)
         return user
 
-def build_country_list():
-    countries = [(country.name.lower(), country.name) for country in sorted(pycountry.countries, key= lambda x: x.name)]
-    countries.insert(0, ("unknown", "Unknown"))
-    return countries
-
 class ModifyPasswordForm(PasswordValidationClass, forms.Form):
     error_messages = {**PasswordValidationClass.error_messages,
         "incorrect_old": "The old password is incorrect.",
@@ -87,6 +82,11 @@ class ModifyPasswordForm(PasswordValidationClass, forms.Form):
         password = self.cleaned_data.get("password2")
         user = UserProfile.get_user(username)
         user.update_password(password)
+
+def build_country_list():
+    countries = [(country.name.lower(), country.name) for country in sorted(pycountry.countries, key= lambda x: x.name)]
+    countries.insert(0, ("unknown", "Unknown"))
+    return countries
 
 class UpdateUserProfileForm(forms.Form):
     country = forms.CharField(widget=forms.Select(choices=build_country_list()))
