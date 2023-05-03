@@ -3,6 +3,7 @@ from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from .models import UserProfile
 import bcrypt
+import pycountry
 
 class CustomUserCreationForm(forms.Form):
     error_messages = {
@@ -63,8 +64,14 @@ class CustomUserCreationForm(forms.Form):
         user.create_user(password)
         return username, password
 
+def build_country_list():
+    countries = [(country.name.lower(), country.name) for country in sorted(pycountry.countries, key= lambda x: x.name)]
+    countries.insert(0, ("unknown", "Unknown"))
+    return countries
+
 class UpdateUserProfileForm(forms.Form):
-    country = forms.CharField(widget=forms.Select(choices=[("unknown", "Unknown"), ("belgium", "Belgium")]))
+
+    country = forms.CharField(widget=forms.Select(choices=build_country_list()))
 
     def save(self, username):
         user = UserProfile.get_user(username)

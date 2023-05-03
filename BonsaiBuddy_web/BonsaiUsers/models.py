@@ -5,11 +5,8 @@ from django.contrib.auth.models import AbstractUser
 import bcrypt
 from django.utils import timezone
 
-
 class User(AbstractUser):
     pass
-
-COUNTRY_ENUM = ["Undefined", "Belgium"]
 
 class UserProfile(mongoengine.Document):
     username = mongoengine.StringField()
