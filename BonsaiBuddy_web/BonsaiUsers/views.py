@@ -27,8 +27,8 @@ class SignupView(BonsaiUsersMenuMixin, generic.FormView):
     template_name = "registration/signup.html"
 
     def form_valid(self, form):
-        username, password = form.save()
-        user = authenticate(self.request, username=username, password=password)
+        up = form.save()
+        user = authenticate(self.request, username=up.username, password=up.password)
         login(self.request, user)
         return super().form_valid(form)
 

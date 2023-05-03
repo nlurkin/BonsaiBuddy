@@ -57,7 +57,7 @@ class CustomUserCreationForm(PasswordValidationClass, forms.Form):
         password = self.cleaned_data.get("password2")
         user = UserProfile(username=username)
         user.create_user(password)
-        return username, password
+        return user
 
 def build_country_list():
     countries = [(country.name.lower(), country.name) for country in sorted(pycountry.countries, key= lambda x: x.name)]
