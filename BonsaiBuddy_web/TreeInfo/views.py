@@ -21,5 +21,5 @@ class DetailView(TreeInfoMenuMixin, View):
     context_object_name = "tree_info"
 
     def get(self, request, pk):
-        question = get_object_or_404(self.model, name=pk)
-        return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: question})
+        tree = get_object_or_404(self.model, name=pk)
+        return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: tree})
