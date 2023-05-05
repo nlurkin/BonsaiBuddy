@@ -4,6 +4,29 @@
     <h1>{{ tree_info.name }}</h1>
     {{ tree_info.latin_name}}
     <p>{{ tree_info.description}}</p>
+
+    {% if tree_info.placement|length > 0 %}
+    <p><strong>Placement: </strong>{{ tree_info.placement}}</p>
+    {% endif %}
+    {% if tree_info.watering|length > 0 %}
+    <p><strong>Watering: </strong>{{ tree_info.watering|length }}</p>
+    {% endif %}
+    {% if tree_info.fertilizing|length > 0 %}
+    <p><strong>Fertilizing: </strong>{{ tree_info.fertilizing }}</p>
+    {% endif %}
+    {% if tree_info.pruning_wiring|length > 0 %}
+    <p><strong>Pruning and wiring: </strong>{{ tree_info.pruning_wiring }}</p>
+    {% endif %}
+    {% if tree_info.repotting|length > 0 %}
+    <p><strong>Repotting: </strong>{{ tree_info.repotting }}</p>
+    {% endif %}
+    {% if tree_info.propagation|length > 0 %}
+    <p><strong>Propagation: </strong>{{ tree_info.propagation }}</p>
+    {% endif %}
+    {% if tree_info.pests|length > 0 %}
+    <p><strong>Pests: </strong>{{ tree_info.pests }}</p>
+    {% endif %}
+
     {% if 'TreeInfo.change_content' in perms %}
     <p><a href="{% url 'BonsaiAdmin:treeinfo_update' pk=tree_info.name %}">Update</a></p>
     {% endif %}
