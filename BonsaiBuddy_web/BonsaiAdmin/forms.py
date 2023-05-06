@@ -38,7 +38,7 @@ class BonsaiTechniqueForm(forms.Form):
         update_val = self.cleaned_data["update"]
         del self.cleaned_data["update"]
         if update_val:
-            pk = self.cleaned_data["name"]
+            pk = self.cleaned_data["short_name"]
             original = BonsaiTechnique.objects.get(short_name=pk)
             original.update(**self.cleaned_data)
         else:
@@ -56,7 +56,7 @@ class BonsaiObjectiveForm(forms.Form):
         update_val = self.cleaned_data["update"]
         del self.cleaned_data["update"]
         if update_val:
-            pk = self.cleaned_data["name"]
+            pk = self.cleaned_data["short_name"]
             original = BonsaiObjective.objects.get(short_name=pk)
             original.update(**self.cleaned_data)
         else:
@@ -74,7 +74,7 @@ class BonsaiWhenForm(forms.Form):
         update_val = self.cleaned_data["update"]
         del self.cleaned_data["update"]
         if update_val:
-            pk = self.cleaned_data["name"]
+            pk = self.cleaned_data["short_name"]
             original = BonsaiWhen.objects.get(short_name=pk)
             original.update(**self.cleaned_data)
         else:
