@@ -12,7 +12,7 @@ def build_periods():
 class AdviceConfigForm(forms.Form):
     tree           = forms.CharField(label="Tree species", widget=forms.Select(choices=build_tree_list()))
     objective      = forms.CharField(label="Objective")
-    period         = forms.CharField(label="Period", widget=forms.Select(choices=build_periods()))
+    period         = forms.CharField(label="Period", widget=forms.Select(choices=[(None, "Undefined")] + build_periods()))
     when           = forms.CharField(label="When")
 
 
