@@ -10,4 +10,6 @@ urlpatterns = [
   path("technique/<pk>/update/", views.BonsaiTechniqueFormView.as_view(), name="technique_update"),
   path("objective/create/", views.BonsaiObjectiveFormView.as_view(), name="objective_create"),
   path("objective/<pk>/update/", views.BonsaiObjectiveFormView.as_view(), name="objective_update"),
+  path("when/create/", views.BonsaiWhenFormView.as_view(), name="when_create"),
+  path("when/<pk>/update/", views.BonsaiWhenFormView.as_view(), name="when_update"),
 ]
