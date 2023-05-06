@@ -79,7 +79,7 @@ class WhichTechniqueView(View):
         view = WhichTechniqueSelector.as_view(info=info)
         return view(self.request)
 
-class WhichTechniqueSelector(generic.FormView):
+class WhichTechniqueSelector(BonsaiAdviceMenuMixin, generic.FormView):
     success_url = reverse_lazy("BonsaiAdvice:which_technique")
     template_name = 'BonsaiAdvice/advice_selector.html'
     form_class = AdviceConfigForm
