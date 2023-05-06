@@ -1,0 +1,10 @@
+<input name='{{ widget.name }}' value='build_from_initial'{% include "django/forms/widgets/attrs.html" %}>
+
+<script type='text/javascript'>
+  var input = document.querySelector('input[name="{{ widget.name }}"]'),
+    tagify = new Tagify(input, {
+      whitelist: [{% for group_name, group_choices, group_index in widget.optgroups %}
+      {% for option in group_choices %}{'value': '{{ option.value }}', 'name': '{{ option.label }}'},{% endfor %}{% endfor %}],
+      {{ widget.tagify }}
+    })
+</script>
