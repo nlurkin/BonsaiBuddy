@@ -27,9 +27,13 @@ class TreeInfoForm(forms.Form):
             q = TreeInfo(**self.cleaned_data)
             q.save()
 
+def build_technique_category():
+    return [(_.lower(), _) for _ in ["Pruning", "Defoliation", "Deadwood"]]
+
 class BonsaiTechniqueForm(forms.Form):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
+    category = forms.CharField(widget=forms.Select(choices=build_technique_category()))
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
     update = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)

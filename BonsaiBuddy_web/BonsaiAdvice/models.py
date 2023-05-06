@@ -12,6 +12,7 @@ class BonsaiTechnique(mongoengine.Document):
     short_name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
     display_name = mongoengine.StringField(max_length=200)
     description = mongoengine.StringField()
+    category = mongoengine.StringField(max_length=200)
     published = mongoengine.BooleanField(default=False)
 
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
