@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .menu import BonsaiAdviceMenuMixin
 from django.views import generic, View
 from .models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
-from utils import get_object_or_404
+from utils import get_object_or_404, user_has_any_perms
 from django.urls import reverse_lazy
 from .forms import AdviceConfigForm
 
@@ -16,8 +16,17 @@ class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
-        top["bonsai_techniques"] = BonsaiTechnique.objects.filter(published=True).order_by("short_name")
-        top["bonsai_objectives"] = BonsaiObjective.objects.filter(published=True).order_by("short_name")
+        show_unpublished = user_has_any_perms(self.request.user, ["BonsaiAdvice.change_content"])
+        techniques = BonsaiTechnique.objects
+        objectives = BonsaiObjective.objects
+        when = BonsaiWhen.objects
+        if not show_unpublished:
+            techniques = techniques.filter(published=True)
+            objectives = objectives.filter(published=True)
+            when = when.filter(published=not show_unpublished)
+        top["bonsai_techniques"] = techniques.order_by("short_name")
+        top["bonsai_objectives"] = objectives.order_by("short_name")
+        top["bonsai_when"] = when.order_by("short_name")
         return top
 
 class TechniqueView(BonsaiAdviceMenuMixin, View):

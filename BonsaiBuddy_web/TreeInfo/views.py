@@ -4,7 +4,7 @@
 from django.shortcuts import render
 from .models import TreeInfo
 from django.views import View, generic
-from utils import get_object_or_404
+from utils import get_object_or_404, user_has_any_perms
 from .menu import TreeInfoMenuMixin
 
 class IndexView(TreeInfoMenuMixin, generic.ListView):
@@ -13,7 +13,12 @@ class IndexView(TreeInfoMenuMixin, generic.ListView):
 
     def get_queryset(self):
         """Return the complete list of available trees."""
-        return TreeInfo.objects.filter(published=True).order_by("name")
+        show_unpublished = user_has_any_perms(self.request.user, ["TreeInfo.change_content"])
+        treeinfo = TreeInfo.objects
+        print(show_unpublished)
+        if not show_unpublished:
+            treeinfo = treeinfo.filter(published=True)
+        return treeinfo.order_by("name")
 
 class DetailView(TreeInfoMenuMixin, View):
     model = TreeInfo
