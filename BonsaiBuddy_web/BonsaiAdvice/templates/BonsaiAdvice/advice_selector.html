@@ -1,5 +1,9 @@
 {% extends "base_generic.html" %}
 
+{% block head %}
+    {{ form.media }}
+{% endblock%}
+
 {% block message %}
     {% if messages %}
     <ul class="messages">
