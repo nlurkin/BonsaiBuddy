@@ -9,14 +9,13 @@ from django.contrib import messages
 from .menu import AdminMenuMixin
 from TreeInfo.models import TreeInfo
 from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
-from utils import get_object_or_404
+from utils import get_object_or_404, user_has_any_perms
 
 class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
     permission_required = ['TreeInfo.change_content', "BonsaiAdvice.change_content"]
 
     def has_permission(self):
-        user = self.request.user
-        return any(user.has_perm(_) for _ in self.permission_required)
+        return user_has_any_perms(self.request.user, self.permission_required)
 
     def get(self, request):
         return render(request, "BonsaiAdmin/index.html", self.build_menu_context(request))

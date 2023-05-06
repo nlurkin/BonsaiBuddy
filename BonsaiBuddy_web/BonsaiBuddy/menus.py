@@ -1,4 +1,5 @@
 import copy
+from utils import user_has_any_perms
 
 class MenuItem(object):
     def __init__(self, display, urlref=None, submenu=None, permissions=None, requires_auth=False):
@@ -27,7 +28,7 @@ class MenuItem(object):
     def is_displayable(self):
         auth_ok = False
         perms_ok = False
-        if self.permissions is None or any(self.current_user.has_perm(_) for _ in self.permissions):
+        if self.permissions is None or user_has_any_perms(self.current_user, self.permissions):
             perms_ok = True
         if not self.requires_auth or self.current_user.is_authenticated:
             auth_ok = True

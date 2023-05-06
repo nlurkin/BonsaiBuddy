@@ -22,3 +22,8 @@ class MongoDBTestCase(TestCase):
     def tearDown(self):
         self.db.drop_database(MongoDBTestCase.database_name)
         self.db.close()
+
+def user_has_any_perms(user, perms):
+    return any([user.has_perm(_) for _ in perms])
+
+
