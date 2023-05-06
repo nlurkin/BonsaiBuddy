@@ -33,7 +33,7 @@ def build_technique_category():
 class BonsaiTechniqueForm(forms.Form):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
-    category = forms.CharField(widget=forms.Select(choices=build_technique_category()))
+    category = forms.ChoiceField(choices=build_technique_category())
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
     update = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)

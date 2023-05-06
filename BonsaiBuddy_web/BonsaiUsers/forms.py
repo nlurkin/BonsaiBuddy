@@ -89,7 +89,7 @@ def build_country_list():
     return countries
 
 class UpdateUserProfileForm(forms.Form):
-    country = forms.CharField(widget=forms.Select(choices=build_country_list()))
+    country = forms.ChoiceField(choices=build_country_list())
 
     def save(self, username):
         user = UserProfile.get_user(username)

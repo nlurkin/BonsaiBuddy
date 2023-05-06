@@ -10,9 +10,9 @@ def build_periods():
     return [(f"{iseason}_{isub}", f"{sub} {season}") for isub, sub in enumerate(subsection) for iseason, season in enumerate(seasons)]
 
 class AdviceConfigForm(forms.Form):
-    tree           = forms.CharField(label="Tree species", widget=forms.Select(choices=build_tree_list()))
+    tree           = forms.ChoiceField(label="Tree species", choices=build_tree_list())
     objective      = forms.CharField(label="Objective")
-    period         = forms.CharField(label="Period", widget=forms.Select(choices=[(None, "Undefined")] + build_periods()))
+    period         = forms.ChoiceField(label="Period", choices=[(None, "Undefined")] + build_periods())
     when           = forms.CharField(label="When")
 
 
