@@ -1,0 +1,9 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>{{ when.display_name }}</h1>
+    <p>{{ when.description}}</p>
+    {% if 'BonsaiAdvice.change_content' in perms %}
+    <p><a href="{% url 'BonsaiAdmin:when_update' pk=when.short_name %}">Update</a></p>
+    {% endif %}
+{% endblock %}

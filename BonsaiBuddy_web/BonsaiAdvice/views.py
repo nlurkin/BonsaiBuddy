@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .menu import BonsaiAdviceMenuMixin
 from django.views import generic, View
-from .models import BonsaiTechnique, BonsaiObjective
+from .models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
 from utils import get_object_or_404
 from django.urls import reverse_lazy
 from .forms import AdviceConfigForm
@@ -33,6 +33,16 @@ class ObjectiveView(BonsaiAdviceMenuMixin, View):
     model = BonsaiObjective
     template_name = "BonsaiAdvice/detail_objective.html"
     context_object_name = "objective"
+
+    def get(self, request, pk):
+        obj_instance = get_object_or_404(self.model, short_name=pk)
+        return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: obj_instance})
+
+
+class WhenView(BonsaiAdviceMenuMixin, View):
+    model = BonsaiWhen
+    template_name = "BonsaiAdvice/detail_when.html"
+    context_object_name = "when"
 
     def get(self, request, pk):
         obj_instance = get_object_or_404(self.model, short_name=pk)
