@@ -20,7 +20,7 @@ def build_when():
 class AdviceConfigForm(forms.Form):
     tree           = forms.ChoiceField(label="Tree species", choices=build_tree_list())
     objective      = forms.ChoiceField(label="Objective", choices=build_objectives(), widget=TagifyWidget(maxTags=1))
-    period         = forms.ChoiceField(label="Period", choices=[(None, "Undefined")] + build_periods())
+    period         = forms.ChoiceField(label="Period", choices=[(None, "Undefined")] + build_periods(), required=False)
     when           = forms.ChoiceField(label="When", choices=build_when(), widget=TagifyWidget)
 
 
