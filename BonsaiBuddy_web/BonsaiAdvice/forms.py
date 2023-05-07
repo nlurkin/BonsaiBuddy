@@ -1,6 +1,6 @@
 from django import forms
 from TreeInfo.models import TreeInfo
-from .models import BonsaiWhen
+from .models import BonsaiWhen, BonsaiObjective
 from BonsaiBuddy.widgets import TagifyWidget
 
 def build_tree_list():
@@ -11,13 +11,16 @@ def build_periods():
     subsection = ["Early", "Late"]
     return [(f"{iseason}_{isub}", f"{sub} {season}") for isub, sub in enumerate(subsection) for iseason, season in enumerate(seasons)]
 
+def build_objectives():
+    return [(_.short_name, _.display_name) for _ in BonsaiObjective.objects.all()]
+
 def build_when():
     return [(_.short_name, _.display_name) for _ in BonsaiWhen.objects.all()]
 
 class AdviceConfigForm(forms.Form):
     tree           = forms.ChoiceField(label="Tree species", choices=build_tree_list())
-    objective      = forms.CharField(label="Objective")
+    objective      = forms.ChoiceField(label="Objective", choices=build_objectives(), widget=TagifyWidget(maxTags=1))
     period         = forms.ChoiceField(label="Period", choices=[(None, "Undefined")] + build_periods())
-    when           = forms.ChoiceField(label="When", choices=build_when(), widget=TagifyWidget())
+    when           = forms.ChoiceField(label="When", choices=build_when(), widget=TagifyWidget)
 
 
