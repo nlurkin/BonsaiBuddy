@@ -1,4 +1,4 @@
-<input name='{{ widget.name }}' value='build_from_initial'{% include "django/forms/widgets/attrs.html" %}>
+<input name='{{ widget.name }}' {% if widget.value %} value='{{ widget.value|join:"," }}'{% endif %}{% include "django/forms/widgets/attrs.html" %}>
 
 <script type='text/javascript'>
   var input = document.querySelector('input[name="{{ widget.name }}"]'),
