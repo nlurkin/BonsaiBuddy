@@ -20,3 +20,4 @@ class AdviceConfigForm(forms.Form):
     objective      = forms.ChoiceField(label="Objective", choices=build_objectives(), widget=TagifyWidget(maxTags=1))
     period         = forms.ChoiceField(label="Period", choices=build_periods(), required=False)
     when           = forms.MultipleChoiceField(label="When", choices=build_when(), widget=TagifyWidget, required=False)
+    is_submitted   = forms.BooleanField(initial=True, widget=forms.HiddenInput, required=False)
