@@ -67,9 +67,13 @@ class BonsaiObjectiveForm(forms.Form):
             q = BonsaiObjective(**self.cleaned_data)
             q.save()
 
+def build_periods():
+    return [(None, "Undefined")] + [(f"{periodid[0]}_{periodid[1]}", f"{periodname[0]} {periodname[1]}") for periodid, periodname in get_periods()]
+
 class BonsaiWhenForm(forms.Form):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
+    global_period = forms.ChoiceField(choices=build_periods(), required=False)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
     update = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)
