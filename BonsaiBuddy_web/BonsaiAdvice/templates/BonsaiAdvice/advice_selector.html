@@ -15,8 +15,7 @@
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'BonsaiAdvice:which_technique' %}" method="get">
-    {% csrf_token %}
+<form action="{% url 'BonsaiAdvice:which_technique' %}" method="get" novalidate>
     {{ form.as_p }}
     <input type="submit" value="Submit">
 </form>
