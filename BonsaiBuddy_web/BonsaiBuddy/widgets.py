@@ -46,3 +46,13 @@ class TagifyWidget(forms.SelectMultiple):
         context = super().get_context(name, value, attrs)
         context["widget"]["tagify"] = mark_safe(python_to_js({**self.build_generic_params(), "dropdown": self.build_dropdown_params()}))
         return context
+
+    def value_from_datadict(self, data, files, name):
+        try:
+            getter = data.getlist
+        except AttributeError:
+            getter = data.get
+        value = getter(name)
+        if value=="":
+            return None
+        return value.split(",")
