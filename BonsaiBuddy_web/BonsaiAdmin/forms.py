@@ -21,7 +21,7 @@ class TreeInfoForm(forms.Form):
         del self.cleaned_data["update"]
         if update_val:
             pk = self.cleaned_data["name"]
-            original = TreeInfo.objects.get(name=pk)
+            original = TreeInfo.get(pk)
             original.update(**self.cleaned_data)
         else:
             q = TreeInfo(**self.cleaned_data)
@@ -43,7 +43,7 @@ class BonsaiTechniqueForm(forms.Form):
         del self.cleaned_data["update"]
         if update_val:
             pk = self.cleaned_data["short_name"]
-            original = BonsaiTechnique.objects.get(short_name=pk)
+            original = BonsaiTechnique.get(pk)
             original.update(**self.cleaned_data)
         else:
             q = BonsaiTechnique(**self.cleaned_data)
@@ -61,7 +61,7 @@ class BonsaiObjectiveForm(forms.Form):
         del self.cleaned_data["update"]
         if update_val:
             pk = self.cleaned_data["short_name"]
-            original = BonsaiObjective.objects.get(short_name=pk)
+            original = BonsaiObjective.get(pk)
             original.update(**self.cleaned_data)
         else:
             q = BonsaiObjective(**self.cleaned_data)
@@ -79,7 +79,7 @@ class BonsaiWhenForm(forms.Form):
         del self.cleaned_data["update"]
         if update_val:
             pk = self.cleaned_data["short_name"]
-            original = BonsaiWhen.objects.get(short_name=pk)
+            original = BonsaiWhen.get(pk)
             original.update(**self.cleaned_data)
         else:
             q = BonsaiWhen(**self.cleaned_data)

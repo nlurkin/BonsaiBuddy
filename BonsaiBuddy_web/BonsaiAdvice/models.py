@@ -20,6 +20,17 @@ class BonsaiTechnique(mongoengine.Document):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_all(published_only=True):
+        objects = BonsaiTechnique.objects
+        if published_only:
+            objects = objects.filter(published=True)
+        return objects.order_by("short_name")
+
+    @staticmethod
+    def get(short_name):
+        return BonsaiTechnique.objects.get(short_name=short_name)
+
 class BonsaiObjective(mongoengine.Document):
     short_name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
     display_name = mongoengine.StringField(max_length=200)
@@ -31,6 +42,18 @@ class BonsaiObjective(mongoengine.Document):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_all(published_only=True):
+        objects = BonsaiObjective.objects
+        if published_only:
+            objects = objects.filter(published=True)
+        return objects.order_by("short_name")
+
+    @staticmethod
+    def get(short_name):
+        return BonsaiObjective.objects.get(short_name=short_name)
+
+
 class BonsaiWhen(mongoengine.Document):
     short_name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
     display_name = mongoengine.StringField(max_length=200)
@@ -41,3 +64,14 @@ class BonsaiWhen(mongoengine.Document):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_all(published_only=True):
+        objects = BonsaiWhen.objects
+        if published_only:
+            objects = objects.filter(published=True)
+        return objects.order_by("short_name")
+
+    @staticmethod
+    def get(short_name):
+        return BonsaiWhen.objects.get(short_name=short_name)

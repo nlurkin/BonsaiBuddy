@@ -4,7 +4,7 @@ from .models import BonsaiWhen, BonsaiObjective
 from BonsaiBuddy.widgets import TagifyWidget
 
 def build_tree_list():
-    return [(_.name.lower(), _.name) for _ in TreeInfo.objects.all()]
+    return [(_.name.lower(), _.name) for _ in TreeInfo.get_all()]
 
 def build_periods():
     seasons = ["Spring", "Summer", "Autumn", "Winter"]
@@ -12,10 +12,10 @@ def build_periods():
     return [(f"{iseason}_{isub}", f"{sub} {season}") for isub, sub in enumerate(subsection) for iseason, season in enumerate(seasons)]
 
 def build_objectives():
-    return [(_.short_name, _.display_name) for _ in BonsaiObjective.objects.all()]
+    return [(_.short_name, _.display_name) for _ in BonsaiObjective.get_all()]
 
 def build_when():
-    return [(_.short_name, _.display_name) for _ in BonsaiWhen.objects.all()]
+    return [(_.short_name, _.display_name) for _ in BonsaiWhen.get_all()]
 
 class AdviceConfigForm(forms.Form):
     tree           = forms.ChoiceField(label="Tree species", choices=build_tree_list())

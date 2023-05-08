@@ -25,3 +25,14 @@ class TreeInfo(mongoengine.Document):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_all(published_only=True, order_by="name"):
+        objects = TreeInfo.objects
+        if published_only:
+            objects = objects.filter(published=True)
+        return objects.order_by(order_by)
+
+    @staticmethod
+    def get(name):
+        return TreeInfo.objects.get(name=name)

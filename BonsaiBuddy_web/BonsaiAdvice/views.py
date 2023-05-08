@@ -13,16 +13,9 @@ class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
         show_unpublished = user_has_any_perms(self.request.user, ["BonsaiAdvice.change_content"])
-        techniques = BonsaiTechnique.objects
-        objectives = BonsaiObjective.objects
-        when = BonsaiWhen.objects
-        if not show_unpublished:
-            techniques = techniques.filter(published=True)
-            objectives = objectives.filter(published=True)
-            when = when.filter(published=not show_unpublished)
-        top["bonsai_techniques"] = techniques.order_by("short_name")
-        top["bonsai_objectives"] = objectives.order_by("short_name")
-        top["bonsai_when"] = when.order_by("short_name")
+        top["bonsai_techniques"] = BonsaiTechnique.get_all(not show_unpublished)
+        top["bonsai_objectives"] = BonsaiObjective.get_all(not show_unpublished)
+        top["bonsai_when"] = BonsaiWhen.get_all(not show_unpublished)
         return top
 
 class TechniqueView(BonsaiAdviceMenuMixin, View):
