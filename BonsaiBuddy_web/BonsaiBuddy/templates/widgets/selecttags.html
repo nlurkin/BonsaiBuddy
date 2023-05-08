@@ -6,5 +6,6 @@
       whitelist: [{% for group_name, group_choices, group_index in widget.optgroups %}
       {% for option in group_choices %}{'value': '{{ option.value }}', 'name': '{{ option.label }}'},{% endfor %}{% endfor %}],
       {{ widget.tagify }}
+      originalInputValueFormat: valuesArr => valuesArr.map(item => item.value)
     })
 </script>
