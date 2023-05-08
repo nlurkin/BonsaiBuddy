@@ -8,6 +8,10 @@ class AdvicePermissionModel(models.Model):
         )
 
 
+
+def get_technique_categories():
+    return ["Pruning", "Defoliation", "Deadwood"]
+
 class BonsaiTechnique(mongoengine.Document):
     short_name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
     display_name = mongoengine.StringField(max_length=200)

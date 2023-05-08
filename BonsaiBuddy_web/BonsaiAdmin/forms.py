@@ -1,6 +1,6 @@
 from django import forms
 from TreeInfo.models import TreeInfo
-from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
+from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, get_periods, get_technique_categories
 
 class TreeInfoForm(forms.Form):
     name           = forms.CharField(max_length=200, label="Tree name")
@@ -28,7 +28,7 @@ class TreeInfoForm(forms.Form):
             q.save()
 
 def build_technique_category():
-    return [(_.lower(), _) for _ in ["Pruning", "Defoliation", "Deadwood"]]
+    return [(_.lower(), _) for _ in get_technique_categories()]
 
 class BonsaiTechniqueForm(forms.Form):
     short_name = forms.CharField(max_length=200)
