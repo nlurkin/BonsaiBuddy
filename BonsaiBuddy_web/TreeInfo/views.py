@@ -15,7 +15,6 @@ class IndexView(TreeInfoMenuMixin, generic.ListView):
         """Return the complete list of available trees."""
         show_unpublished = user_has_any_perms(self.request.user, ["TreeInfo.change_content"])
         treeinfo = TreeInfo.objects
-        print(show_unpublished)
         if not show_unpublished:
             treeinfo = treeinfo.filter(published=True)
         return treeinfo.order_by("name")
