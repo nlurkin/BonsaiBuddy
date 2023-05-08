@@ -13,6 +13,15 @@ def get_periods():
     subsection = ["Early", "Late"]
     return [((isub, iseason), (sub, season)) for isub, sub in enumerate(subsection) for iseason, season in enumerate(seasons)]
 
+def periodid_to_name(periodid):
+    if isinstance(periodid, str):
+        periodid = tuple([int(_) for _ in periodid.split("_")])
+    if len(periodid) != 2:
+        return None
+    d = {pid: " ".join(pname) for pid, pname in get_periods()}
+    if periodid in d:
+        return d[periodid]
+    return None
 
 def get_technique_categories():
     return ["Pruning", "Defoliation", "Deadwood"]
@@ -71,6 +80,9 @@ class BonsaiWhen(mongoengine.Document):
     published = mongoengine.BooleanField(default=False)
 
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
+
+    def global_period_name(self):
+        return periodid_to_name(self.global_period)
 
     def __str__(self):
         return self.name
