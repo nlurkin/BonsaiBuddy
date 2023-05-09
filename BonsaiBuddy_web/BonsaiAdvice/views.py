@@ -8,7 +8,10 @@ from .forms import AdviceConfigForm
 
 class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
     template_name = "BonsaiAdvice/index.html"
-    context_object_name = "bonsai_techniques"
+
+    def get_queryset(self):
+        # Not needed as this is done in the get_context_data, but required by django
+        return None
 
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
