@@ -1,6 +1,7 @@
 from django import forms
 from TreeInfo.models import TreeInfo
-from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, get_periods, get_technique_categories
+from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
+from utils import build_technique_categories, build_periods
 
 class TreeInfoForm(forms.Form):
     name           = forms.CharField(max_length=200, label="Tree name")
@@ -27,13 +28,10 @@ class TreeInfoForm(forms.Form):
             q = TreeInfo(**self.cleaned_data)
             q.save()
 
-def build_technique_category():
-    return [(_.lower(), _) for _ in get_technique_categories()]
-
 class BonsaiTechniqueForm(forms.Form):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
-    category = forms.ChoiceField(choices=build_technique_category())
+    category = forms.ChoiceField(choices=build_technique_categories())
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
     update = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)
@@ -66,9 +64,6 @@ class BonsaiObjectiveForm(forms.Form):
         else:
             q = BonsaiObjective(**self.cleaned_data)
             q.save()
-
-def build_periods():
-    return [(None, "Undefined")] + [(f"{periodid[0]}_{periodid[1]}", f"{periodname[0]} {periodname[1]}") for periodid, periodname in get_periods()]
 
 class BonsaiWhenForm(forms.Form):
     short_name = forms.CharField(max_length=200)

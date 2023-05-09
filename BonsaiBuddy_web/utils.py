@@ -2,6 +2,9 @@ from django.http import Http404
 from django.test import TestCase
 import mongoengine
 from BonsaiBuddy import settings
+from django.contrib.auth.models import Permission
+from TreeInfo.models import TreeInfo
+from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen, get_periods, get_technique_categories
 
 def get_object_or_404(klass, **kwargs):
     try:
@@ -26,4 +29,23 @@ class MongoDBTestCase(TestCase):
 def user_has_any_perms(user, perms):
     return any([user.has_perm(_) for _ in perms])
 
+def build_choices(queryset, id_field, name_field):
+    return [(getattr(_, "name").lower(), getattr(_, "name")) for _ in queryset]
 
+def build_tree_list():
+    return build_choices(TreeInfo.get_all(), "name", "name")
+
+def build_objectives():
+    return build_choices(BonsaiObjective.get_all(), "short_name", "display_name")
+
+def build_techniques():
+    return build_choices(BonsaiTechnique.get_all(), "short_name", "display_name")
+
+def build_when():
+    return build_choices(BonsaiWhen.get_all(), "short_name", "display_name")
+
+def build_periods():
+    return [(None, "Undefined")] + [(f"{periodid[0]}_{periodid[1]}", f"{periodname[0]} {periodname[1]}") for periodid, periodname in get_periods()]
+
+def build_technique_categories():
+    return [(_.lower(), _) for _ in get_technique_categories()]
