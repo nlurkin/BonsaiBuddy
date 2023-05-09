@@ -30,7 +30,7 @@ def user_has_any_perms(user, perms):
     return any([user.has_perm(_) for _ in perms])
 
 def build_choices(queryset, id_field, name_field):
-    return [(getattr(_, "name").lower(), getattr(_, "name")) for _ in queryset]
+    return [(getattr(_, id_field).lower(), getattr(_, name_field)) for _ in queryset]
 
 def build_tree_list():
     return build_choices(TreeInfo.get_all(), "name", "name")
