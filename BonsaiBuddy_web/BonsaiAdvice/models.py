@@ -36,7 +36,7 @@ class BonsaiTechnique(mongoengine.Document):
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
 
     def __str__(self):
-        return self.name
+        return self.short_name
 
     @staticmethod
     def get_all(published_only=True):
@@ -58,7 +58,7 @@ class BonsaiObjective(mongoengine.Document):
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
 
     def __str__(self):
-        return self.name
+        return self.short_name
 
     @staticmethod
     def get_all(published_only=True):
@@ -85,7 +85,7 @@ class BonsaiWhen(mongoengine.Document):
         return periodid_to_name(self.global_period)
 
     def __str__(self):
-        return self.name
+        return self.short_name
 
     @staticmethod
     def get_all(published_only=True):
