@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-from .models import UserProfile
+from .models import UserProfile, build_country_list
 import bcrypt
-import pycountry
 
 
 class PasswordValidationClass():
@@ -83,10 +82,6 @@ class ModifyPasswordForm(PasswordValidationClass, forms.Form):
         user = UserProfile.get_user(username)
         user.update_password(password)
 
-def build_country_list():
-    countries = [(country.name.lower(), country.name) for country in sorted(pycountry.countries, key= lambda x: x.name)]
-    countries.insert(0, ("unknown", "Unknown"))
-    return countries
 
 class UpdateUserProfileForm(forms.Form):
     country = forms.ChoiceField(choices=build_country_list())

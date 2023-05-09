@@ -4,9 +4,16 @@ import mongoengine
 from django.contrib.auth.models import AbstractUser
 import bcrypt
 from django.utils import timezone
+import pycountry
 
 class User(AbstractUser):
     pass
+
+
+def build_country_list():
+    countries = [(country.name.lower(), country.name) for country in sorted(pycountry.countries, key= lambda x: x.name)]
+    countries.insert(0, ("unknown", "Unknown"))
+    return countries
 
 class UserProfile(mongoengine.Document):
     username = mongoengine.StringField()
