@@ -1,0 +1,9 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% for technique in techniques %}
+        <h1>{{ technique.display_name }}</h1>
+        <p>{{ technique.category}}</p>
+        <p>{{ technique.description}}</p>
+    {% endfor %}
+{% endblock %}

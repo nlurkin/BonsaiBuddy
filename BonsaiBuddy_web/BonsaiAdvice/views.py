@@ -73,7 +73,8 @@ class WhichTechniqueView(View):
 
     def process_complete_request(self, info):
         '''To be used when all parameters are set correctly'''
-        return render(self.request, self.template_name)
+        view = WhichTechniqueDisplay.as_view(info=info)
+        return view(self.request)
 
     def process_partial_request(self, info):
         '''To be used when some parameters are missing. Essentially telling user to complete and resubmit'''
@@ -95,3 +96,13 @@ class WhichTechniqueSelector(BonsaiAdviceMenuMixin, generic.FormView):
             form = self.form_class(initial={"tree": self.info.tree.lower(), "objective": self.info.objective, "period": self.info.period, "when": self.info.when})
         context['form'] = form
         return self.render_to_response(context)
+
+
+class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
+    template_name = 'BonsaiAdvice/advice_display.html'
+    context_object_name = "techniques"
+    info = None
+
+    def get_queryset(self):
+        query = BonsaiTechnique.objects.all()
+        return query
