@@ -13,6 +13,8 @@ function cloneMore(selector, prefix) {
         var id = 'id_' + name;
         if($(this).attr('name').indexOf("tree_name")==-1)
             $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        else
+            $(this).attr({'name': name, 'id': id});
     });
     newElement.find('label').each(function() {
         var forValue = $(this).attr('for');
