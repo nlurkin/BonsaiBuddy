@@ -20,4 +20,19 @@
     {{ form.as_p }}
     <input type="submit" value="Submit">
 </form>
+
+{% if form_association %}
+<form action="{% url rev_url pk %}" method="post">
+    {% csrf_token %}
+    {{ form_association.management_form }}
+    {% for form in form_association %}
+        <p>
+        <div class="form-row">
+            {{ form }}
+        </div>
+    </p>
+    {% endfor %}
+    <input type="submit" value="Submit">
+</form>
+{% endif %}
 {% endblock %}
