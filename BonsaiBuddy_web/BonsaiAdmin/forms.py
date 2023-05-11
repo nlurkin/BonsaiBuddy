@@ -85,6 +85,9 @@ class BonsaiWhenForm(forms.Form):
             q.save()
 
 class TechniqueAssociationForm(forms.Form):
+    class Media:
+        js = ("https://code.jquery.com/jquery-3.6.4.min.js", "BonsaiAdmin/dyn_form.js",)
+
     tree_name = forms.ChoiceField(choices=build_tree_list(), disabled=True, required=False)
     tree_name_hidden = forms.CharField(widget=forms.HiddenInput())
     technique = forms.ChoiceField(choices=build_techniques())

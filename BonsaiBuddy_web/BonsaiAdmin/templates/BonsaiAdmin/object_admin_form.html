@@ -1,5 +1,9 @@
 {% extends "base_generic.html" %}
 
+{% block head %}
+    {{ form_association.media }}
+{% endblock %}
+
 {% block message %}
     {% if messages %}
     <ul class="messages">
@@ -32,7 +36,15 @@
         </div>
     </p>
     {% endfor %}
+    <button class="add-form-row">+</button>
     <input type="submit" value="Submit">
 </form>
+<script type='text/javascript'>
+$(document).on('click', '.add-form-row', function(e){
+    e.preventDefault();
+    cloneMore('.form-row:last', 'association');
+    return false;
+});
+</script>
 {% endif %}
 {% endblock %}
