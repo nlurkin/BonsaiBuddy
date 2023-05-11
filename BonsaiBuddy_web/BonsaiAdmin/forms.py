@@ -1,7 +1,7 @@
 from django import forms
 from TreeInfo.models import TreeInfo
 from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
-from utils import build_technique_categories, build_periods
+from utils import build_technique_categories, build_periods, build_tree_list, build_techniques, build_objectives, build_when
 
 class TreeInfoForm(forms.Form):
     name           = forms.CharField(max_length=200, label="Tree name")
@@ -84,3 +84,10 @@ class BonsaiWhenForm(forms.Form):
             q = BonsaiWhen(**self.cleaned_data)
             q.save()
 
+class TechniqueAssociationForm(forms.Form):
+    tree_name = forms.ChoiceField(choices=build_tree_list(), disabled=True, required=False)
+    tree_name_hidden = forms.CharField(widget=forms.HiddenInput())
+    technique = forms.ChoiceField(choices=build_techniques())
+    objective = forms.ChoiceField(choices=build_objectives())
+    when = forms.ChoiceField(choices=build_when(), required=False)
+    period = forms.ChoiceField(choices=build_periods(), required=False)
