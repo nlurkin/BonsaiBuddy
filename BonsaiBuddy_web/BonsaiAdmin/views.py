@@ -68,6 +68,16 @@ class TreeInfoFormView(MyFormView):
     index_name = "name"
     object_class = TreeInfo
 
+    def init_form_association(self, pk, data=None):
+        if data is None:
+            form_association = forms.formset_factory(TechniqueAssociationForm, can_delete=True, extra=0)(initial=[{"tree_name": pk.lower(), "tree_name_hidden": pk.lower()}], prefix="association")
+        else:
+            form_association = forms.formset_factory(TechniqueAssociationForm, can_delete=True)(data, prefix="association")
+        return form_association
+
+    def get(self, request, *args, **kwargs):
+        form_association = self.init_form_association(kwargs["pk"]) if "pk" in kwargs else None
+        return super().get(request, form_association=form_association, *args, **kwargs)
 
 class BonsaiTechniqueFormView(MyFormView):
     permission_required = 'BonsaiAdvice.change_content'
