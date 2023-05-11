@@ -3,6 +3,7 @@ from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from .models import UserProfile, build_country_list
 import bcrypt
+from BonsaiBuddy.widgets import SelectPlaceholder
 
 
 class PasswordValidationClass():
@@ -84,7 +85,7 @@ class ModifyPasswordForm(PasswordValidationClass, forms.Form):
 
 
 class UpdateUserProfileForm(forms.Form):
-    country = forms.ChoiceField(choices=build_country_list())
+    country = forms.ChoiceField(choices=build_country_list(), widget=SelectPlaceholder)
 
     def save(self, username):
         user = UserProfile.get_user(username)

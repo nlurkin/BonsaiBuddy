@@ -2,6 +2,7 @@ from django import forms
 from TreeInfo.models import TreeInfo
 from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
 from utils import build_technique_categories, build_periods, build_tree_list, build_techniques, build_objectives, build_when
+from BonsaiBuddy.widgets import SelectPlaceholder
 
 class TreeInfoForm(forms.Form):
     name           = forms.CharField(max_length=200, label="Tree name")
@@ -31,7 +32,7 @@ class TreeInfoForm(forms.Form):
 class BonsaiTechniqueForm(forms.Form):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
-    category = forms.ChoiceField(choices=build_technique_categories())
+    category = forms.ChoiceField(choices=build_technique_categories(), widget=SelectPlaceholder)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
     update = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)
@@ -68,7 +69,7 @@ class BonsaiObjectiveForm(forms.Form):
 class BonsaiWhenForm(forms.Form):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
-    global_period = forms.ChoiceField(choices=build_periods(), required=False)
+    global_period = forms.ChoiceField(choices=build_periods(), required=False, widget=SelectPlaceholder)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
     update = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)
@@ -90,7 +91,7 @@ class TechniqueAssociationForm(forms.Form):
 
     tree_name = forms.ChoiceField(choices=build_tree_list(), disabled=True, required=False)
     tree_name_hidden = forms.CharField(widget=forms.HiddenInput())
-    technique = forms.ChoiceField(choices=build_techniques())
-    objective = forms.ChoiceField(choices=build_objectives())
-    when = forms.ChoiceField(choices=build_when(), required=False)
-    period = forms.ChoiceField(choices=build_periods(), required=False)
+    technique = forms.ChoiceField(choices=build_techniques(), widget=SelectPlaceholder)
+    objective = forms.ChoiceField(choices=build_objectives(), widget=SelectPlaceholder)
+    when = forms.ChoiceField(choices=build_when(), required=False, widget=SelectPlaceholder)
+    period = forms.ChoiceField(choices=build_periods(), required=False, widget=SelectPlaceholder)
