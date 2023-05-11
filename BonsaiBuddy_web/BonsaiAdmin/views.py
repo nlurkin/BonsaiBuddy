@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from .forms import TreeInfoForm, BonsaiTechniqueForm, BonsaiObjectiveForm, BonsaiWhenForm
+from .forms import TreeInfoForm, BonsaiTechniqueForm, BonsaiObjectiveForm, BonsaiWhenForm, TechniqueAssociationForm
 from django.urls import reverse_lazy, reverse
 from django.views.generic import View
 from mongoengine.errors import NotUniqueError
@@ -10,6 +10,7 @@ from .menu import AdminMenuMixin
 from TreeInfo.models import TreeInfo
 from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
 from utils import get_object_or_404, user_has_any_perms
+from django import forms
 
 class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
     permission_required = ['TreeInfo.change_content', "BonsaiAdvice.change_content"]
