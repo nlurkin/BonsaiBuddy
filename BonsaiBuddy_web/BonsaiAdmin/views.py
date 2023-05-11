@@ -32,14 +32,17 @@ class MyFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
             top["rev_url"] = f"BonsaiAdmin:{self.url_create_name}"
         return top
 
+    def init_form(self, pk):
+        kwargs = {self.index_name: pk}
+        obj_instance = get_object_or_404(self.object_class, **kwargs)
+        form = self.form_class(initial={**obj_instance.to_mongo().to_dict(), "update": True})
+        form.fields[self.index_name].widget.attrs["readonly"] = True
+        return form
+
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if "pk" in context:
-            kwargs = {self.index_name: context["pk"]}
-            obj_instance = get_object_or_404(self.object_class, **kwargs)
-            form = self.form_class(initial={**obj_instance.to_mongo().to_dict(), "update": True})
-            form.fields[self.index_name].widget.attrs["readonly"] = True
-            context['form'] = form
+            context['form'] = self.init_form(context["pk"])
 
         return self.render_to_response(context)
 
