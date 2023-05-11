@@ -79,6 +79,21 @@ class TreeInfoFormView(MyFormView):
         form_association = self.init_form_association(kwargs["pk"]) if "pk" in kwargs else None
         return super().get(request, form_association=form_association, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        if not request.POST.get("association-TOTAL_FORMS", None):
+            # Dealing with default form, forward to parent
+            print("Using parent POST")
+            form_association = self.init_form_association(kwargs["pk"]) if "pk" in kwargs else None
+            return super().post(request, form_association=form_association, *args, **kwargs)
+
+        # Dealing with the special form_association
+        pk = kwargs["pk"]
+        formset = self.init_form_association(pk, request.POST)
+
+        if not formset.is_valid():
+            return self.form_invalid(formset, pk)
+        return self.form_valid(formset)
+
 class BonsaiTechniqueFormView(MyFormView):
     permission_required = 'BonsaiAdvice.change_content'
     url_update_name = "technique_update"
