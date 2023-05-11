@@ -94,6 +94,17 @@ class TreeInfoFormView(MyFormView):
             return self.form_invalid(formset, pk)
         return self.form_valid(formset)
 
+    def form_valid(self, form):
+        if isinstance(form, forms.BaseFormSet):
+            return FormView.form_valid(self, form)
+        else:
+            return super().form_valid(form)
+
+
+    def form_invalid(self, form, pk):
+        return self.render_to_response(self.get_context_data(form_association=form, pk=pk, form=self.init_form(pk)))
+
+
 class BonsaiTechniqueFormView(MyFormView):
     permission_required = 'BonsaiAdvice.change_content'
     url_update_name = "technique_update"
