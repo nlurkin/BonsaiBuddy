@@ -8,6 +8,9 @@ class TreeInfoPermissionModel(models.Model):
             ('change_content', 'Content administrators'),
         )
 
+class TechniqueMapper(mongoengine.EmbeddedDocument):
+    technique = mongoengine.ReferenceField(BonsaiTechnique)
+
 class TreeInfo(mongoengine.Document):
     name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
     latin_name = mongoengine.StringField(max_length=200)
@@ -20,6 +23,7 @@ class TreeInfo(mongoengine.Document):
     propagation = mongoengine.StringField()
     pests = mongoengine.StringField()
     published = mongoengine.BooleanField(default=False)
+    techniques = mongoengine.EmbeddedDocumentListField(TechniqueMapper)
 
     meta = {'db_alias': 'mongo', "indexes": ["$name"]}
 
