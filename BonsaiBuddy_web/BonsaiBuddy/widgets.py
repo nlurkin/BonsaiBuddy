@@ -12,6 +12,14 @@ def python_to_js(pydict):
         return str(pydict).lower()
     return f"{pydict}"
 
+class SelectPlaceholder(forms.Select):
+    template_name = "widgets/select.html"
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context["widget"]["is_empty"] = "" if value else "selected"
+        return context
+
 class TagifyWidget(forms.SelectMultiple):
     class Media:
         js = ('https://cdn.jsdelivr.net/npm/@yaireo/tagify', 'https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js',)
