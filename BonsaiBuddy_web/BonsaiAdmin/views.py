@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .forms import TreeInfoForm, BonsaiTechniqueForm, BonsaiObjectiveForm, BonsaiWhenForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import View
 from mongoengine.errors import NotUniqueError
 from django.contrib import messages
@@ -42,6 +42,11 @@ class MyFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
             context['form'] = form
 
         return self.render_to_response(context)
+
+    def get_success_url(self):
+        if "pk" in self.kwargs:
+            return reverse(f"BonsaiAdmin:{self.url_update_name}", kwargs={"pk": self.kwargs["pk"]})
+        return super().get_success_url()
 
     def form_valid(self, form):
         try:
