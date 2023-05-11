@@ -51,12 +51,15 @@ class MyFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
             return reverse(f"BonsaiAdmin:{self.url_update_name}", kwargs={"pk": self.kwargs["pk"]})
         return super().get_success_url()
 
-    def form_valid(self, form):
+    def process_form(self, form):
         try:
             form.create_update()
         except NotUniqueError:
             messages.error(self.request, f"{self.object_class.__name__} already exists in database.")
             return super().form_invalid(form)
+
+    def form_valid(self, form):
+        self.process_form(form)
         return super().form_valid(form)
 
 # Create your views here.
