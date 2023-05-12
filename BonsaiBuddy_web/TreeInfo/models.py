@@ -15,6 +15,9 @@ class TechniqueMapper(mongoengine.EmbeddedDocument):
     when = mongoengine.LazyReferenceField(BonsaiWhen)
     period = mongoengine.ListField(choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
 
+    def __str__(self):
+        return f"Mapper({self.oid}): technique={self.technique}, objective={self.objective}, when={self.when}, period={self.period}"
+
 
 class TreeInfo(mongoengine.Document):
     name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
