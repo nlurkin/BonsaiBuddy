@@ -11,6 +11,10 @@ class TreeInfoPermissionModel(models.Model):
 class TechniqueMapper(mongoengine.EmbeddedDocument):
     oid = mongoengine.ObjectIdField(required=True, default=ObjectId, primary_key=True)
     technique = mongoengine.LazyReferenceField(BonsaiTechnique)
+    objective = mongoengine.LazyReferenceField(BonsaiObjective)
+    when = mongoengine.LazyReferenceField(BonsaiWhen)
+    period = mongoengine.ListField(choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
+
 
 class TreeInfo(mongoengine.Document):
     name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
