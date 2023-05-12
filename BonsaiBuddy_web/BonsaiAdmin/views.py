@@ -101,11 +101,13 @@ class TreeInfoFormView(MyFormView):
             return self.form_invalid(formset, pk)
         return self.form_valid(formset)
 
-    def form_valid(self, form):
-        if isinstance(form, forms.BaseFormSet):
-            return FormView.form_valid(self, form)
+    def form_valid(self, formset):
+        if isinstance(formset, forms.BaseFormSet):
+            for form in formset:
+                form.create_update()
+            return FormView.form_valid(self, formset)
         else:
-            return super().form_valid(form)
+            return super().form_valid(formset)
 
 
     def form_invalid(self, form, pk):
