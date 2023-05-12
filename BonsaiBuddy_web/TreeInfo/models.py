@@ -41,3 +41,7 @@ class TreeInfo(mongoengine.Document):
     @staticmethod
     def get(name):
         return TreeInfo.objects.get(name=name)
+
+    def get_techniques_list(self):
+        techniques = [{"oid": item.oid, "technique": item.technique.fetch().short_name} for item in self.techniques]
+        return techniques
