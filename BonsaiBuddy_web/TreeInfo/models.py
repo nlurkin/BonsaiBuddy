@@ -9,7 +9,7 @@ class TreeInfoPermissionModel(models.Model):
         )
 
 class TechniqueMapper(mongoengine.EmbeddedDocument):
-    technique = mongoengine.ReferenceField(BonsaiTechnique)
+    technique = mongoengine.LazyReferenceField(BonsaiTechnique)
 
 class TreeInfo(mongoengine.Document):
     name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
