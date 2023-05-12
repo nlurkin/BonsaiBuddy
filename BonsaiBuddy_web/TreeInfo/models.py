@@ -1,5 +1,7 @@
 import mongoengine
 from django.db import models
+from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, get_periods
+from bson import ObjectId
 
 
 class TreeInfoPermissionModel(models.Model):
@@ -50,5 +52,12 @@ class TreeInfo(mongoengine.Document):
         return TreeInfo.objects.get(name=name)
 
     def get_techniques_list(self):
-        techniques = [{"oid": item.oid, "technique": item.technique.fetch().short_name} for item in self.techniques]
+        techniques = [{"oid": item.oid,
+                       "technique": item.technique.fetch().short_name if item.technique else None,
+                       "objective": item.objective.fetch().short_name if item.objective else None,
+                       "when": item.when.fetch().short_name if item.when else None,
+                       "period": item.period,
+                       } for item in self.techniques]
+        if len(techniques) == 0:
+            techniques.append({})
         return techniques
