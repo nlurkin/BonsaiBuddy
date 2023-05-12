@@ -91,6 +91,7 @@ class TechniqueAssociationForm(forms.Form):
 
     tree_name = forms.ChoiceField(choices=build_tree_list(), disabled=True, required=False)
     tree_name_hidden = forms.CharField(widget=forms.HiddenInput())
+    oid = forms.CharField(widget=forms.HiddenInput())
     technique = forms.ChoiceField(choices=build_techniques(), widget=SelectPlaceholder)
     objective = forms.ChoiceField(choices=build_objectives(), widget=SelectPlaceholder)
     when = forms.ChoiceField(choices=build_when(), required=False, widget=SelectPlaceholder)
