@@ -56,11 +56,7 @@ class TagifyWidget(forms.SelectMultiple):
         return context
 
     def value_from_datadict(self, data, files, name):
-        try:
-            getter = data.getlist
-        except AttributeError:
-            getter = data.get
-        value = getter(name)
+        value = data.get(name)
         if value=="":
             return None
         return value.split(",")
