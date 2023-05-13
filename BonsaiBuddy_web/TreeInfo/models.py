@@ -14,7 +14,7 @@ class TechniqueMapper(mongoengine.EmbeddedDocument):
     oid = mongoengine.ObjectIdField(required=True, default=ObjectId, primary_key=True)
     technique = mongoengine.LazyReferenceField(BonsaiTechnique)
     objective = mongoengine.LazyReferenceField(BonsaiObjective)
-    when = mongoengine.LazyReferenceField(BonsaiWhen)
+    when = mongoengine.ListField(mongoengine.LazyReferenceField(BonsaiWhen))
     period = mongoengine.ListField(choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
 
     def __str__(self):
@@ -55,7 +55,7 @@ class TreeInfo(mongoengine.Document):
         techniques = [{"oid": item.oid,
                        "technique": item.technique.fetch().short_name if item.technique else None,
                        "objective": item.objective.fetch().short_name if item.objective else None,
-                       "when": item.when.fetch().short_name if item.when else None,
+                       "when": [when.fetch().short_name if when else None for when in item.when],
                        "period": item.period,
                        } for item in self.techniques]
         if len(techniques) == 0:

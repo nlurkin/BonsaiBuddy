@@ -2,7 +2,7 @@ from django import forms
 from TreeInfo.models import TreeInfo, TechniqueMapper
 from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
 from utils import build_technique_categories, build_periods, build_tree_list, build_techniques, build_objectives, build_when
-from BonsaiBuddy.widgets import SelectPlaceholder
+from BonsaiBuddy.widgets import SelectPlaceholder, TagifyWidget
 
 class TreeInfoForm(forms.Form):
     name           = forms.CharField(max_length=200, label="Tree name")
@@ -94,15 +94,15 @@ class TechniqueAssociationForm(forms.Form):
     oid = forms.CharField(widget=forms.HiddenInput(), required=False)
     technique = forms.ChoiceField(choices=build_techniques(), widget=SelectPlaceholder)
     objective = forms.ChoiceField(choices=build_objectives(), widget=SelectPlaceholder)
-    when = forms.ChoiceField(choices=build_when(), required=False, widget=SelectPlaceholder)
-    period = forms.ChoiceField(choices=build_periods(), required=False)
+    when = forms.MultipleChoiceField(choices=build_when(), required=False, widget=TagifyWidget)
+    period = forms.MultipleChoiceField(choices=build_periods(), required=False, widget=TagifyWidget)
 
     def create_update(self):
         tree  = TreeInfo.get(self.cleaned_data['tree_name_hidden'])
         technique_id = BonsaiTechnique.get(self.cleaned_data['technique']).id
         objective_id = BonsaiObjective.get(self.cleaned_data['objective']).id
-        when_id = None if not self.cleaned_data['when'] else BonsaiWhen.get(self.cleaned_data['when']).id
-        period = [self.cleaned_data['period']] if len(self.cleaned_data['period'])>0 else []
+        when_id = [None if not when else BonsaiWhen.get(when).id for when in self.cleaned_data['when']]
+        period = self.cleaned_data['period'] if len(self.cleaned_data['period'])>0 else []
         if self.cleaned_data["oid"]:
             # Modifying an existing entry
             oid = self.cleaned_data['oid']
