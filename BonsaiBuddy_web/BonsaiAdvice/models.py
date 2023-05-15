@@ -26,6 +26,22 @@ def periodid_to_name(periodid):
 def get_technique_categories():
     return ["Pruning", "Defoliation", "Deadwood"]
 
+def timing_matches(when, period, available_when, available_period):
+    # Returns true if both when and period are in the available lists, uniless the corresponding list is empty
+    # This is considered as "doesn't matter"
+    # Same think in the opposite direction, if either of when or period is None, it is considered as "doesn't matter"
+    when_cond = (len(available_when)==0 or when in available_when)
+    period_cond = (len(available_period)==0 or period in available_period)
+    if when and period:
+        return when_cond and period_cond
+    elif when and not period:
+        return when_cond
+    elif not when and period:
+        return period_cond
+
+def make_timing(whens, periods):
+    return {"when": [_.display_name for _ in whens], "period": [periodid_to_name(_) for _ in periods]}
+
 class BonsaiTechnique(mongoengine.Document):
     short_name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
     display_name = mongoengine.StringField(max_length=200)
