@@ -23,6 +23,7 @@ class TechniqueMapper(mongoengine.EmbeddedDocument):
 
 class TreeInfo(mongoengine.Document):
     name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
+    display_name = mongoengine.StringField(max_length=200, required=True)
     latin_name = mongoengine.StringField(max_length=200)
     description = mongoengine.StringField()
     placement = mongoengine.StringField()
@@ -38,7 +39,7 @@ class TreeInfo(mongoengine.Document):
     meta = {'db_alias': 'mongo', "indexes": ["$name"]}
 
     def __str__(self):
-        return self.name
+        return self.display_name
 
     @staticmethod
     def get_all(published_only=True, order_by="name"):

@@ -5,7 +5,8 @@ from utils import build_technique_categories, build_periods, build_tree_list, bu
 from BonsaiBuddy.widgets import SelectPlaceholder, TagifyWidget
 
 class TreeInfoForm(forms.Form):
-    name           = forms.CharField(max_length=200, label="Tree name")
+    display_name   = forms.CharField(max_length=200, label="Tree name")
+    name           = forms.CharField(widget=forms.HiddenInput, required=False)
     latin_name     = forms.CharField(max_length=200)
     description    = forms.CharField(widget=forms.Textarea, required=False)
     placement      = forms.CharField(widget=forms.Textarea, required=False)
@@ -17,6 +18,11 @@ class TreeInfoForm(forms.Form):
     pests          = forms.CharField(widget=forms.Textarea, required=False)
     published      = forms.BooleanField(initial=False, required=False)
     update         = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)
+
+    def clean_name(self):
+        # Name is just the lower case display name
+        display_name = self.cleaned_data.get("display_name")
+        return display_name.lower()
 
     def create_update(self):
         update_val = self.cleaned_data["update"]

@@ -90,9 +90,9 @@ class WhichTechniqueSelector(BonsaiAdviceMenuMixin, generic.FormView):
         context = self.get_context_data(**kwargs)
         if request.GET.get("is_submitted", False):
             # Forms has been submitted, bind it
-            form = self.form_class({"tree": self.info.tree.lower(), "objective": self.info.objective, "period": self.info.period, "when": self.info.when, "is_submitted": True})
+            form = self.form_class({"tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "when": self.info.when, "is_submitted": True})
         else:
-            form = self.form_class(initial={"tree": self.info.tree.lower(), "objective": self.info.objective, "period": self.info.period, "when": self.info.when})
+            form = self.form_class(initial={"tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "when": self.info.when})
         context['form'] = form
         return self.render_to_response(context)
 
