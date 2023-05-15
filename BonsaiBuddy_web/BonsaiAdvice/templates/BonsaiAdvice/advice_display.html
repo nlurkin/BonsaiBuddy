@@ -5,7 +5,7 @@
     {% if techniques %}
         <p>The following techniques are applicable according to your criterion</p>
         {% for technique in techniques %}
-            <h1>{{ technique.technique.display_name }}</h1>
+            <h3>{{ technique.technique.display_name }}</h3>
             <p>{{ technique.technique.category}}</p>
             <p>{{ technique.technique.description}}</p>
             <p>This technique is applicable generally in {{ technique.timing.period|join:", " }}, when the tree shows any of the following states: {{ technique.timing.when|join:", " }}
