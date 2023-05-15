@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from .menu import BonsaiAdviceMenuMixin
 from django.views import generic, View
-from .models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
+from .models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, timing_matches, make_timing
 from utils import get_object_or_404, user_has_any_perms
 from django.urls import reverse_lazy
 from .forms import AdviceConfigForm, ReqAdviceInfo
+from TreeInfo.models import TreeInfo
 
 class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
     template_name = "BonsaiAdvice/index.html"
@@ -92,5 +93,24 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
     info = None
 
     def get_queryset(self):
-        query = BonsaiTechnique.objects.all()
-        return query
+        return TreeInfo.get(self.info.tree)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Then get the list of valid advices according to the criteria in info
+        objective_document_id = BonsaiObjective.get(self.info.objective).id
+        when_document_id = None if not self.info.when else BonsaiWhen.get(self.info.when)
+        period = None if not self.info.period else self.info.period
+        selected_techniques = []
+        tree = self.get_queryset()
+        for technique in tree.techniques:
+            if technique.objective.id != objective_document_id:
+                continue
+            if not timing_matches(when_document_id, period, technique.when, technique.period):
+                continue
+            selected_techniques.append({"technique": technique.technique.fetch(),
+                                        "timing": make_timing([_.fetch() for _ in technique.when], technique.period)})
+        context["techniques"] = selected_techniques
+        context["tree"] = tree
+        return context
