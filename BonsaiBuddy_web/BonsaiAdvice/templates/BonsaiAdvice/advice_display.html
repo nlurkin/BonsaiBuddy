@@ -1,9 +1,16 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    {% for technique in techniques %}
-        <h1>{{ technique.display_name }}</h1>
-        <p>{{ technique.category}}</p>
-        <p>{{ technique.description}}</p>
-    {% endfor %}
+    <h2>Advices for {{ tree.display_name }}</h2>
+    {% if techniques %}
+        <p>The following techniques are applicable according to your criterion</p>
+        {% for technique in techniques %}
+            <h1>{{ technique.technique.display_name }}</h1>
+            <p>{{ technique.technique.category}}</p>
+            <p>{{ technique.technique.description}}</p>
+            <p>This technique is applicable generally in {{ technique.timing.period|join:", " }}, when the tree shows any of the following states: {{ technique.timing.when|join:", " }}
+        {% endfor %}
+    {% else %}
+        <p>No techniques are applicable for {{ tree.display_name }} according to your search criterion</p>
+    {% endif %}
 {% endblock %}
