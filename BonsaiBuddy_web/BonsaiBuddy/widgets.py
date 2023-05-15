@@ -55,11 +55,14 @@ class TagifyWidget(forms.SelectMultiple):
         context["widget"]["tagify"] = mark_safe(python_to_js({**self.build_generic_params(), "dropdown": self.build_dropdown_params()}))
         return context
 
+    def is_multiple(self):
+        return self.maxTags=="Infinity" or self.maxTags>1
+
     def value_from_datadict(self, data, files, name):
         value = data.get(name)
         if value=="":
             return None
-        if self.maxTags>1:
+        if self.is_multiple():
             return value.split(",")
         else:
             return value
