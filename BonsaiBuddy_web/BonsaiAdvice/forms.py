@@ -7,7 +7,9 @@ class ReqAdviceInfo():
             self.tree = query.get("tree", None)
             self.objective = query.get("objective", None)
             self.period = query.get("period", None)
-            self.when = query.get("when", None).split(",")
+            self.when = query.get("when", None)
+            if self.when:
+                 self.when = self.when.split(",")
 
         def is_complete(self):
             # Requires tree, objective, and either of period or when
