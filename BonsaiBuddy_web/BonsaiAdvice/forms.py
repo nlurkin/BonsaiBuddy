@@ -14,8 +14,19 @@ class ReqAdviceInfo():
             return (not self.tree or not self.objective or not (self.period or self.when))
 
 class AdviceConfigForm(forms.Form):
+    error_messages = {
+        "missing_timing": "At least one of Period or When needs to be provided.",
+    }
+
     tree           = forms.ChoiceField(label="Tree species", choices=build_tree_list(), widget=SelectPlaceholder)
     objective      = forms.ChoiceField(label="Objective", choices=build_objectives(), widget=TagifyWidget(maxTags=1))
     period         = forms.ChoiceField(label="Period", choices=build_periods(), required=False)
     when           = forms.MultipleChoiceField(label="When", choices=build_when(), widget=TagifyWidget, required=False)
     is_submitted   = forms.BooleanField(initial=True, widget=forms.HiddenInput, required=False)
+
+    def clean_period(self):
+         # Check that at least one of period or when has been provided
+         period = self.cleaned_data.get("period")
+         when = self.cleaned_data.get("when")
+         if not period and not when:
+              raise forms.ValidationError(self.error_messages["missing_timing"], code="missing_timing")
