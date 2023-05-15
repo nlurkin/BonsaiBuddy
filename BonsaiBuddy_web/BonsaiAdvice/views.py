@@ -62,7 +62,6 @@ class WhichTechniqueView(View):
             # Requires tree, objective, and either of period or when
             return (not self.tree or not self.objective or not (self.period or self.when))
 
-    template_name = "BonsaiAdvice/blank.html"
     def get(self, request):
         info = WhichTechniqueView.ReqInfo(request.GET)
         if info.is_complete():
