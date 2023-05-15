@@ -59,4 +59,7 @@ class TagifyWidget(forms.SelectMultiple):
         value = data.get(name)
         if value=="":
             return None
-        return value.split(",")
+        if self.maxTags>1:
+            return value.split(",")
+        else:
+            return value
