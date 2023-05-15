@@ -4,7 +4,7 @@ from django.views import generic, View
 from .models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
 from utils import get_object_or_404, user_has_any_perms
 from django.urls import reverse_lazy
-from .forms import AdviceConfigForm
+from .forms import AdviceConfigForm, ReqAdviceInfo
 
 class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
     template_name = "BonsaiAdvice/index.html"
@@ -51,19 +51,8 @@ class WhenView(BonsaiAdviceMenuMixin, View):
 
 
 class WhichTechniqueView(View):
-    class ReqInfo():
-        def __init__(self, query):
-            self.tree = query.get("tree", None)
-            self.objective = query.get("objective", None)
-            self.period = query.get("period", None)
-            self.when = query.get("when", None)
-
-        def is_complete(self):
-            # Requires tree, objective, and either of period or when
-            return (not self.tree or not self.objective or not (self.period or self.when))
-
     def get(self, request):
-        info = WhichTechniqueView.ReqInfo(request.GET)
+        info = ReqAdviceInfo(request.GET)
         if info.is_complete():
             # Missing parameters
             return self.process_partial_request(info)
