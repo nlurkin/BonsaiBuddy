@@ -27,11 +27,21 @@ def get_technique_categories():
     return ["Pruning", "Defoliation", "Deadwood"]
 
 def timing_matches(when, period, available_when, available_period):
-    # Returns true if both when and period are in the available lists, uniless the corresponding list is empty
+    # Returns true if both when and period are compatible with the available lists, unless the corresponding list is empty
     # This is considered as "doesn't matter"
     # Same think in the opposite direction, if either of when or period is None, it is considered as "doesn't matter"
-    when_cond = (len(available_when)==0 or when in available_when)
-    period_cond = (len(available_period)==0 or period in available_period)
+    # Compatible is defined as: any of is in the available
+    if when is not None:
+        if type(when) not in (list, set, tuple):
+            when = [when]
+        when = set(when)
+        when_cond = len(available_when)==0 or not when.isdisjoint(set(available_when))
+    if period is not None:
+        if type(period) not in (list, set, tuple):
+            period = [period]
+        period = set(period)
+        period_cond = len(available_period)==0 or not period.isdisjoint(set(available_period))
+
     if when and period:
         return when_cond and period_cond
     elif when and not period:
