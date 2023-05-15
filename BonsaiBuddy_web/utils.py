@@ -33,7 +33,7 @@ def build_choices(queryset, id_field, name_field):
     return [(getattr(_, id_field).lower(), getattr(_, name_field)) for _ in queryset]
 
 def build_tree_list():
-    return build_choices(TreeInfo.get_all(), "name", "name")
+    return build_choices(TreeInfo.get_all(), "name", "display_name")
 
 def build_objectives():
     return build_choices(BonsaiObjective.get_all(), "short_name", "display_name")
