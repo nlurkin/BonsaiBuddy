@@ -103,16 +103,14 @@ class MyTreeForm(CreateUpdateForm):
     tree_name      = forms.ChoiceField(choices=build_tree_list())
     objective      = forms.ChoiceField(choices=build_objectives())
 
-    def update_object(self):
-        pass
+    def get_refs_dict(self):
+        return {"treeReference": TreeInfo.get(self.cleaned_data["tree_name"]),
+                "objective": BonsaiObjective.get(self.cleaned_data["objective"])}
 
+    def update_object(self, username):
+        pass
     def create_object(self, username):
-        print(self.cleaned_data)
         profile = UserProfile.get_user(username)
-        tree = TreeCollection()
-        treeRef = TreeInfo.get(self.cleaned_data["tree_name"])
-        objectiveRef = BonsaiObjective.get(self.cleaned_data["objective"])
-        tree.treeReference = treeRef
-        tree.objective = objectiveRef
+        tree = TreeCollection(**self.get_refs_dict())
         profile.my_trees.append(tree)
         profile.save()
