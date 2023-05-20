@@ -36,9 +36,9 @@ class CreateUpdateView(FormView):
             return reverse(f"{self.app_name}:{self.url_update_name}", kwargs={"pk": self.kwargs["pk"]})
         return super().get_success_url()
 
-    def process_form(self, form):
+    def process_form(self, form, **kwargs):
         try:
-            form.create_update()
+            form.create_update(**kwargs)
         except NotUniqueError:
             messages.error(
                 self.request, f"{self.object_class.__name__} already exists in database.")
