@@ -7,6 +7,7 @@ from django.utils import timezone
 import pycountry
 from TreeInfo.models import TreeInfo
 from BonsaiAdvice.models import BonsaiObjective
+from bson import ObjectId
 
 class User(AbstractUser):
     pass
@@ -18,6 +19,7 @@ def build_country_list():
     return countries
 
 class TreeCollection(mongoengine.EmbeddedDocument):
+    oid = mongoengine.ObjectIdField(required=True, default=ObjectId, primary_key=True)
     treeReference = mongoengine.ReferenceField(TreeInfo)
     objective = mongoengine.ReferenceField(BonsaiObjective)
 
