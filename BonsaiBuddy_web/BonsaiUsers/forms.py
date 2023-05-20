@@ -108,7 +108,13 @@ class MyTreeForm(CreateUpdateForm):
                 "objective": BonsaiObjective.get(self.cleaned_data["objective"])}
 
     def update_object(self, username):
-        pass
+        profile = UserProfile.get_user(username)
+        tree = profile.get_my_tree(self.cleaned_data["oid"])
+        refs_dict = self.get_refs_dict()
+        tree.treeReference = refs_dict["treeReference"]
+        tree.objective = refs_dict["objective"]
+        profile.save()
+
     def create_object(self, username):
         profile = UserProfile.get_user(username)
         tree = TreeCollection(**self.get_refs_dict())
