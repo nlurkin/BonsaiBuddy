@@ -11,7 +11,7 @@ from utils import build_objectives, build_tree_list
 from .models import TreeCollection, UserProfile, build_country_list
 
 
-class PasswordValidationClass():
+class PasswordValidationClass(forms.Form):
     error_messages = {
         "password_mismatch": "The two password fields didn't match.",
     }
@@ -27,6 +27,7 @@ class PasswordValidationClass():
         strip=False,
         help_text="Enter the same password as before, for verification.",
     )
+
     def clean_password(self):
         password = self.cleaned_data.get("password")
         if password:
@@ -64,7 +65,7 @@ class CustomUserCreationForm(PasswordValidationClass, forms.Form):
         user.create_user(password)
         return user
 
-class ModifyPasswordForm(PasswordValidationClass, forms.Form):
+class ModifyPasswordForm(PasswordValidationClass):
     error_messages = {**PasswordValidationClass.error_messages,
         "incorrect_old": "The old password is incorrect.",
     }
