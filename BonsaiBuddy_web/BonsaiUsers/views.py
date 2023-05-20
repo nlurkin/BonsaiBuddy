@@ -1,15 +1,16 @@
-from django.shortcuts import render
-from .menu import BonsaiUsersMenuMixin
-from django.views import View, generic
-from .models import UserProfile, TreeCollection
-from utils import get_object_or_404
-from django.http import Http404
-from .forms import CustomUserCreationForm, UpdateUserProfileForm, ModifyPasswordForm, MyTreeForm
-from django.urls import reverse_lazy
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import views
+from BonsaiAdvice.models import get_current_period
 from BonsaiBuddy.views import CreateUpdateView
-from bson import ObjectId
+from django.contrib.auth import authenticate, login, views
+from django.http import Http404
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import View, generic
+from utils import get_object_or_404
+
+from .forms import (CustomUserCreationForm, ModifyPasswordForm, MyTreeForm,
+                    UpdateUserProfileForm)
+from .menu import BonsaiUsersMenuMixin
+from .models import TreeCollection, UserProfile
 
 
 class DetailView(BonsaiUsersMenuMixin, View):
@@ -79,6 +80,11 @@ class MyTreesListView(BonsaiUsersMenuMixin, generic.ListView):
         profile = UserProfile.get_user(self.request.user.username)
         trees_list = profile.my_trees
         return trees_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_period"] = get_current_period()
+        return context
 
 class MyTreesFormView(BonsaiUsersMenuMixin, CreateUpdateView):
     template_name = "BonsaiUsers/my_trees_form.html"

@@ -5,7 +5,9 @@
     {% if tree_info_list %}
     <ul>
         {% for tree in tree_info_list %}
-        <li> {{ tree.treeReference }} with objective  {{ tree.objective }} <a href="{% url 'Profile:my_trees_update' pk=tree.oid %}">Modify</a></li>
+        <li> {{ tree.treeReference.display_name }} with objective  {{ tree.objective.display_name }}
+            <a href="{% url 'Profile:my_trees_update' pk=tree.oid %}">Modify</a>
+            <a href="{% url 'BonsaiAdvice:which_technique' %}?tree={{ tree.treeReference.name }}&objective={{ tree.objective.short_name }}&period={{ current_period|join:',' }}">See advice</a></li>
         {% endfor %}
     </ul>
     {% else %}
