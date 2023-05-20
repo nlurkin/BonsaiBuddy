@@ -102,6 +102,7 @@ class MyTreeForm(CreateUpdateForm):
     oid            = forms.CharField(widget=forms.HiddenInput, required=False)
     tree_name      = forms.ChoiceField(choices=build_tree_list())
     objective      = forms.ChoiceField(choices=build_objectives())
+    delete         = forms.BooleanField(required=False)
 
     def get_refs_dict(self):
         return {"treeReference": TreeInfo.get(self.cleaned_data["tree_name"]),
@@ -110,9 +111,13 @@ class MyTreeForm(CreateUpdateForm):
     def update_object(self, username):
         profile = UserProfile.get_user(username)
         tree = profile.get_my_tree(self.cleaned_data["oid"])
-        refs_dict = self.get_refs_dict()
-        tree.treeReference = refs_dict["treeReference"]
-        tree.objective = refs_dict["objective"]
+        if self.cleaned_data["delete"]:
+            # Remove the entry
+            profile.my_trees.remove(tree)
+        else:
+            refs_dict = self.get_refs_dict()
+            tree.treeReference = refs_dict["treeReference"]
+            tree.objective = refs_dict["objective"]
         profile.save()
 
     def create_object(self, username):
