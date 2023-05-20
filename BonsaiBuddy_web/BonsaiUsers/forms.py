@@ -76,6 +76,10 @@ class ModifyPasswordForm(PasswordValidationClass):
         help_text="Old password"
     )
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
     def clean_old_password(self):
         old_password = self.cleaned_data.get("old_password")
         if old_password:
