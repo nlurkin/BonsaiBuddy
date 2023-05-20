@@ -101,7 +101,7 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
         # Then get the list of valid advices according to the criteria in info
         objective_document_id = BonsaiObjective.get(self.info.objective).id
         when_document_id = None if not self.info.when else [BonsaiWhen.get(_).id for _ in self.info.when]
-        period = None if not self.info.period else self.info.period
+        period = None if not self.info.period else self.info.period.split(',')
         selected_techniques = []
         tree = self.get_queryset()
         for technique in tree.techniques:
