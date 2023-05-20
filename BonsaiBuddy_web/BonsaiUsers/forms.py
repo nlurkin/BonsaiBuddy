@@ -104,6 +104,12 @@ class MyTreeForm(CreateUpdateForm):
     objective      = forms.ChoiceField(choices=build_objectives())
     delete         = forms.BooleanField(required=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not "initial" in kwargs or len(kwargs["initial"]) == 0:
+            self.fields["delete"].widget = forms.HiddenInput()
+
+
     def get_refs_dict(self):
         return {"treeReference": TreeInfo.get(self.cleaned_data["tree_name"]),
                 "objective": BonsaiObjective.get(self.cleaned_data["objective"])}
