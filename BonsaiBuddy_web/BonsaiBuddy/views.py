@@ -7,6 +7,7 @@ from utils import get_object_or_404
 
 class CreateUpdateView(FormView):
     # Required in subclass: success_url, template_name, app_name
+    return_to_form_on_update_success = True
 
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
@@ -38,7 +39,7 @@ class CreateUpdateView(FormView):
         return self.render_to_response(context)
 
     def get_success_url(self):
-        if "pk" in self.kwargs:
+        if self.return_to_form_on_update_success and "pk" in self.kwargs:
             return reverse(f"{self.app_name}:{self.url_update_name}", kwargs={"pk": self.kwargs["pk"]})
         return super().get_success_url()
 
