@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 import mongoengine
 
 class AdvicePermissionModel(models.Model):
@@ -26,6 +27,53 @@ def periodid_to_name(periodid):
 def get_technique_categories():
     return ["Pruning", "Defoliation", "Deadwood"]
 
+def month_to_period(month):
+    # TODO: this is applicable only to the northern hemisphere, excluding tropical regions
+    period = []
+    qualifier = []
+    if month >= 3 and month <=6:
+        # Spring: March-June
+        period.append(0)
+        qualifier.append(None)
+        if month <=4:
+            # Early: March, April
+            qualifier[-1] = 0
+        else:
+            # Late : May, June
+            qualifier[-1] = 1
+    if month >= 7 and month <= 9:
+        # Summer: July-September
+        period.append(1)
+        qualifier.append(None)
+        if month == 7:
+            # Early: July
+            qualifier[-1] = 0
+        elif month == 9:
+            # Late: September
+            qualifier[-1] = 1
+    if month >= 9 and month <= 11:
+        # Autumn: September-November
+        if month <= 10:
+            # Early: September, October
+            period.append(2)
+            qualifier.append(0)
+        if month <= 10:
+            # Late : October, November
+            period.append(2)
+            qualifier.append(1)
+    if month >= 12 or month <= 3:
+        # Winter: December, Mid-March
+        period.append(3)
+        qualifier.append(None)
+        if month == 12:
+            # Early: December,
+            qualifier[-1] = 0
+        if month >= 2:
+            # Late: February, March
+            qualifier[-1] = 1
+    # Undefined: August, January
+    return [f"{q}_{p}" for p,q in zip(period, qualifier)]
+
 def timing_matches(when, period, available_when, available_period):
     # Returns true if both when and period are compatible with the available lists, unless the corresponding list is empty
     # This is considered as "doesn't matter"
@@ -51,6 +99,10 @@ def timing_matches(when, period, available_when, available_period):
 
 def make_timing(whens, periods):
     return {"when": [_.display_name for _ in whens], "period": [periodid_to_name(_) for _ in periods]}
+
+def get_current_period():
+    curr_month = timezone.now().month
+    return month_to_period(curr_month)
 
 class BonsaiTechnique(mongoengine.Document):
     short_name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
