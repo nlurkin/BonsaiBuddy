@@ -42,6 +42,14 @@ class UserProfile(mongoengine.Document):
         self.last_pwd_update = timezone.now()
         self.save()
 
+    def get_my_tree(self, oid):
+        if isinstance(oid, str):
+            oid = ObjectId(oid)
+        for tree in self.my_trees:
+            if tree.oid == oid:
+                return tree
+        return None
+
     @staticmethod
     def get_user(username):
         return UserProfile.objects.get(username=username)

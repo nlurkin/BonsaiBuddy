@@ -96,11 +96,9 @@ class MyTreesFormView(BonsaiUsersMenuMixin, CreateUpdateView):
 
     def get_object(self, pk, **kwargs):
         profile = UserProfile.get_user(self.request.user.username)
-        trees_list = profile.my_trees
-        pk = ObjectId(pk)
-        for tree in trees_list:
-            if tree.oid == pk:
-                return tree
+        tree = profile.get_my_tree(pk)
+        if tree is not None:
+            return tree
 
         raise Http404(f"TreeCollection {tree.oid} does not exist for user {self.request.user.username}")
 
