@@ -12,6 +12,7 @@ from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
 from utils import get_object_or_404, user_has_any_perms
 from django import forms
 
+from BonsaiBuddy.views import CreateUpdateView
 class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
     permission_required = ['TreeInfo.change_content', "BonsaiAdvice.change_content"]
 
@@ -21,49 +22,14 @@ class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
     def get(self, request):
         return render(request, "BonsaiAdmin/index.html", self.build_menu_context(request))
 
-class MyFormView(AdminMenuMixin, PermissionRequiredMixin, FormView):
+
+class MyFormView(AdminMenuMixin, PermissionRequiredMixin, CreateUpdateView):
     success_url = reverse_lazy("BonsaiAdmin:index")
     template_name = 'BonsaiAdmin/object_admin_form.html'
+    app_name = "BonsaiAdmin"
 
-    def get_context_data(self, **kwargs):
-        top = super().get_context_data(**kwargs)
-        if "pk" in top:
-            top["rev_url"] = f"BonsaiAdmin:{self.url_update_name}"
-        else:
-            top["rev_url"] = f"BonsaiAdmin:{self.url_create_name}"
-        return top
 
-    def init_form(self, pk):
-        kwargs = {self.index_name: pk}
-        obj_instance = get_object_or_404(self.object_class, **kwargs)
-        form = self.form_class(initial={**obj_instance.to_mongo().to_dict(), "update": True})
-        form.fields[self.index_name].widget.attrs["readonly"] = True
-        return form
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        if "pk" in context:
-            context['form'] = self.init_form(context["pk"])
-
-        return self.render_to_response(context)
-
-    def get_success_url(self):
-        if "pk" in self.kwargs:
-            return reverse(f"BonsaiAdmin:{self.url_update_name}", kwargs={"pk": self.kwargs["pk"]})
-        return super().get_success_url()
-
-    def process_form(self, form):
-        try:
-            form.create_update()
-        except NotUniqueError:
-            messages.error(self.request, f"{self.object_class.__name__} already exists in database.")
-            return super().form_invalid(form)
-
-    def form_valid(self, form):
-        self.process_form(form)
-        return super().form_valid(form)
-
-# Create your views here.
 class TreeInfoFormView(MyFormView):
     permission_required = 'TreeInfo.change_content'
     url_update_name = "treeinfo_update"
