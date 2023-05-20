@@ -1,23 +1,25 @@
-from django import forms
-from TreeInfo.models import TreeInfo, TechniqueMapper
-from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
-from utils import build_technique_categories, build_periods, build_tree_list, build_techniques, build_objectives, build_when
-from BonsaiBuddy.widgets import SelectPlaceholder, TagifyWidget
+from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen
 from BonsaiBuddy.forms import CreateUpdateForm
+from BonsaiBuddy.widgets import SelectPlaceholder, TagifyWidget
+from django import forms
+from TreeInfo.models import TechniqueMapper, TreeInfo
+from utils import (build_objectives, build_periods, build_technique_categories,
+                   build_techniques, build_tree_list, build_when)
+
 
 class TreeInfoForm(CreateUpdateForm):
-    display_name   = forms.CharField(max_length=200, label="Tree name")
-    name           = forms.CharField(widget=forms.HiddenInput, required=False)
-    latin_name     = forms.CharField(max_length=200)
-    description    = forms.CharField(widget=forms.Textarea, required=False)
-    placement      = forms.CharField(widget=forms.Textarea, required=False)
-    watering       = forms.CharField(widget=forms.Textarea, required=False)
-    fertilizing    = forms.CharField(widget=forms.Textarea, required=False)
+    display_name = forms.CharField(max_length=200, label="Tree name")
+    name = forms.CharField(widget=forms.HiddenInput, required=False)
+    latin_name = forms.CharField(max_length=200)
+    description = forms.CharField(widget=forms.Textarea, required=False)
+    placement = forms.CharField(widget=forms.Textarea, required=False)
+    watering = forms.CharField(widget=forms.Textarea, required=False)
+    fertilizing = forms.CharField(widget=forms.Textarea, required=False)
     pruning_wiring = forms.CharField(widget=forms.Textarea, required=False)
-    repotting      = forms.CharField(widget=forms.Textarea, required=False)
-    propagation    = forms.CharField(widget=forms.Textarea, required=False)
-    pests          = forms.CharField(widget=forms.Textarea, required=False)
-    published      = forms.BooleanField(initial=False, required=False)
+    repotting = forms.CharField(widget=forms.Textarea, required=False)
+    propagation = forms.CharField(widget=forms.Textarea, required=False)
+    pests = forms.CharField(widget=forms.Textarea, required=False)
+    published = forms.BooleanField(initial=False, required=False)
 
     def clean_name(self):
         # Name is just the lower case display name
@@ -33,10 +35,12 @@ class TreeInfoForm(CreateUpdateForm):
         q = TreeInfo(**self.cleaned_data)
         q.save()
 
+
 class BonsaiTechniqueForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
-    category = forms.ChoiceField(choices=build_technique_categories(), widget=SelectPlaceholder)
+    category = forms.ChoiceField(
+        choices=build_technique_categories(), widget=SelectPlaceholder)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
 
@@ -48,6 +52,7 @@ class BonsaiTechniqueForm(CreateUpdateForm):
     def create_object(self):
         q = BonsaiTechnique(**self.cleaned_data)
         q.save()
+
 
 class BonsaiObjectiveForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
@@ -64,10 +69,12 @@ class BonsaiObjectiveForm(CreateUpdateForm):
         q = BonsaiObjective(**self.cleaned_data)
         q.save()
 
+
 class BonsaiWhenForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
-    global_period = forms.ChoiceField(choices=build_periods(), required=False, widget=SelectPlaceholder)
+    global_period = forms.ChoiceField(
+        choices=build_periods(), required=False, widget=SelectPlaceholder)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
 
@@ -80,24 +87,33 @@ class BonsaiWhenForm(CreateUpdateForm):
         q = BonsaiWhen(**self.cleaned_data)
         q.save()
 
+
 class TechniqueAssociationForm(forms.Form):
     class Media:
-        js = ("https://code.jquery.com/jquery-3.6.4.min.js", "BonsaiAdmin/dyn_form.js",)
+        js = ("https://code.jquery.com/jquery-3.6.4.min.js",
+              "BonsaiAdmin/dyn_form.js",)
 
-    tree_name = forms.ChoiceField(choices=build_tree_list(), disabled=True, required=False)
+    tree_name = forms.ChoiceField(
+        choices=build_tree_list(), disabled=True, required=False)
     tree_name_hidden = forms.CharField(widget=forms.HiddenInput())
     oid = forms.CharField(widget=forms.HiddenInput(), required=False)
-    technique = forms.ChoiceField(choices=build_techniques(), widget=SelectPlaceholder)
-    objective = forms.ChoiceField(choices=build_objectives(), widget=SelectPlaceholder)
-    when = forms.MultipleChoiceField(choices=build_when(), required=False, widget=TagifyWidget)
-    period = forms.MultipleChoiceField(choices=build_periods(), required=False, widget=TagifyWidget)
+    technique = forms.ChoiceField(
+        choices=build_techniques(), widget=SelectPlaceholder)
+    objective = forms.ChoiceField(
+        choices=build_objectives(), widget=SelectPlaceholder)
+    when = forms.MultipleChoiceField(
+        choices=build_when(), required=False, widget=TagifyWidget)
+    period = forms.MultipleChoiceField(
+        choices=build_periods(), required=False, widget=TagifyWidget)
 
     def create_update(self):
-        tree  = TreeInfo.get(self.cleaned_data['tree_name_hidden'])
+        tree = TreeInfo.get(self.cleaned_data['tree_name_hidden'])
         technique_id = BonsaiTechnique.get(self.cleaned_data['technique']).id
         objective_id = BonsaiObjective.get(self.cleaned_data['objective']).id
-        when_id = [None if not when else BonsaiWhen.get(when).id for when in self.cleaned_data['when']]
-        period = self.cleaned_data['period'] if len(self.cleaned_data['period'])>0 else []
+        when_id = [None if not when else BonsaiWhen.get(
+            when).id for when in self.cleaned_data['when']]
+        period = self.cleaned_data['period'] if len(
+            self.cleaned_data['period']) > 0 else []
         if self.cleaned_data["oid"]:
             # Modifying an existing entry
             oid = self.cleaned_data['oid']
@@ -106,12 +122,13 @@ class TechniqueAssociationForm(forms.Form):
                 # Requires deletion of the entry
                 tree.techniques.remove(mapper)
             else:
-                mapper.technique=technique_id
-                mapper.objective=objective_id
-                mapper.when=when_id
-                mapper.period=period
+                mapper.technique = technique_id
+                mapper.objective = objective_id
+                mapper.when = when_id
+                mapper.period = period
         else:
             # Creating a new entry
-            mapper = TechniqueMapper(technique = technique_id, objective=objective_id, when=when_id, period=period)
+            mapper = TechniqueMapper(
+                technique=technique_id, objective=objective_id, when=when_id, period=period)
             tree.techniques.append(mapper)
         tree.save()
