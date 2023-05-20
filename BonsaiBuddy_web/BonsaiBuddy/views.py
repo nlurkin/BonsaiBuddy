@@ -16,11 +16,17 @@ class CreateUpdateView(FormView):
             top["rev_url"] = f"{self.app_name}:{self.url_create_name}"
         return top
 
+    def get_object(self, pk, **kwargs):
+        return get_object_or_404(self.object_class, **kwargs)
+
+    def obj_to_dict(self, obj):
+        return obj.to_mongo().to_dict()
+
     def init_form(self, pk):
         kwargs = {self.index_name: pk}
-        obj_instance = get_object_or_404(self.object_class, **kwargs)
+        obj_instance = self.get_object(pk, **kwargs)
         form = self.form_class(
-            initial={**obj_instance.to_mongo().to_dict(), "update": True})
+            initial={**self.obj_to_dict(obj_instance), "update": True})
         form.fields[self.index_name].widget.attrs["readonly"] = True
         return form
 
