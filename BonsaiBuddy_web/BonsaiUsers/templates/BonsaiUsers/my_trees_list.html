@@ -1,11 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+    <h2>My trees</h2>
     {% if tree_info_list %}
     <ul>
         {% for tree in tree_info_list %}
-        {{ tree.treeReference }}
-        {{ tree.objective }}
+        <li> {{ tree.treeReference }} with objective  {{ tree.objective }} <a href="{% url 'Profile:my_trees_update' pk=tree.oid %}">Modify</a></li>
         {% endfor %}
     </ul>
     {% else %}

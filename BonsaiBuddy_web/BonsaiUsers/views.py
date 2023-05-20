@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views
 from BonsaiBuddy.views import CreateUpdateView
+from bson import ObjectId
 
 
 class DetailView(BonsaiUsersMenuMixin, View):
@@ -92,3 +93,16 @@ class MyTreesFormView(BonsaiUsersMenuMixin, CreateUpdateView):
     def form_valid(self, form):
         self.process_form(form, username=self.request.user.username)
         return generic.FormView.form_valid(self, form)
+
+    def get_object(self, pk, **kwargs):
+        profile = UserProfile.get_user(self.request.user.username)
+        trees_list = profile.my_trees
+        pk = ObjectId(pk)
+        for tree in trees_list:
+            if tree.oid == pk:
+                return tree
+
+        raise Http404(f"TreeCollection {tree.oid} does not exist for user {self.request.user.username}")
+
+    def obj_to_dict(self, obj):
+        return {"oid": obj.oid, "tree_name": obj.treeReference.name, "objective": obj.objective.short_name}
