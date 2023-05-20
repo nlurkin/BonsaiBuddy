@@ -1,20 +1,23 @@
-from django.shortcuts import render
-from django.views.generic.edit import FormView
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from .forms import TreeInfoForm, BonsaiTechniqueForm, BonsaiObjectiveForm, BonsaiWhenForm, TechniqueAssociationForm
-from django.urls import reverse_lazy, reverse
-from django.views.generic import View
-from mongoengine.errors import NotUniqueError
-from django.contrib import messages
-from .menu import AdminMenuMixin
-from TreeInfo.models import TreeInfo
-from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen
-from utils import get_object_or_404, user_has_any_perms
-from django import forms
-
+from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen
 from BonsaiBuddy.views import CreateUpdateView
+from django import forms
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import View
+from django.views.generic.edit import FormView
+from TreeInfo.models import TreeInfo
+from utils import user_has_any_perms
+
+from .forms import (BonsaiObjectiveForm, BonsaiTechniqueForm, BonsaiWhenForm,
+                    TechniqueAssociationForm, TreeInfoForm)
+from .menu import AdminMenuMixin
+
+
+
 class IndexView(AdminMenuMixin, PermissionRequiredMixin, View):
-    permission_required = ['TreeInfo.change_content', "BonsaiAdvice.change_content"]
+    permission_required = ['TreeInfo.change_content',
+                           "BonsaiAdvice.change_content"]
 
     def has_permission(self):
         return user_has_any_perms(self.request.user, self.permission_required)
@@ -39,7 +42,8 @@ class TreeInfoFormView(MyFormView):
     object_class = TreeInfo
 
     def init_form_association(self, pk, data=None):
-        initial=[{"tree_name": pk.lower(), "tree_name_hidden": pk, **technique} for technique in TreeInfo.get(pk).get_techniques_list()]
+        initial = [{"tree_name": pk.lower(), "tree_name_hidden": pk, **technique}
+                   for technique in TreeInfo.get(pk).get_techniques_list()]
         if data is None:
             form_association = forms.formset_factory(TechniqueAssociationForm, can_delete=True, extra=0)(
                 initial=initial, prefix="association")
@@ -49,14 +53,16 @@ class TreeInfoFormView(MyFormView):
         return form_association
 
     def get(self, request, *args, **kwargs):
-        form_association = self.init_form_association(kwargs["pk"]) if "pk" in kwargs else None
+        form_association = self.init_form_association(
+            kwargs["pk"]) if "pk" in kwargs else None
         return super().get(request, form_association=form_association, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if not request.POST.get("association-TOTAL_FORMS", None):
             # Dealing with default form, forward to parent
             print("Using parent POST")
-            form_association = self.init_form_association(kwargs["pk"]) if "pk" in kwargs else None
+            form_association = self.init_form_association(
+                kwargs["pk"]) if "pk" in kwargs else None
             return super().post(request, form_association=form_association, *args, **kwargs)
 
         # Dealing with the special form_association
@@ -75,7 +81,6 @@ class TreeInfoFormView(MyFormView):
         else:
             return super().form_valid(formset)
 
-
     def form_invalid(self, form, pk):
         return self.render_to_response(self.get_context_data(form_association=form, pk=pk, form=self.init_form(pk)))
 
@@ -88,6 +93,7 @@ class BonsaiTechniqueFormView(MyFormView):
     index_name = "short_name"
     object_class = BonsaiTechnique
 
+
 class BonsaiObjectiveFormView(MyFormView):
     permission_required = 'BonsaiAdvice.change_content'
     url_update_name = "objective_update"
@@ -95,6 +101,7 @@ class BonsaiObjectiveFormView(MyFormView):
     form_class = BonsaiObjectiveForm
     index_name = "short_name"
     object_class = BonsaiObjective
+
 
 class BonsaiWhenFormView(MyFormView):
     permission_required = 'BonsaiAdvice.change_content'
