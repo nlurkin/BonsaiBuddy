@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .menu import BonsaiUsersMenuMixin
 from django.views import View, generic
-from .models import UserProfile
+from .models import UserProfile, TreeCollection
 from utils import get_object_or_404
 from django.http import Http404
 from .forms import CustomUserCreationForm, UpdateUserProfileForm, ModifyPasswordForm
@@ -66,3 +66,13 @@ class ModifyPasswordView(BonsaiUsersMenuMixin, generic.FormView):
     def form_valid(self, form):
         form.save(self.request.user.username)
         return super().form_valid(form)
+
+class MyTreesListView(BonsaiUsersMenuMixin, generic.ListView):
+    template_name = "BonsaiUsers/my_trees_list.html"
+    context_object_name = "tree_info_list"
+
+    def get_queryset(self):
+        """Return the complete list of available trees."""
+        profile = UserProfile.get_user(self.request.user.username)
+        trees_list = profile.my_trees
+        return trees_list

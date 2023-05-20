@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if tree_info_list %}
+    <ul>
+        {% for tree in tree_info_list %}
+        {{ tree.treeReference }}
+        {{ tree.objective }}
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No TreeInfo are available.</p>
+    {% endif %}
+
+    <a href="{% url 'Profile:my_trees_create' %}">Add a tree</a>
+{% endblock %}
