@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View, generic
 from utils import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import (CustomUserCreationForm, ModifyPasswordForm, MyTreeForm,
                     UpdateUserProfileForm)
@@ -13,7 +14,7 @@ from .menu import BonsaiUsersMenuMixin
 from .models import TreeCollection, UserProfile
 
 
-class DetailView(BonsaiUsersMenuMixin, View):
+class DetailView(BonsaiUsersMenuMixin, LoginRequiredMixin, View):
     model = UserProfile
     template_name = "BonsaiUsers/profile.html"
     context_object_name = "profile"
@@ -39,7 +40,7 @@ class SignupView(BonsaiUsersMenuMixin, generic.FormView):
 class MyLoginView(BonsaiUsersMenuMixin, views.LoginView):
     pass
 
-class ProfileUpdateView(BonsaiUsersMenuMixin, generic.FormView):
+class ProfileUpdateView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormView):
     success_url = reverse_lazy("Profile:detail")
     template_name = 'BonsaiUsers/profile_form.html'
     form_class = UpdateUserProfileForm
@@ -57,7 +58,7 @@ class ProfileUpdateView(BonsaiUsersMenuMixin, generic.FormView):
         form.save(self.request.user.username)
         return super().form_valid(form)
 
-class ModifyPasswordView(BonsaiUsersMenuMixin, generic.FormView):
+class ModifyPasswordView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormView):
     form_class = ModifyPasswordForm
     success_url = reverse_lazy("Profile:detail")
     template_name = "registration/password_change.html"
@@ -71,7 +72,7 @@ class ModifyPasswordView(BonsaiUsersMenuMixin, generic.FormView):
         form.save(self.request.user.username)
         return super().form_valid(form)
 
-class MyTreesListView(BonsaiUsersMenuMixin, generic.ListView):
+class MyTreesListView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.ListView):
     template_name = "BonsaiUsers/my_trees_list.html"
     context_object_name = "tree_info_list"
 
@@ -86,7 +87,7 @@ class MyTreesListView(BonsaiUsersMenuMixin, generic.ListView):
         context["current_period"] = get_current_period()
         return context
 
-class MyTreesFormView(BonsaiUsersMenuMixin, CreateUpdateView):
+class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView):
     template_name = "BonsaiUsers/my_trees_form.html"
     url_update_name = "my_trees_update"
     url_create_name = "my_trees_create"
