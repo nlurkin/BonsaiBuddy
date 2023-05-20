@@ -1,7 +1,8 @@
 from django import forms
 
+
 class CreateUpdateForm(forms.Form):
-    update         = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)
+    update = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)
 
     def create_update(self, **kwargs):
         update_val = self.cleaned_data["update"]

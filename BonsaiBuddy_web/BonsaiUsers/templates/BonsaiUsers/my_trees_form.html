@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+
+{% block head %}
+    {{ form_association.media }}
+{% endblock %}
+
+{% block message %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if "create" in rev_url %}
+<form action="{% url rev_url %}" method="post">
+{% else %}
+<form action="{% url rev_url pk %}" method="post">
+{% endif %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

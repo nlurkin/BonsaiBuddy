@@ -1,9 +1,14 @@
+import bcrypt
+from BonsaiAdvice.models import BonsaiObjective
+from BonsaiBuddy.forms import CreateUpdateForm
+from BonsaiBuddy.widgets import SelectPlaceholder
 from django import forms
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-from .models import UserProfile, build_country_list
-import bcrypt
-from BonsaiBuddy.widgets import SelectPlaceholder
+from TreeInfo.models import TreeInfo
+from utils import build_objectives, build_tree_list
+
+from .models import TreeCollection, UserProfile, build_country_list
 
 
 class PasswordValidationClass():
@@ -91,3 +96,23 @@ class UpdateUserProfileForm(forms.Form):
         user = UserProfile.get_user(username)
         user.country = self.cleaned_data.get("country")
         user.save()
+
+
+class MyTreeForm(CreateUpdateForm):
+    oid            = forms.CharField(widget=forms.HiddenInput, required=False)
+    tree_name      = forms.ChoiceField(choices=build_tree_list())
+    objective      = forms.ChoiceField(choices=build_objectives())
+
+    def update_object(self):
+        pass
+
+    def create_object(self, username):
+        print(self.cleaned_data)
+        profile = UserProfile.get_user(username)
+        tree = TreeCollection()
+        treeRef = TreeInfo.get(self.cleaned_data["tree_name"])
+        objectiveRef = BonsaiObjective.get(self.cleaned_data["objective"])
+        tree.treeReference = treeRef
+        tree.objective = objectiveRef
+        profile.my_trees.append(tree)
+        profile.save()

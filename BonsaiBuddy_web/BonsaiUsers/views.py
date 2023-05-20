@@ -4,10 +4,12 @@ from django.views import View, generic
 from .models import UserProfile, TreeCollection
 from utils import get_object_or_404
 from django.http import Http404
-from .forms import CustomUserCreationForm, UpdateUserProfileForm, ModifyPasswordForm
+from .forms import CustomUserCreationForm, UpdateUserProfileForm, ModifyPasswordForm, MyTreeForm
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views
+from BonsaiBuddy.views import CreateUpdateView
+
 
 class DetailView(BonsaiUsersMenuMixin, View):
     model = UserProfile
@@ -76,3 +78,17 @@ class MyTreesListView(BonsaiUsersMenuMixin, generic.ListView):
         profile = UserProfile.get_user(self.request.user.username)
         trees_list = profile.my_trees
         return trees_list
+
+class MyTreesFormView(BonsaiUsersMenuMixin, CreateUpdateView):
+    template_name = "BonsaiUsers/my_trees_form.html"
+    url_update_name = "my_trees_update"
+    url_create_name = "my_trees_create"
+    app_name = "Profile"
+    form_class = MyTreeForm
+    index_name = "oid"
+    object_class = TreeCollection
+    success_url  = reverse_lazy("Profile:my_trees")
+
+    def form_valid(self, form):
+        self.process_form(form, username=self.request.user.username)
+        return generic.FormView.form_valid(self, form)
