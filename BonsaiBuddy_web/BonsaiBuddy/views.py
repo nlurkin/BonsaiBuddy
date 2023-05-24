@@ -45,7 +45,9 @@ class CreateUpdateView(FormView):
 
     def process_form(self, form, **kwargs):
         try:
-            form.create_update(**kwargs)
+            if not form.create_update(**kwargs):
+                # Success, but object is now invalid, cannot return to it
+                self.return_to_form_on_update_success = False
         except NotUniqueError:
             messages.error(
                 self.request, f"{self.object_class.__name__} already exists in database.")
