@@ -58,6 +58,11 @@ class BonsaiTechniqueForm(CreateUpdateForm):
         q = BonsaiTechnique(**self.cleaned_data)
         q.save()
 
+    def delete_object(self):
+        pk = self.cleaned_data["short_name"]
+        original = BonsaiTechnique.get(pk)
+        original.delete()
+
 
 class BonsaiObjectiveForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
@@ -73,6 +78,11 @@ class BonsaiObjectiveForm(CreateUpdateForm):
     def create_object(self):
         q = BonsaiObjective(**self.cleaned_data)
         q.save()
+
+    def delete_object(self):
+        pk = self.cleaned_data["short_name"]
+        original = BonsaiObjective.get(pk)
+        original.delete()
 
 
 class BonsaiWhenForm(CreateUpdateForm):
@@ -91,6 +101,11 @@ class BonsaiWhenForm(CreateUpdateForm):
     def create_object(self):
         q = BonsaiWhen(**self.cleaned_data)
         q.save()
+
+    def delete_object(self):
+        pk = self.cleaned_data["short_name"]
+        original = BonsaiWhen.get(pk)
+        original.delete()
 
 
 class TechniqueAssociationForm(forms.Form):
