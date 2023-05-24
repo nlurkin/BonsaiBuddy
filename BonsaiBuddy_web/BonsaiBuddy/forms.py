@@ -5,6 +5,16 @@ class CreateUpdateForm(forms.Form):
     update = forms.BooleanField(initial=False, widget=forms.HiddenInput, required=False)
     delete = forms.BooleanField(initial=False, required=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        field_order = []
+        for field in self.declared_fields:
+            if field == "delete":
+                continue
+            field_order.append(field)
+        field_order.append("delete")
+
+        self.order_fields(field_order)
 
     def create_update(self, **kwargs):
         update_val = self.cleaned_data["update"]
