@@ -60,7 +60,6 @@ class TreeInfoFormView(MyFormView):
     def post(self, request, *args, **kwargs):
         if not request.POST.get("association-TOTAL_FORMS", None):
             # Dealing with default form, forward to parent
-            print("Using parent POST")
             form_association = self.init_form_association(
                 kwargs["pk"]) if "pk" in kwargs else None
             return super().post(request, form_association=form_association, *args, **kwargs)

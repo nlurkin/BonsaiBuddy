@@ -32,3 +32,12 @@ class CreateUpdateForm(forms.Form):
         else:
             self.create_object(**kwargs)
         return True
+
+    def delete_object(self, **kwargs):
+        pass
+
+    def update_object(self, **kwargs):
+        pass
+
+    def create_object(self, **kwargs):
+        pass

@@ -35,6 +35,11 @@ class TreeInfoForm(CreateUpdateForm):
         q = TreeInfo(**self.cleaned_data)
         q.save()
 
+    def delete_object(self):
+        pk = self.cleaned_data["name"]
+        original = TreeInfo.get(pk)
+        original.delete()
+
 
 class BonsaiTechniqueForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
