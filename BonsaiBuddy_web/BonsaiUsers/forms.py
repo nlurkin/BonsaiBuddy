@@ -107,7 +107,6 @@ class MyTreeForm(CreateUpdateForm):
     oid            = forms.CharField(widget=forms.HiddenInput, required=False)
     tree_name      = forms.ChoiceField(choices=build_tree_list())
     objective      = forms.ChoiceField(choices=build_objectives())
-    delete         = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -119,16 +118,19 @@ class MyTreeForm(CreateUpdateForm):
         return {"treeReference": TreeInfo.get(self.cleaned_data["tree_name"]),
                 "objective": BonsaiObjective.get(self.cleaned_data["objective"])}
 
+    def delete_object(self, username):
+        # Remove the entry
+        profile = UserProfile.get_user(username)
+        tree = profile.get_my_tree(self.cleaned_data["oid"])
+        profile.my_trees.remove(tree)
+        profile.save()
+
     def update_object(self, username):
         profile = UserProfile.get_user(username)
         tree = profile.get_my_tree(self.cleaned_data["oid"])
-        if self.cleaned_data["delete"]:
-            # Remove the entry
-            profile.my_trees.remove(tree)
-        else:
-            refs_dict = self.get_refs_dict()
-            tree.treeReference = refs_dict["treeReference"]
-            tree.objective = refs_dict["objective"]
+        refs_dict = self.get_refs_dict()
+        tree.treeReference = refs_dict["treeReference"]
+        tree.objective = refs_dict["objective"]
         profile.save()
 
     def create_object(self, username):
