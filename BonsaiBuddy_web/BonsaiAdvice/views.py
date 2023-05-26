@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .menu import BonsaiAdviceMenuMixin
 from django.views import generic, View
-from .models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, timing_matches, make_timing
+from .models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, timing_matches, make_timing, get_technique_categories
 from utils import get_object_or_404, user_has_any_perms
 from django.urls import reverse_lazy
 from .forms import AdviceConfigForm, ReqAdviceInfo
@@ -17,7 +17,11 @@ class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
         show_unpublished = user_has_any_perms(self.request.user, ["BonsaiAdvice.change_content"])
-        top["bonsai_techniques"] = BonsaiTechnique.get_all(not show_unpublished)
+        technique_list = []
+        for category in get_technique_categories():
+            technique_list.append((category, BonsaiTechnique.get_all(not show_unpublished, category=category.lower())))
+
+        top["bonsai_techniques"] = technique_list
         top["bonsai_objectives"] = BonsaiObjective.get_all(not show_unpublished)
         top["bonsai_when"] = BonsaiWhen.get_all(not show_unpublished)
         return top

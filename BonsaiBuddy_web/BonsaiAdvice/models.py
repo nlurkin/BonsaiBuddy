@@ -117,10 +117,13 @@ class BonsaiTechnique(mongoengine.Document):
         return self.short_name
 
     @staticmethod
-    def get_all(published_only=True):
+    def get_all(published_only=True, category=None):
         objects = BonsaiTechnique.objects
         if published_only:
             objects = objects.filter(published=True)
+        if category:
+            objects = objects.filter(category=category)
+
         return objects.order_by("short_name")
 
     @staticmethod
