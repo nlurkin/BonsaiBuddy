@@ -2,8 +2,8 @@
 
 {% block content %}
     <h1>{{ when.display_name }}</h1>
-    <p>{{ when.description}}</p>
-    <p>{{ when.global_period_name}}</p>
+    <p>{{ when.description }}</p>
+    <p>{{ when.global_period_name|linebreaks }}</p>
     {% if 'BonsaiAdvice.change_content' in perms %}
     <p><a href="{% url 'BonsaiAdmin:when_update' pk=when.short_name %}">Update</a></p>
     {% endif %}

@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>{{ objective.display_name }}</h1>
-    <p>{{ objective.description}}</p>
+    <p>{{ objective.description|linebreaks }}</p>
     {% if 'BonsaiAdvice.change_content' in perms %}
     <p><a href="{% url 'BonsaiAdmin:objective_update' pk=objective.short_name %}">Update</a></p>
     {% endif %}
