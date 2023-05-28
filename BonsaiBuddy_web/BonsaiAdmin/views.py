@@ -40,6 +40,7 @@ class TreeInfoFormView(MyFormView):
     form_class = TreeInfoForm
     index_name = "name"
     object_class = TreeInfo
+    display_url = "TreeInfo:detail"
 
     def init_form_association(self, pk, data=None):
         initial = [{"tree_name": pk.lower(), "tree_name_hidden": pk, **technique}
@@ -91,6 +92,7 @@ class BonsaiTechniqueFormView(MyFormView):
     form_class = BonsaiTechniqueForm
     index_name = "short_name"
     object_class = BonsaiTechnique
+    display_url = "BonsaiAdvice:technique_detail"
 
 
 class BonsaiObjectiveFormView(MyFormView):
@@ -100,6 +102,7 @@ class BonsaiObjectiveFormView(MyFormView):
     form_class = BonsaiObjectiveForm
     index_name = "short_name"
     object_class = BonsaiObjective
+    display_url = "BonsaiAdvice:objective_detail"
 
 
 class BonsaiWhenFormView(MyFormView):
@@ -109,3 +112,4 @@ class BonsaiWhenFormView(MyFormView):
     form_class = BonsaiWhenForm
     index_name = "short_name"
     object_class = BonsaiWhen
+    display_url = "BonsaiAdvice:when_detail"

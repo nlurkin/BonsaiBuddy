@@ -6,8 +6,13 @@ from utils import get_object_or_404
 
 
 class CreateUpdateView(FormView):
-    # Required in subclass: success_url, template_name, app_name
-    return_to_form_on_update_success = True
+    # Required in subclass:
+    #  - success_url
+    #  - template_name
+    #  - app_name
+    object_is_valid = True
+    return_to_form_on_update_success = False
+    display_url = None
 
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
@@ -39,15 +44,21 @@ class CreateUpdateView(FormView):
         return self.render_to_response(context)
 
     def get_success_url(self):
-        if self.return_to_form_on_update_success and "pk" in self.kwargs:
-            return reverse(f"{self.app_name}:{self.url_update_name}", kwargs={"pk": self.kwargs["pk"]})
-        return super().get_success_url()
+        if self.object_is_valid and "pk" in self.kwargs:
+            if self.return_to_form_on_update_success:
+                # Go back to form
+                return reverse(f"{self.app_name}:{self.url_update_name}", kwargs={"pk": self.kwargs["pk"]})
+            elif self.display_url:
+                # Go the display
+                return reverse(self.display_url, kwargs={"pk": self.kwargs["pk"]})
+
+        return super().get_success_url() # success_url as defined in the child class
 
     def process_form(self, form, **kwargs):
         try:
             if not form.create_update(**kwargs):
-                # Success, but object is now invalid, cannot return to it
-                self.return_to_form_on_update_success = False
+                # Success, but object was deleted
+                self.object_is_valid = False
         except NotUniqueError:
             messages.error(
                 self.request, f"{self.object_class.__name__} already exists in database.")

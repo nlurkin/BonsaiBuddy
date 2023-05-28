@@ -96,7 +96,6 @@ class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView
     index_name = "oid"
     object_class = TreeCollection
     success_url  = reverse_lazy("Profile:my_trees")
-    return_to_form_on_update_success = False
 
     def form_valid(self, form):
         self.process_form(form, username=self.request.user.username)
