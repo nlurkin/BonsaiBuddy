@@ -12,6 +12,7 @@ from .forms import (CustomUserCreationForm, ModifyPasswordForm, MyTreeForm,
                     UpdateUserProfileForm)
 from .menu import BonsaiUsersMenuMixin
 from .models import TreeCollection, UserProfile
+from mongoengine import DoesNotExist
 
 
 class DetailView(BonsaiUsersMenuMixin, LoginRequiredMixin, View):
@@ -78,13 +79,18 @@ class MyTreesListView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.ListView
 
     def get_queryset(self):
         """Return the complete list of available trees."""
-        profile = UserProfile.get_user(self.request.user.username)
+        try:
+            profile = UserProfile.get_user(self.request.user.username)
+        except DoesNotExist:
+            self.template_name = "BonsaiUsers/not_found.html"
+            return None
         trees_list = profile.my_trees
         return trees_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["current_period"] = get_current_period()
+        context["profile"] = self.request.user
         return context
 
 class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView):
