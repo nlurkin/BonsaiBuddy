@@ -110,6 +110,7 @@ class BonsaiTechnique(mongoengine.Document):
     description = mongoengine.StringField()
     category = mongoengine.StringField(max_length=200)
     published = mongoengine.BooleanField(default=False)
+    sequence = mongoengine.IntField(default=99)
 
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
 
@@ -135,6 +136,7 @@ class BonsaiObjective(mongoengine.Document):
     display_name = mongoengine.StringField(max_length=200)
     description = mongoengine.StringField()
     published = mongoengine.BooleanField(default=False)
+    sequence = mongoengine.IntField(default=99)
 
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
 
@@ -159,6 +161,7 @@ class BonsaiWhen(mongoengine.Document):
     description = mongoengine.StringField()
     global_period = mongoengine.ListField(choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
     published = mongoengine.BooleanField(default=False)
+    sequence = mongoengine.IntField(default=99)
 
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
 

@@ -19,11 +19,11 @@ class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
         show_unpublished = user_has_any_perms(self.request.user, ["BonsaiAdvice.change_content"])
         technique_list = []
         for category in get_technique_categories():
-            technique_list.append((category, BonsaiTechnique.get_all(not show_unpublished, category=category.lower())))
+            technique_list.append((category, BonsaiTechnique.get_all(not show_unpublished, category=category.lower()))).order_by("sequence")
 
         top["bonsai_techniques"] = technique_list
-        top["bonsai_objectives"] = BonsaiObjective.get_all(not show_unpublished)
-        top["bonsai_when"] = BonsaiWhen.get_all(not show_unpublished)
+        top["bonsai_objectives"] = BonsaiObjective.get_all(not show_unpublished).order_by("sequence")
+        top["bonsai_when"] = BonsaiWhen.get_all(not show_unpublished).order_by("sequence")
         return top
 
 class TechniqueView(BonsaiAdviceMenuMixin, View):

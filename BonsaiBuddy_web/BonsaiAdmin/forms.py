@@ -48,6 +48,7 @@ class BonsaiTechniqueForm(CreateUpdateForm):
         choices=build_technique_categories(), widget=SelectPlaceholder)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
+    sequence = forms.IntegerField(required=False)
 
     def update_object(self):
         pk = self.cleaned_data["short_name"]
@@ -69,6 +70,7 @@ class BonsaiObjectiveForm(CreateUpdateForm):
     display_name = forms.CharField(max_length=200)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
+    sequence = forms.IntegerField(required=False)
 
     def update_object(self):
         pk = self.cleaned_data["short_name"]
@@ -92,6 +94,7 @@ class BonsaiWhenForm(CreateUpdateForm):
         choices=build_periods(), required=False, widget=SelectPlaceholder)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
+    sequence = forms.IntegerField(required=False)
 
     def update_object(self):
         pk = self.cleaned_data["short_name"]
