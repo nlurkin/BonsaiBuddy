@@ -127,6 +127,7 @@ class TechniqueAssociationForm(forms.Form):
         choices=build_when(False), required=False, widget=TagifyWidget)
     period = forms.MultipleChoiceField(
         choices=build_periods(), required=False, widget=TagifyWidget)
+    comment = forms.CharField(widget=forms.Textarea, required=False)
 
     def create_update(self):
         tree = TreeInfo.get(self.cleaned_data['tree_name_hidden'])
@@ -148,9 +149,10 @@ class TechniqueAssociationForm(forms.Form):
                 mapper.objective = objective_id
                 mapper.when = when_id
                 mapper.period = period
+                mapper.comment = self.cleaned_data['comment']
         else:
             # Creating a new entry
             mapper = TechniqueMapper(
-                technique=technique_id, objective=objective_id, when=when_id, period=period)
+                technique=technique_id, objective=objective_id, when=when_id, period=period, comment = self.cleaned_data["comment"])
             tree.techniques.append(mapper)
         tree.save()
