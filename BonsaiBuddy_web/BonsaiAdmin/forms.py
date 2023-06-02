@@ -117,15 +117,15 @@ class TechniqueAssociationForm(forms.Form):
               "BonsaiAdmin/dyn_form.js",)
 
     tree_name = forms.ChoiceField(
-        choices=build_tree_list(), disabled=True, required=False)
+        choices=build_tree_list(False), disabled=True, required=False)
     tree_name_hidden = forms.CharField(widget=forms.HiddenInput())
     oid = forms.CharField(widget=forms.HiddenInput(), required=False)
     technique = forms.ChoiceField(
-        choices=build_techniques(), widget=SelectPlaceholder)
+        choices=build_techniques(False), widget=SelectPlaceholder)
     objective = forms.ChoiceField(
-        choices=build_objectives(), widget=SelectPlaceholder)
+        choices=build_objectives(False), widget=SelectPlaceholder)
     when = forms.MultipleChoiceField(
-        choices=build_when(), required=False, widget=TagifyWidget)
+        choices=build_when(False), required=False, widget=TagifyWidget)
     period = forms.MultipleChoiceField(
         choices=build_periods(), required=False, widget=TagifyWidget)
 

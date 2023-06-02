@@ -32,17 +32,17 @@ def user_has_any_perms(user, perms):
 def build_choices(queryset, id_field, name_field):
     return [(getattr(_, id_field).lower(), getattr(_, name_field)) for _ in queryset]
 
-def build_tree_list():
-    return build_choices(TreeInfo.get_all(), "name", "display_name")
+def build_tree_list(published_only = True):
+    return build_choices(TreeInfo.get_all(published_only), "name", "display_name")
 
-def build_objectives():
-    return build_choices(BonsaiObjective.get_all(), "short_name", "display_name")
+def build_objectives(published_only = True):
+    return build_choices(BonsaiObjective.get_all(published_only), "short_name", "display_name")
 
-def build_techniques():
-    return build_choices(BonsaiTechnique.get_all(), "short_name", "display_name")
+def build_techniques(published_only = True):
+    return build_choices(BonsaiTechnique.get_all(published_only), "short_name", "display_name")
 
-def build_when():
-    return build_choices(BonsaiWhen.get_all(), "short_name", "display_name")
+def build_when(published_only = True):
+    return build_choices(BonsaiWhen.get_all(published_only), "short_name", "display_name")
 
 def build_periods():
     return [(None, "Undefined")] + [(f"{periodid[0]}_{periodid[1]}", f"{periodname[0]} {periodname[1]}") for periodid, periodname in get_periods()]
