@@ -101,6 +101,7 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        show_unpublished = user_has_any_perms(self.request.user, ["BonsaiAdvice.change_content"])
 
         # Then get the list of valid advices according to the criteria in info
         objective_document_id = BonsaiObjective.get(self.info.objective).id
@@ -113,7 +114,10 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
                 continue
             if not timing_matches(when_document_id, period, [_.id for _ in technique.when], technique.period):
                 continue
-            selected_techniques.append({"technique": technique.technique.fetch(),
+            technique_doc = technique.technique.fetch()
+            if not show_unpublished and not technique_doc.published:
+                continue
+            selected_techniques.append({"technique": technique_doc,
                                         "timing": make_timing([_.fetch() for _ in technique.when], technique.period)})
         context["techniques"] = selected_techniques
         context["tree"] = tree
