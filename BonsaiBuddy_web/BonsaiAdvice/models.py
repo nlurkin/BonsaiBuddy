@@ -25,7 +25,7 @@ def periodid_to_name(periodid):
     return None
 
 def get_technique_categories():
-    return ["Pruning", "Defoliation", "Deadwood"]
+    return ["Pruning", "Wiring", "Fertilization", "Defoliation", "Repotting", "Propagation", "Grafting", "Deadwood"]
 
 def month_to_period(month):
     # TODO: this is applicable only to the northern hemisphere, excluding tropical regions
