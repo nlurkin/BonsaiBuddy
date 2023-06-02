@@ -27,6 +27,15 @@
     <p><strong>Pests: </strong>{{ tree_info.pests|linebreaks }}</p>
     {% endif %}
 
+    {% if tree_techniques|length > 0 %}
+    Applicable techniques for this species:
+    <ul>
+    {% for technique in tree_techniques %}
+        <li>{{ technique }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
     {% if 'TreeInfo.change_content' in perms %}
     <p><a href="{% url 'BonsaiAdmin:treeinfo_update' pk=tree_info.name %}">Update</a></p>
     {% endif %}
