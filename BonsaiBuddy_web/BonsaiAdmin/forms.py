@@ -90,8 +90,7 @@ class BonsaiObjectiveForm(CreateUpdateForm):
 class BonsaiWhenForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
-    global_period = forms.ChoiceField(
-        choices=build_periods(), required=False, widget=SelectPlaceholder)
+    global_period = forms.MultipleChoiceField(choices=build_periods(), required=False, widget=TagifyWidget)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
     sequence = forms.IntegerField(required=False)
