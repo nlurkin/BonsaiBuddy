@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 import mongoengine
 
 class AdvicePermissionModel(models.Model):
@@ -113,6 +114,9 @@ class BonsaiTechnique(mongoengine.Document):
     sequence = mongoengine.IntField(default=99)
 
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
+
+    def link(self):
+        return f"<a href='{reverse('BonsaiAdvice:technique_detail', kwargs={'pk': self.short_name})}'>{self.display_name}</a>"
 
     def __str__(self):
         return self.short_name
