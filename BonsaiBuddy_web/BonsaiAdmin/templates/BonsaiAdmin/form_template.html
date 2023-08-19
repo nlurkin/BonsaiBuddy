@@ -1,0 +1,33 @@
+{% load widget_tweaks %}
+
+{% for hidden in form.hidden_fields %}
+  {{ hidden }}
+{% endfor %}
+
+{% for field in form.visible_fields %}
+  {% if field|widget_type == "textinput" %}
+    <div class="form-floating col-md-6">
+      {{ field.errors }}
+      {% render_field field class="form-control" placeholder="field.label" %}
+      <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+    </div>
+  {% elif field|widget_type == "checkboxinput" %}
+  <div class="form-check form-check-inline" style="width:unset">
+    {{ field.errors }}
+    {{ field|add_class:"form-check-input" }}
+    <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+  </div>
+  {% elif field|widget_type == "textarea" %}
+    <div class="form-floating col-12">
+      {{ field.errors }}
+      {% render_field field class="form-control" placeholder="field.label" style="height:150px" %}
+      <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+    </div>
+  {% else %}
+  <div class="col-12">
+        {{ field.errors }}
+        {{ field }}
+        {{ field.label_tag }}
+  </div>
+  {% endif %}
+{% endfor %}
