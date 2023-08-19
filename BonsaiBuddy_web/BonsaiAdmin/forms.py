@@ -8,7 +8,6 @@ from utils import (build_objectives, build_periods, build_technique_categories,
 
 
 class TreeInfoForm(CreateUpdateForm):
-    template_name = "BonsaiAdmin/form_template.html"
     display_name = forms.CharField(max_length=200, label="Tree name")
     name = forms.CharField(widget=forms.HiddenInput, required=False)
     latin_name = forms.CharField(max_length=200)
@@ -47,9 +46,9 @@ class BonsaiTechniqueForm(CreateUpdateForm):
     display_name = forms.CharField(max_length=200)
     category = forms.ChoiceField(
         choices=build_technique_categories(), widget=SelectPlaceholder)
+    sequence = forms.IntegerField(required=False)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
-    sequence = forms.IntegerField(required=False)
 
     def update_object(self):
         pk = self.cleaned_data["short_name"]
@@ -69,9 +68,9 @@ class BonsaiTechniqueForm(CreateUpdateForm):
 class BonsaiObjectiveForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
+    sequence = forms.IntegerField(required=False)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
-    sequence = forms.IntegerField(required=False)
 
     def update_object(self):
         pk = self.cleaned_data["short_name"]
@@ -92,9 +91,9 @@ class BonsaiWhenForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
     global_period = forms.MultipleChoiceField(choices=build_periods(), required=False, widget=TagifyWidget)
+    sequence = forms.IntegerField(required=False)
     description = forms.CharField(widget=forms.Textarea, required=False)
     published = forms.BooleanField(initial=False, required=False)
-    sequence = forms.IntegerField(required=False)
 
     def update_object(self):
         pk = self.cleaned_data["short_name"]

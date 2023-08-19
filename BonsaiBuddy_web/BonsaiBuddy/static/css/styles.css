@@ -5,3 +5,7 @@
 /* body {
   background: white url("images/background.jpeg") no-repeat;
 } */
+
+.bonsaitagify {
+  height: calc(3.5rem + 10px) !important;
+}
