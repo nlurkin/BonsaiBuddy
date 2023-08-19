@@ -23,6 +23,16 @@ function cloneMore(selector, prefix) {
           $(this).attr({'for': forValue});
         }
     });
+    newElement.find('div.accordion-collapse').each(function() {
+        var id = $(this).attr('id').replace('-' + (total-1) + '-', '-' + total + '-');
+        $(this).attr({'id': id});
+    });
+    newElement.find('button.accordion-button').each(function() {
+        var target = $(this).attr('data-bs-target').replace('-' + (total-1) + '-', '-' + total + '-');
+        var controls = $(this).attr('aria-controls').replace('-' + (total-1) + '-', '-' + total + '-');
+        $(this).attr({'data-bs-target': target, 'aria-controls': controls});
+        $(this).html("Association #" + total)
+    });
     total++;
     $('#id_' + prefix + '-TOTAL_FORMS').val(total);
     $(selector).after(newElement);

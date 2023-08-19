@@ -58,16 +58,33 @@
             </h2>
             <div id="associationForm" class="accordion-collapse collapse">
                 <div class="accordion-body">
-                    <form action="{% url rev_url pk %}" method="post">
+                    <form action="{% url rev_url pk %}" method="post" class="row">
                         {% csrf_token %}
                         {{ form_association.management_form }}
-                        {% for form in form_association %}
-                        <p>
-                            <div class="form-row row g-3">
-                                {{ form }}
+                        <div class="accordion">
+
+                            {% for form in form_association %}
+                            <div class="accordion-item form-row">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#formrow-{{ forloop.counter0 }}-collapse"
+                                        aria-expanded="true" aria-controls="formrow-{{ forloop.counter0 }}-collapse">
+                                        Association #{{ forloop.counter0 }}
+                                    </button>
+                                </h2>
+                                <div id="formrow-{{ forloop.counter0 }}-collapse" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+
+                                        <p>
+                                            <!-- <div class="form-row row g-3"> -->
+                                                {{ form }}
+                                            <!-- </div> -->
+                                        </p>
+
+                                </div>
                             </div>
-                        </p>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
+
                         <div class="col-12">
                             <button class="add-form-row btn btn-secondary">+</button>
                             <button type="submit" class="btn btn-primary">Submit</button>
