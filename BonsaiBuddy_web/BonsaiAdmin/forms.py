@@ -8,6 +8,7 @@ from utils import (build_objectives, build_periods, build_technique_categories,
 
 
 class TreeInfoForm(CreateUpdateForm):
+    template_name = "BonsaiAdmin/form_template.html"
     display_name = forms.CharField(max_length=200, label="Tree name")
     name = forms.CharField(widget=forms.HiddenInput, required=False)
     latin_name = forms.CharField(max_length=200)
