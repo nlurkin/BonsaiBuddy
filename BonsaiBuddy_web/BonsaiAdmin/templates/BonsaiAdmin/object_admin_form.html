@@ -1,51 +1,81 @@
 {% extends "base_generic.html" %}
+{% load bootstrap5 %}
 
 {% block head %}
-    {{ form_association.media }}
-    {{ form.media }}
+{{ form_association.media }}
+{{ form.media }}
 {% endblock %}
 
 {% block message %}
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
         {% endfor %}
-    </ul>
-    {% endif %}
+</ul>
+{% endif %}
 {% endblock %}
 
 {% block content %}
 {% if "create" in rev_url %}
-<form action="{% url rev_url %}" method="post">
-{% else %}
-<form action="{% url rev_url pk %}" method="post">
-{% endif %}
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
-
-{% if form_association %}
-<form action="{% url rev_url pk %}" method="post">
-    {% csrf_token %}
-    {{ form_association.management_form }}
-    {% for form in form_association %}
-        <p>
-        <div class="form-row">
-            {{ form }}
+<form action="{% url rev_url %}" method="post" class="row g-3">
+    {% else %}
+    <div class="accordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#mainForm"
+                    aria-expanded="true" aria-controls="mainForm">
+                    Tree description
+                </button>
+            </h2>
+            <div id="mainForm" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <form action="{% url rev_url pk %}" method="post" class="row g-3">
+                        {% endif %}
+                        {% csrf_token %}
+                        {{ form }}
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </p>
-    {% endfor %}
-    <button class="add-form-row">+</button>
-    <input type="submit" value="Submit">
-</form>
-<script type='text/javascript'>
-$(document).on('click', '.add-form-row', function(e){
-    e.preventDefault();
-    cloneMore('.form-row:last', 'association');
-    return false;
-});
-</script>
-{% endif %}
-{% endblock %}
+
+
+        {% if form_association %}
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#associationForm" aria-expanded="false" aria-controls="associationForm">
+                    Techniques
+                </button>
+            </h2>
+            <div id="associationForm" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <form action="{% url rev_url pk %}" method="post">
+                        {% csrf_token %}
+                        {{ form_association.management_form }}
+                        {% for form in form_association %}
+                        <p>
+                        <div class="form-row">
+                            {% bootstrap_form form %}
+                        </div>
+                        </p>
+                        {% endfor %}
+                        <button class="add-form-row">+</button>
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+            <script type='text/javascript'>
+                $(document).on('click', '.add-form-row', function (e) {
+                    e.preventDefault();
+                    cloneMore('.form-row:last', 'association');
+                    return false;
+                });
+            </script>
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
