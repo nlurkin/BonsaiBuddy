@@ -63,13 +63,15 @@
                         {{ form_association.management_form }}
                         {% for form in form_association %}
                         <p>
-                        <div class="form-row">
-                            {% bootstrap_form form %}
-                        </div>
+                            <div class="form-row row g-3">
+                                {{ form }}
+                            </div>
                         </p>
                         {% endfor %}
-                        <button class="add-form-row">+</button>
-                        <input type="submit" value="Submit">
+                        <div class="col-12">
+                            <button class="add-form-row btn btn-secondary">+</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
                     </form>
                 </div>
             </div>
