@@ -25,6 +25,7 @@
     </div>
   {% else %}
   <div class="col-12">
+        {{ field|widget_type }}
         {{ field.errors }}
         {{ field }}
         {{ field.label_tag }}
