@@ -13,6 +13,7 @@ class CreateUpdateView(FormView):
     object_is_valid = True
     return_to_form_on_update_success = False
     display_url = None
+    page_title = ""
 
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
@@ -20,6 +21,7 @@ class CreateUpdateView(FormView):
             top["rev_url"] = f"{self.app_name}:{self.url_update_name}"
         else:
             top["rev_url"] = f"{self.app_name}:{self.url_create_name}"
+        top["page_title"] = self.page_title
         return top
 
     def get_object(self, pk, **kwargs):
