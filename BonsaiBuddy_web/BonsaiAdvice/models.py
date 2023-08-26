@@ -129,7 +129,7 @@ class BonsaiTechnique(mongoengine.Document):
         if category:
             objects = objects.filter(category=category)
 
-        return objects.order_by("short_name")
+        return objects.order_by("category", "sequence", "short_name")
 
     @staticmethod
     def get(short_name):
