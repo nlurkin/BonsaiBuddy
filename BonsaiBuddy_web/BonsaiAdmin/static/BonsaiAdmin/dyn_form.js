@@ -42,8 +42,5 @@ function cloneMore(selector, prefix) {
     });
     total++;
     $('#id_' + prefix + '-TOTAL_FORMS').val(total);
-    var conditionRow = $('.form-row:not(:last)');
-    conditionRow.find('.btn.add-form-row')
-    .removeClass('add-form-row').addClass('remove-form-row');
     return false;
 }
