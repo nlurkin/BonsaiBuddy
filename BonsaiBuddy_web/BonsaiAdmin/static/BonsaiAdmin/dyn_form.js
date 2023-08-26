@@ -33,9 +33,15 @@ function cloneMore(selector, prefix) {
         $(this).attr({'data-bs-target': target, 'aria-controls': controls});
         $(this).html("Association #" + total)
     });
+    $(selector).after(newElement);
+    newElement.find('tags.tagify').each(function() {
+        script = $(this).siblings("script")[0];
+        script.innerHTML = script.innerHTML.replace('-' + (total-1) + '-', '-' + total + '-');
+        eval(script.innerHTML);
+        $(this).remove();
+    });
     total++;
     $('#id_' + prefix + '-TOTAL_FORMS').val(total);
-    $(selector).after(newElement);
     var conditionRow = $('.form-row:not(:last)');
     conditionRow.find('.btn.add-form-row')
     .removeClass('btn-success').addClass('btn-danger')
