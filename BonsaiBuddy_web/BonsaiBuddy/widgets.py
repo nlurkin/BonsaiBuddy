@@ -41,6 +41,7 @@ class TagifyWidget(forms.SelectMultiple):
                 "closeOnSelect": self.closeOnSelect,
                 "maxItems": self.maxItems,
                 "mapValueTo": "name",
+                "searchKeys": ["value", "name"],
                 }
 
     def build_generic_params(self):
