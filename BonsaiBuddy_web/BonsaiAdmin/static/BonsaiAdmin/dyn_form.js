@@ -44,8 +44,6 @@ function cloneMore(selector, prefix) {
     $('#id_' + prefix + '-TOTAL_FORMS').val(total);
     var conditionRow = $('.form-row:not(:last)');
     conditionRow.find('.btn.add-form-row')
-    .removeClass('btn-success').addClass('btn-danger')
-    .removeClass('add-form-row').addClass('remove-form-row')
-    .html('<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>');
+    .removeClass('add-form-row').addClass('remove-form-row');
     return false;
 }
