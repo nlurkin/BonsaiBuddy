@@ -8,7 +8,7 @@
   {% if field|widget_type == "textinput" or field|widget_type == "numberinput" %}
     <div class="form-floating col-md-6">
       {{ field.errors }}
-      {% render_field field class="form-control" placeholder="{{ field.label }}" %}
+      {% render_field field class+="form-control" placeholder=field.label %}
       <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
     </div>
   {% elif field|widget_type == "checkboxinput" %}
@@ -20,19 +20,19 @@
   {% elif field|widget_type == "textarea" %}
     <div class="form-floating col-12">
       {{ field.errors }}
-      {% render_field field class="form-control" placeholder="{{ field.label }}" style="height:100px" %}
+      {% render_field field class+="form-control" placeholder=field.label %}
       <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
     </div>
   {% elif field|widget_type == "selectplaceholder" %}
     <div class="form-floating col-md-6">
       {{ field.errors }}
-      {% render_field field class="form-select" placeholder="{{ field.label }}" %}
+      {% render_field field class+="form-select" placeholder=field.label %}
       <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
     </div>
   {% elif field|widget_type == "tagifywidget" %}
     <div class="form-floating col-12">
       {{ field.errors }}
-      {% render_field field class="bonsaitagify form-select" placeholder=""%}
+      {% render_field field class+="bonsaitagify form-select" placeholder=""%}
       <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
     </div>
   {% else %}
