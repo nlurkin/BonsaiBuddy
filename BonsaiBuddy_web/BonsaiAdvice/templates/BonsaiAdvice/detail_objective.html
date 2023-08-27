@@ -1,6 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+    <a href="{% url 'BonsaiAdvice:index' %}">Back</a>
     <h1>{{ objective.display_name }}</h1>
     <p>{{ objective.description|linebreaks }}</p>
     {% if 'BonsaiAdvice.change_content' in perms %}

@@ -1,6 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+    <a href="{% url 'BonsaiAdvice:index' %}">Back</a>
     <h1>{{ technique.display_name }}</h1>
     <p>Technique category: {{ technique.category|capfirst }}</p>
     <p>{{ technique.description|linebreaks }}</p>
