@@ -123,7 +123,7 @@ class BonsaiTechnique(mongoengine.Document):
 
     @staticmethod
     def get_all(published_only=True, category=None):
-        objects = BonsaiTechnique.objects
+        objects = BonsaiTechnique.objects.no_cache()
         if published_only:
             objects = objects.filter(published=True)
         if category:
@@ -149,7 +149,7 @@ class BonsaiObjective(mongoengine.Document):
 
     @staticmethod
     def get_all(published_only=True):
-        objects = BonsaiObjective.objects
+        objects = BonsaiObjective.objects.no_cache()
         if published_only:
             objects = objects.filter(published=True)
         return objects.order_by("short_name")
@@ -177,7 +177,7 @@ class BonsaiWhen(mongoengine.Document):
 
     @staticmethod
     def get_all(published_only=True):
-        objects = BonsaiWhen.objects
+        objects = BonsaiWhen.objects.no_cache()
         if published_only:
             objects = objects.filter(published=True)
         return objects.order_by("short_name")
