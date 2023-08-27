@@ -9,3 +9,7 @@
 .bonsaitagify {
   height: calc(3.5rem + 10px) !important;
 }
+
+textarea {
+  height: 100px !important;
+}
