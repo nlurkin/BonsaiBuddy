@@ -43,7 +43,7 @@ class HealthCheckMiddleware(object):
 
         try:
             import mongoengine
-            assert(mongoengine.get_connection() is not None)
+            assert(mongoengine.get_connection("mongo") is not None)
         except Exception as e:
             logger.exception(e)
             return HttpResponseServerError("db: cannot connect to Mongo database.")
