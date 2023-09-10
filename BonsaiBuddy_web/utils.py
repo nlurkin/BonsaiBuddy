@@ -1,10 +1,11 @@
 from django.http import Http404
 from django.test import TestCase
 import mongoengine
-from BonsaiBuddy import settings
+import os
 from django.contrib.auth.models import Permission
 from TreeInfo.models import TreeInfo
 from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen, get_periods, get_technique_categories
+settings = __import__(os.environ["DJANGO_SETTINGS_MODULE"])
 
 def get_object_or_404(klass, **kwargs):
     try:

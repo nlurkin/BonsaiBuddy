@@ -4,3 +4,7 @@ db.sqlite3
 doc.md
 settings.py
 migrations/
+secret.env
+staticfiles/
+BonsaiBuddy_web/BonsaiBuddy/settings/production.py
+BonsaiBuddy_web/BonsaiBuddy/settings/development.py
