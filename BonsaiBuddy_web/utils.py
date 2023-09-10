@@ -2,10 +2,10 @@ from django.http import Http404
 from django.test import TestCase
 import mongoengine
 import os
+import importlib
 from django.contrib.auth.models import Permission
 from TreeInfo.models import TreeInfo
 from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen, get_periods, get_technique_categories
-settings = __import__(os.environ["DJANGO_SETTINGS_MODULE"])
 
 def get_object_or_404(klass, **kwargs):
     try:
@@ -18,6 +18,7 @@ def get_object_or_404(klass, **kwargs):
 class MongoDBTestCase(TestCase):
     database_name = "test_database"
     def setUp(self):
+        settings = importlib.import_module(os.environ["DJANGO_SETTINGS_MODULE"])
         MONGO_DATABASE_HOST = 'mongodb+srv://%s:%s@%s/%s?ssl=true' % (
             settings.MONGO_USER, settings.MONGO_PASS, settings.MONGO_HOST, MongoDBTestCase.database_name)
         mongoengine.disconnect(alias="mongo")
