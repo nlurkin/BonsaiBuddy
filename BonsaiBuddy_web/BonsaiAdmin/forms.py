@@ -1,3 +1,5 @@
+from functools import partial
+
 from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen
 from BonsaiBuddy.forms import CreateUpdateForm
 from BonsaiBuddy.widgets import SelectPlaceholder, TagifyWidget
@@ -120,13 +122,13 @@ class TechniqueAssociationForm(forms.Form):
     tree_name_hidden = forms.CharField(widget=forms.HiddenInput())
     oid = forms.CharField(widget=forms.HiddenInput(), required=False)
     technique = forms.ChoiceField(
-        choices=build_techniques(False), widget=SelectPlaceholder)
+        choices=partial(build_techniques, published_only=False), widget=SelectPlaceholder)
     objective = forms.ChoiceField(
-        choices=build_objectives(False), widget=SelectPlaceholder)
+        choices=partial(build_objectives, published_only=False), widget=SelectPlaceholder)
     when = forms.MultipleChoiceField(
-        choices=build_when(False), required=False, widget=TagifyWidget)
+        choices=partial(build_when, published_only=False), required=False, widget=TagifyWidget)
     period = forms.MultipleChoiceField(
-        choices=build_periods(), required=False, widget=TagifyWidget)
+        choices=build_periods, required=False, widget=TagifyWidget)
     comment = forms.CharField(widget=forms.Textarea, required=False)
 
     def create_update(self):
