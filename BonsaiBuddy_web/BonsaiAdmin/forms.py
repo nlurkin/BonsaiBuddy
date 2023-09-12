@@ -117,8 +117,6 @@ class TechniqueAssociationForm(forms.Form):
         js = ("https://code.jquery.com/jquery-3.6.4.min.js",
               "BonsaiAdmin/dyn_form.js",)
 
-    tree_name = forms.ChoiceField(
-        choices=build_tree_list(False), disabled=True, required=False)
     tree_name_hidden = forms.CharField(widget=forms.HiddenInput())
     oid = forms.CharField(widget=forms.HiddenInput(), required=False)
     technique = forms.ChoiceField(
