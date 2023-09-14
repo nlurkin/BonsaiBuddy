@@ -1,6 +1,5 @@
 import mongoengine
 from django.db import models
-from django.utils import safestring
 from django.urls import reverse
 from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, get_periods, periodid_to_name
 from bson import ObjectId
@@ -23,23 +22,14 @@ class TechniqueMapper(mongoengine.EmbeddedDocument):
     def __str__(self):
         return f"Mapper({self.oid}): technique={self.technique}, objective={self.objective}, when={self.when}, period={self.period}"
 
+
     def fetch(self):
         technique = self.technique.fetch()
         objective = self.objective.fetch()
         when = [_.fetch().display_name for _ in self.when]
         return {"technique": technique, "objective": objective, "when": when, "period": self.period, "self": self}
 
-    @safestring.mark_safe
-    def print_html(self):
-        technique = self.technique.fetch()
-        objective = self.objective.fetch()
-        when = [_.fetch().display_name for _ in self.when]
-        periods = ", ".join([periodid_to_name(_) for _ in self.period])
-        ret_str = f"{technique.link()}: to be applied with the {objective} objective during the periods {periods}"
-        if len(when) > 0:
-            ret_str = f"{ret_str} (more precisely at {', '.join(when)})"
-        return ret_str
-    
+
     def link(self, tree):
         return f"<a href='{reverse('BonsaiAdvice:which_technique')}?oid={self.oid!s}&tree={tree}'>more</a>"
 
