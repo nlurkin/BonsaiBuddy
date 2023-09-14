@@ -8,12 +8,15 @@ class ReqAdviceInfo():
             self.objective = query.get("objective", None)
             self.period = query.get("period", None)
             self.when = query.get("when", None)
+            self.oid = query.get("oid", None)
             if self.when:
                  self.when = self.when.split(",")
 
         def is_complete(self):
-            # Requires tree, objective, and either of period or when
-            return (not self.tree or not self.objective or not (self.period or self.when))
+            # Requires tree, objective, and either of period or when, or just oid
+            descriptors = (self.tree is not None and self.objective is not None and (self.period is not None or self.when is not None))
+            oid = self.oid is not None
+            return (descriptors or oid)
 
 class AdviceConfigForm(forms.Form):
     error_messages = {

@@ -8,7 +8,8 @@
             <h3>{{ technique.technique.display_name }}</h3>
             <p>{{ technique.technique.category}}</p>
             <p>{{ technique.technique.description|linebreaks }}</p>
-            <p>This technique is applicable generally in {{ technique.timing.period|join:", " }}, when the tree shows any of the following states: {{ technique.timing.when|join:", " }}
+            <p>This technique is applicable generally in {{ technique.timing.period|join:", " }}, when the tree shows any of the following states: {{ technique.timing.when|join:", " }}</p>
+            <p>Specific for this tree: {{ technique.comment }}</p>
         {% endfor %}
     {% else %}
         <p>No techniques are applicable for {{ tree.display_name }} according to your search criterion</p>

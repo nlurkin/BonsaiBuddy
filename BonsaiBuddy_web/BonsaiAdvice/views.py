@@ -58,7 +58,7 @@ class WhenView(BonsaiAdviceMenuMixin, View):
 class WhichTechniqueView(View):
     def get(self, request):
         info = ReqAdviceInfo(request.GET)
-        if info.is_complete():
+        if not info.is_complete():
             # Missing parameters
             return self.process_partial_request(info)
         else:
@@ -103,22 +103,32 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         show_unpublished = user_has_any_perms(self.request.user, ["BonsaiAdvice.change_content"])
 
-        # Then get the list of valid advices according to the criteria in info
-        objective_document_id = BonsaiObjective.get(self.info.objective).id
-        when_document_id = None if not self.info.when else [BonsaiWhen.get(_).id for _ in self.info.when]
-        period = None if not self.info.period else self.info.period.split(',')
-        selected_techniques = []
         tree = self.get_queryset()
+
+        if self.info.oid is not None:
+            use_oid = True
+        else:
+            # Then get the list of valid advices according to the criteria in info
+            objective_document_id = BonsaiObjective.get(self.info.objective).id
+            when_document_id = None if not self.info.when else [BonsaiWhen.get(_).id for _ in self.info.when]
+            period = None if not self.info.period else self.info.period.split(',')
+
+        selected_techniques = []
         for technique in tree.techniques:
-            if technique.objective.id != objective_document_id:
-                continue
-            if not timing_matches(when_document_id, period, [_.id for _ in technique.when], technique.period):
-                continue
+            if use_oid:
+                if str(technique.oid) != self.info.oid:
+                    continue
+            else:
+                if technique.objective.id != objective_document_id:
+                    continue
+                if not timing_matches(when_document_id, period, [_.id for _ in technique.when], technique.period):
+                    continue
             technique_doc = technique.technique.fetch()
             if not show_unpublished and not technique_doc.published:
                 continue
             selected_techniques.append({"technique": technique_doc,
-                                        "timing": make_timing([_.fetch() for _ in technique.when], technique.period)})
+                                        "timing": make_timing([_.fetch() for _ in technique.when], technique.period),
+                                        "comment": technique.comment})
         context["techniques"] = selected_techniques
         context["tree"] = tree
         return context
