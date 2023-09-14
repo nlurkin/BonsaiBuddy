@@ -68,7 +68,7 @@
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#formrow-{{ forloop.counter0 }}-collapse"
                                         aria-expanded="false" aria-controls="formrow-{{ forloop.counter0 }}-collapse">
-                                        Association #{{ forloop.counter0 }} - {{ form.display_name}}
+                                        Association #<div style="width:3ch">{{ forloop.counter0 }}</div> - {{ form.summary }}
                                     </button>
                                 </h2>
                                 <div id="formrow-{{ forloop.counter0 }}-collapse" class="accordion-collapse collapse">

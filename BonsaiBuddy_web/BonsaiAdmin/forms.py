@@ -1,12 +1,13 @@
 from functools import partial
 
-from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen
+from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen, periodid_to_name
 from BonsaiBuddy.forms import CreateUpdateForm
 from BonsaiBuddy.widgets import SelectPlaceholder, TagifyWidget
 from django import forms
 from TreeInfo.models import TechniqueMapper, TreeInfo
 from utils import (build_objectives, build_periods, build_technique_categories,
                    build_techniques, build_tree_list, build_when)
+from django.utils.safestring import mark_safe
 
 
 class TreeInfoForm(CreateUpdateForm):
@@ -129,12 +130,6 @@ class TechniqueAssociationForm(forms.Form):
         choices=build_periods, required=False, widget=TagifyWidget)
     comment = forms.CharField(widget=forms.Textarea, required=False)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.display_name = ""
-        if "initial" in kwargs:
-            self.display_name = kwargs["initial"]["display_name"]
-
     def create_update(self):
         tree = TreeInfo.get(self.cleaned_data['tree_name_hidden'])
         technique_id = BonsaiTechnique.get(self.cleaned_data['technique']).id
@@ -162,3 +157,11 @@ class TechniqueAssociationForm(forms.Form):
                 technique=technique_id, objective=objective_id, when=when_id, period=period, comment = self.cleaned_data["comment"])
             tree.techniques.append(mapper)
         tree.save()
+
+    def summary(self):
+        stage = self.initial["objective"]
+        technique = self.initial["technique_name"]
+        timing = ",".join([periodid_to_name(_) for _ in self.initial["period"]])
+        if self.initial["when"]:
+            timing += " (" + ",".join(self.initial['when']) + ")"
+        return mark_safe(f"<div style='width:30ch;'>&nbsp;{technique}</div> - <div style='width:15ch;'>&nbsp;{stage}</div> - {timing}")
