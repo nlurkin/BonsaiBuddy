@@ -7,3 +7,4 @@ secret.env
 staticfiles/
 BonsaiBuddy_web/BonsaiBuddy/settings/production.py
 BonsaiBuddy_web/BonsaiBuddy/settings/development.py
+.vscode/
