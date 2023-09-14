@@ -67,11 +67,11 @@
                             <div class="accordion-item form-row">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#formrow-{{ forloop.counter0 }}-collapse"
-                                        aria-expanded="true" aria-controls="formrow-{{ forloop.counter0 }}-collapse">
-                                        Association #{{ forloop.counter0 }}
+                                        aria-expanded="false" aria-controls="formrow-{{ forloop.counter0 }}-collapse">
+                                        Association #{{ forloop.counter0 }} - {{ form.display_name}}
                                     </button>
                                 </h2>
-                                <div id="formrow-{{ forloop.counter0 }}-collapse" class="accordion-collapse collapse show">
+                                <div id="formrow-{{ forloop.counter0 }}-collapse" class="accordion-collapse collapse">
                                     <div class="accordion-body">
 
                                         <p>
@@ -79,7 +79,7 @@
                                                 {{ form }}
                                             <!-- </div> -->
                                         </p>
-
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}

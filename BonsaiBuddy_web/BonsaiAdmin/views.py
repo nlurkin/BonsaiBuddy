@@ -44,7 +44,8 @@ class TreeInfoFormView(MyFormView):
     page_title = "Tree info"
 
     def init_form_association(self, pk, data=None):
-        initial = [{"tree_name": pk.lower(), "tree_name_hidden": pk, **technique}
+        initial = [{"tree_name": pk.lower(), "tree_name_hidden": pk,
+                    "display_name": technique["technique_name"], **technique}
                    for technique in TreeInfo.get(pk).get_techniques_list()]
         if data is None:
             form_association = forms.formset_factory(TechniqueAssociationForm, can_delete=True, extra=0)(

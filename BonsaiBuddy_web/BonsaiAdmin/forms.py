@@ -129,6 +129,12 @@ class TechniqueAssociationForm(forms.Form):
         choices=build_periods, required=False, widget=TagifyWidget)
     comment = forms.CharField(widget=forms.Textarea, required=False)
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.display_name = ""
+        if "initial" in kwargs:
+            self.display_name = kwargs["initial"]["display_name"]
+
     def create_update(self):
         tree = TreeInfo.get(self.cleaned_data['tree_name_hidden'])
         technique_id = BonsaiTechnique.get(self.cleaned_data['technique']).id

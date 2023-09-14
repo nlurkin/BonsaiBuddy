@@ -66,6 +66,7 @@ class TreeInfo(mongoengine.Document):
 
     def get_techniques_list(self):
         techniques = [{"oid": item.oid,
+                       "technique_name": item.technique.fetch().display_name if item.technique else None,
                        "technique": item.technique.fetch().short_name if item.technique else None,
                        "objective": item.objective.fetch().short_name if item.objective else None,
                        "when": [when.fetch().short_name if when else None for when in item.when],
