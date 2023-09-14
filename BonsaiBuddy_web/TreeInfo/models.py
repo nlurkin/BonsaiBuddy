@@ -24,10 +24,9 @@ class TechniqueMapper(mongoengine.EmbeddedDocument):
 
 
     def fetch(self):
-        technique = self.technique.fetch()
-        objective = self.objective.fetch()
-        when = [_.fetch().display_name for _ in self.when]
-        return {"technique": technique, "objective": objective, "when": when, "period": self.period, "self": self}
+        self.technique_f = self.technique.fetch()
+        self.objective_f = self.objective.fetch()
+        self.when_f = [_.fetch().display_name for _ in self.when]
 
 
     def link(self, tree):
