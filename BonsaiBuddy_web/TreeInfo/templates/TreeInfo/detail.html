@@ -1,4 +1,5 @@
 {% extends "base_generic.html" %}
+{% load tablify %}
 
 {% block content %}
     <h1>{{ tree_info.display_name }}</h1>
@@ -27,13 +28,9 @@
     <p><strong>Pests: </strong>{{ tree_info.pests|linebreaks }}</p>
     {% endif %}
 
-    {% if tree_techniques|length > 0 %}
+    {% if technique_table|length > 0 %}
     Applicable techniques for this species:
-    <ul>
-    {% for technique in tree_techniques %}
-        <li>{{ technique }}</li>
-    {% endfor %}
-    </ul>
+    {{ technique_table|tablify:True }}
     {% endif %}
 
     {% if 'TreeInfo.change_content' in perms %}
