@@ -6,7 +6,7 @@
     {% if tree_info_list %}
     <ul>
         {% for tree in tree_info_list %}
-        <li><a href="{% url 'TreeInfo:detail' tree.name %}">{{ tree.display_name }}</a></li>
+        <li><a {% if not tree.published %}class="unpublished" {% endif %} href="{% url 'TreeInfo:detail' tree.name %}">{{ tree.display_name }}</a></li>
         {% endfor %}
     </ul>
     {% else %}

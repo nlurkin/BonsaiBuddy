@@ -7,7 +7,7 @@
         {% for category, cat_list in bonsai_techniques %}
             <h3>{{ category }}</h3>
             {% for technique in cat_list %}
-            <li><a href="{% url 'BonsaiAdvice:technique_detail' technique.short_name %}">{{ technique.display_name }}</a></li>
+            <li><a {% if not technique.published %}class="unpublished" {% endif %} href="{% url 'BonsaiAdvice:technique_detail' technique.short_name %}">{{ technique.display_name }}</a></li>
             {% endfor %}
         {% endfor %}
     </ul>
@@ -19,7 +19,7 @@
     {% if bonsai_objectives %}
     <ul>
         {% for objective in bonsai_objectives %}
-        <li><a href="{% url 'BonsaiAdvice:objective_detail' objective.short_name %}">{{ objective.display_name }}</a></li>
+        <li><a {% if not objective.published %}class="unpublished" {% endif %} href="{% url 'BonsaiAdvice:objective_detail' objective.short_name %}">{{ objective.display_name }}</a></li>
         {% endfor %}
     </ul>
     {% else %}
@@ -30,7 +30,7 @@
     {% if bonsai_when %}
     <ul>
         {% for when in bonsai_when %}
-        <li><a href="{% url 'BonsaiAdvice:when_detail' when.short_name %}">{{ when.display_name }}</a></li>
+        <li><a {% if not when.published %}class="unpublished" {% endif %} href="{% url 'BonsaiAdvice:when_detail' when.short_name %}">{{ when.display_name }}</a></li>
         {% endfor %}
     </ul>
     {% else %}

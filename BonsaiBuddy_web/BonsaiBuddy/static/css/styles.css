@@ -9,3 +9,7 @@
 textarea {
   height: 100px !important;
 }
+
+.unpublished {
+  color: red;
+}

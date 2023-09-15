@@ -116,7 +116,8 @@ class BonsaiTechnique(mongoengine.Document):
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
 
     def link(self):
-        return f"<a href='{reverse('BonsaiAdvice:technique_detail', kwargs={'pk': self.short_name})}'>{self.display_name}</a>"
+        unpublished = "" if self.published else "class='unpublished'"
+        return f"<a {unpublished} href='{reverse('BonsaiAdvice:technique_detail', kwargs={'pk': self.short_name})}'>{self.display_name}</a>"
 
     def __str__(self):
         return self.short_name
