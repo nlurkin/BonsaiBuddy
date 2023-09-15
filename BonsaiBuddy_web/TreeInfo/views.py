@@ -50,6 +50,7 @@ class DetailView(TreeInfoMenuMixin, View):
         table = [[""] + all_objectives_ordered]
 
         technique_seen = []
+        techniques_by_category = {_.technique_f.category: [] for _ in tech_associations}
         for association in tech_associations:
             # Do not repeat techniques appearing multiple times
             if association.technique in technique_seen:
@@ -72,6 +73,10 @@ class DetailView(TreeInfoMenuMixin, View):
                 # But for each save only the timing and the link to the full description
                 objectives[technique.objective_f.display_name].append(timing + " " + technique.link(tree.name))
             # Add the technique as a row in the table
-            table.append([association.technique_f.link()] + ["\n".join(objectives[_]) for _ in all_objectives_ordered])
+            techniques_by_category[association.technique_f.category].append([association.technique_f.link()] + ["\n".join(objectives[_]) for _ in all_objectives_ordered])
+
+        for category in techniques_by_category:
+            table.append([category.capitalize()])
+            table.extend(techniques_by_category[category])
 
         return table

@@ -13,3 +13,17 @@ textarea {
 .unpublished {
   color: red;
 }
+
+.table th[colspan] {
+  text-align: center;
+  border-bottom-width: medium;
+  border-bottom-style: groove;
+  border-top-width: medium;
+  border-top-style: groove;
+  background-color: var(--bs-table-striped-bg);
+  padding: 0px;
+ }
+
+ .table tr:first-of-type>th {
+  text-align: center;
+ }
