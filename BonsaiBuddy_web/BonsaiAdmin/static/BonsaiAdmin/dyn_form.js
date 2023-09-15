@@ -25,12 +25,12 @@ function cloneMore(selector, prefix) {
     });
     newElement.find('div.accordion-collapse').each(function() {
         var id = $(this).attr('id').replace('-' + (total-1) + '-', '-' + total + '-');
-        $(this).attr({'id': id});
+        $(this).attr({'id': id, 'class': 'accordion-collapse collapse show'});
     });
     newElement.find('button.accordion-button').each(function() {
         var target = $(this).attr('data-bs-target').replace('-' + (total-1) + '-', '-' + total + '-');
         var controls = $(this).attr('aria-controls').replace('-' + (total-1) + '-', '-' + total + '-');
-        $(this).attr({'data-bs-target': target, 'aria-controls': controls});
+        $(this).attr({'data-bs-target': target, 'aria-controls': controls, 'class': 'accordion-button', 'aria-expanded': "true"});
         $(this).html("Association #" + total)
     });
     $(selector).after(newElement);
