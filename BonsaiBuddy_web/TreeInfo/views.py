@@ -31,6 +31,8 @@ class DetailView(TreeInfoMenuMixin, View):
                                                     "technique_table": self.build_technique_table(tree)})
 
     def build_technique_table(self, tree):
+        show_unpublished = user_has_any_perms(self.request.user, ["TreeInfo.change_content"])
+
         # Fetch all associations for the tree
         tech_associations = tree.techniques
         if len(tech_associations) == 0:
@@ -53,6 +55,8 @@ class DetailView(TreeInfoMenuMixin, View):
             if association.technique in technique_seen:
                 continue
             technique_seen.append(association.technique)
+            if not show_unpublished and not association.technique_f.published:
+                continue
 
             # Search for all associations sharing the same technique
             similar = [_ for _ in tech_associations if _.technique == association.technique]
