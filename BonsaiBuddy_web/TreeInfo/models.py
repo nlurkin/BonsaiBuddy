@@ -64,7 +64,8 @@ class TreeInfo(mongoengine.Document):
     def get(name):
         return TreeInfo.objects.get(name=name)
 
-    def get_techniques_list(self):
+    def get_techniques_list(self, sort=None):
+        sort = sort if sort else "technique"
         techniques = [{"oid": item.oid,
                        "technique_name": item.technique.fetch().display_name if item.technique else None,
                        "technique": item.technique.fetch().short_name if item.technique else None,
@@ -73,6 +74,7 @@ class TreeInfo(mongoengine.Document):
                        "period": item.period,
                        "comment": item.comment
                        } for item in self.techniques]
+        techniques = sorted(techniques, key=lambda technique: technique[sort])
         if len(techniques) == 0:
             techniques.append({})
         return techniques

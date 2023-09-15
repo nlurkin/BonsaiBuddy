@@ -58,6 +58,12 @@
             </h2>
             <div id="associationForm" class="accordion-collapse collapse">
                 <div class="accordion-body">
+                    <div style="display: inline-flex;">
+                        <div style="width:18ch;">Sort:</div>
+                        <div style='width:30ch;'><a href="{{ request.path }}?sort=technique">Technique name</a></div>
+                        <div style='width:15ch;'><a href="{{ request.path }}?sort=objective">Objective</a></div>
+                    </div>
+
                     <form action="{% url rev_url pk %}" method="post" class="row">
                         {% csrf_token %}
                         {{ form_association.management_form }}
