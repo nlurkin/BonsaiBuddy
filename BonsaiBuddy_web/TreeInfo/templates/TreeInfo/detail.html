@@ -34,7 +34,7 @@
     {% endif %}
 
     {% if 'TreeInfo.change_content' in perms %}
-    <p><a href="{% url 'BonsaiAdmin:treeinfo_update' pk=tree_info.name %}">Update</a></p>
+    <p><a href="{% url 'BonsaiAdmin:treeinfo_update' pk=tree_info.name %}">Update</a> - <a href="{% url 'BonsaiAdmin:treeinfo_create'%}?tree={{tree_info.name}}">Clone</a></p>
     {% endif %}
     <p><a href="{% url 'BonsaiAdvice:which_technique' %}?tree={{tree_info.name}}">See advice</a></p>
 {% endblock %}

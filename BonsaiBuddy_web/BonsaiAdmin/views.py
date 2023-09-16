@@ -12,6 +12,7 @@ from utils import user_has_any_perms
 from .forms import (BonsaiObjectiveForm, BonsaiTechniqueForm, BonsaiWhenForm,
                     TechniqueAssociationForm, TreeInfoForm)
 from .menu import AdminMenuMixin
+from copy import deepcopy
 
 
 
@@ -43,6 +44,18 @@ class TreeInfoFormView(MyFormView):
     display_url = "TreeInfo:detail"
     page_title = "Tree info"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.copy_tree = None
+
+    def get_context_data(self, **kwargs):
+        top = super().get_context_data(**kwargs)
+        if self.copy_tree:
+            form = self.form_class(initial={**self.obj_to_dict(self.copy_tree), "update": False})
+            form.fields[self.index_name].widget.attrs["readonly"] = True
+            top["form"] = form
+        return top
+
     def init_form_association(self, pk, data=None):
         initial = [{"tree_name": pk.lower(), "tree_name_hidden": pk,
                     "display_name": technique["technique_name"], **technique}
@@ -56,6 +69,13 @@ class TreeInfoFormView(MyFormView):
         return form_association
 
     def get(self, request, *args, **kwargs):
+        clone_tree = request.GET.get("tree", None)
+        if clone_tree:
+            self.copy_tree = deepcopy(TreeInfo.get(clone_tree))#
+            self.copy_tree.id = None
+            self.copy_tree.name = None
+            self.copy_tree.display_name = None
+            self.copy_tree.latin_name = None
         form_association = self.init_form_association(
             kwargs["pk"]) if "pk" in kwargs else None
         return super().get(request, form_association=form_association, *args, **kwargs)
