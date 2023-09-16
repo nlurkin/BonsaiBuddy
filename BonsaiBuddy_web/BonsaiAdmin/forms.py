@@ -159,6 +159,8 @@ class TechniqueAssociationForm(forms.Form):
         tree.save()
 
     def summary(self):
+        if not "objective" in self.initial:
+            return mark_safe("")
         stage = self.initial["objective"]
         technique = self.initial["technique_name"]
         timing = ",".join([periodid_to_name(_) for _ in self.initial["period"]])
