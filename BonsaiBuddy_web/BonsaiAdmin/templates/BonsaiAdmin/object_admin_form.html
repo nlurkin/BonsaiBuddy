@@ -75,17 +75,16 @@
                             <div class="accordion-item form-row">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#formrow-{{ forloop.counter0 }}-collapse"
-                                        aria-expanded="false" aria-controls="formrow-{{ forloop.counter0 }}-collapse">
-                                        Association #<div style="width:3ch">{{ forloop.counter0 }}</div> - {{ form.summary }}
+                                    aria-expanded="false" aria-controls="formrow-{{ forloop.counter0 }}-collapse">
+                                    Association #<div style="width:3ch">{{ forloop.counter0 }}</div> - {{ form.summary }}
                                     </button>
                                 </h2>
                                 <div id="formrow-{{ forloop.counter0 }}-collapse" class="accordion-collapse collapse">
                                     <div class="accordion-body">
 
                                         <p>
-                                            <!-- <div class="form-row row g-3"> -->
-                                                {{ form }}
-                                            <!-- </div> -->
+                                            {{ form }}
+                                            <a class="clone-form-row btn-sm btn-success" role="button" name="copy-{{ forloop.counter0 }}">Copy</a>
                                         </p>
                                     </div>
                                 </div>
@@ -104,6 +103,12 @@
                 $(document).on('click', '.add-form-row', function (e) {
                     e.preventDefault();
                     cloneMore('.form-row:last', 'association');
+                    return false;
+                });
+                $(document).on('click', '.clone-form-row', function (e) {
+                    e.preventDefault();
+                    n = parseInt($(this).attr('name').replace('copy-', ''));
+                    cloneMore('.form-row:nth-of-type(' + (n+1) + ')', 'association', false, n);
                     return false;
                 });
             </script>
