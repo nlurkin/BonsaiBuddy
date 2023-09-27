@@ -75,31 +75,31 @@ def month_to_period(month):
     # Undefined: August, January
     return [f"{q}_{p}" for p,q in zip(period, qualifier)]
 
-def timing_matches(when, period, available_when, available_period):
-    # Returns true if both when and period are compatible with the available lists, unless the corresponding list is empty
+def timing_matches(stage, period, available_stage, available_period):
+    # Returns true if both stage and period are compatible with the available lists, unless the corresponding list is empty
     # This is considered as "doesn't matter"
-    # Same think in the opposite direction, if either of when or period is None, it is considered as "doesn't matter"
+    # Same think in the opposite direction, if either of stage or period is None, it is considered as "doesn't matter"
     # Compatible is defined as: any of is in the available
-    if when is not None:
-        if type(when) not in (list, set, tuple):
-            when = [when]
-        when = set(when)
-        when_cond = len(available_when)==0 or not when.isdisjoint(set(available_when))
+    if stage is not None:
+        if type(stage) not in (list, set, tuple):
+            stage = [stage]
+        stage = set(stage)
+        stage_cond = len(available_stage)==0 or not stage.isdisjoint(set(available_stage))
     if period is not None:
         if type(period) not in (list, set, tuple):
             period = [period]
         period = set(period)
         period_cond = len(available_period)==0 or not period.isdisjoint(set(available_period))
 
-    if when and period:
-        return when_cond and period_cond
-    elif when and not period:
-        return when_cond
-    elif not when and period:
+    if stage and period:
+        return stage_cond and period_cond
+    elif stage and not period:
+        return stage_cond
+    elif not stage and period:
         return period_cond
 
-def make_timing(whens, periods):
-    return {"when": [_.display_name for _ in whens], "period": [periodid_to_name(_) for _ in periods]}
+def make_timing(stages, periods):
+    return {"stage": [_.display_name for _ in stages], "period": [periodid_to_name(_) for _ in periods]}
 
 def get_current_period():
     curr_month = timezone.now().month
@@ -160,7 +160,7 @@ class BonsaiObjective(mongoengine.Document):
         return BonsaiObjective.objects.get(short_name=short_name)
 
 
-class BonsaiWhen(mongoengine.Document):
+class BonsaiStage(mongoengine.Document):
     short_name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
     display_name = mongoengine.StringField(max_length=200)
     description = mongoengine.StringField()
@@ -178,11 +178,11 @@ class BonsaiWhen(mongoengine.Document):
 
     @staticmethod
     def get_all(published_only=True):
-        objects = BonsaiWhen.objects.no_cache()
+        objects = BonsaiStage.objects.no_cache()
         if published_only:
             objects = objects.filter(published=True)
         return objects.order_by("short_name")
 
     @staticmethod
     def get(short_name):
-        return BonsaiWhen.objects.get(short_name=short_name)
+        return BonsaiStage.objects.get(short_name=short_name)

@@ -1,7 +1,7 @@
 import mongoengine
 from django.db import models
 from django.urls import reverse
-from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, get_periods, periodid_to_name
+from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiStage, get_periods, periodid_to_name
 from bson import ObjectId
 
 
@@ -15,18 +15,18 @@ class TechniqueMapper(mongoengine.EmbeddedDocument):
     oid = mongoengine.ObjectIdField(required=True, default=ObjectId, primary_key=True)
     technique = mongoengine.LazyReferenceField(BonsaiTechnique)
     objective = mongoengine.LazyReferenceField(BonsaiObjective)
-    when = mongoengine.ListField(mongoengine.LazyReferenceField(BonsaiWhen))
+    stage = mongoengine.ListField(mongoengine.LazyReferenceField(BonsaiStage))
     period = mongoengine.ListField(choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
     comment = mongoengine.StringField()
 
     def __str__(self):
-        return f"Mapper({self.oid}): technique={self.technique}, objective={self.objective}, when={self.when}, period={self.period}"
+        return f"Mapper({self.oid}): technique={self.technique}, objective={self.objective}, stage={self.stage}, period={self.period}"
 
 
     def fetch(self):
         self.technique_f = self.technique.fetch()
         self.objective_f = self.objective.fetch()
-        self.when_f = [_.fetch().display_name for _ in self.when]
+        self.stage_f = [_.fetch().display_name for _ in self.stage]
 
 
     def link(self, tree):
@@ -70,7 +70,7 @@ class TreeInfo(mongoengine.Document):
                        "technique_name": item.technique.fetch().display_name if item.technique else None,
                        "technique": item.technique.fetch().short_name if item.technique else None,
                        "objective": item.objective.fetch().short_name if item.objective else None,
-                       "when": [when.fetch().short_name if when else None for when in item.when],
+                       "stage": [stage.fetch().short_name if stage else None for stage in item.stage],
                        "period": item.period,
                        "comment": item.comment
                        } for item in self.techniques]

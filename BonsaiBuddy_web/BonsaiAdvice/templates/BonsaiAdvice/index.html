@@ -26,14 +26,14 @@
     <p>No objectives are available.</p>
     {% endif %}
 
-    <h2>Bonsai When</h2>
-    {% if bonsai_when %}
+    <h2>Bonsai Stage</h2>
+    {% if bonsai_stage %}
     <ul>
-        {% for when in bonsai_when %}
-        <li><a {% if not when.published %}class="unpublished" {% endif %} href="{% url 'BonsaiAdvice:when_detail' when.short_name %}">{{ when.display_name }}</a></li>
+        {% for stage in bonsai_stage %}
+        <li><a {% if not stage.published %}class="unpublished" {% endif %} href="{% url 'BonsaiAdvice:stage_detail' stage.short_name %}">{{ stage.display_name }}</a></li>
         {% endfor %}
     </ul>
     {% else %}
-    <p>No when are available.</p>
+    <p>No stage are available.</p>
     {% endif %}
 {% endblock %}

@@ -65,11 +65,11 @@ class DetailView(TreeInfoMenuMixin, View):
             # Categorize them according to their objective
             objectives = {_: [] for _ in all_objectives_ordered}
             for technique in similar:
-                when = ",".join(technique.when_f)
+                stage = ",".join(technique.stage_f)
                 periods = ", ".join([periodid_to_name(_) for _ in technique.period])
                 timing = periods
-                if len(when)>0:
-                    timing += f" ({when})"
+                if len(stage)>0:
+                    timing += f" ({stage})"
                 # But for each save only the timing and the link to the full description
                 objectives[technique.objective_f.display_name].append(timing + " " + technique.link(tree.name))
             # Add the technique as a row in the table

@@ -5,7 +5,7 @@ import os
 import importlib
 from django.contrib.auth.models import Permission
 from TreeInfo.models import TreeInfo
-from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen, get_periods, get_technique_categories
+from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiStage, get_periods, get_technique_categories
 
 def get_object_or_404(klass, **kwargs):
     try:
@@ -43,8 +43,8 @@ def build_objectives(published_only = True):
 def build_techniques(published_only = True):
     return build_choices(BonsaiTechnique.get_all(published_only), "short_name", "display_name")
 
-def build_when(published_only = True):
-    return build_choices(BonsaiWhen.get_all(published_only), "short_name", "display_name")
+def build_stage(published_only = True):
+    return build_choices(BonsaiStage.get_all(published_only), "short_name", "display_name")
 
 def build_periods():
     return [(None, "Undefined")] + [(f"{periodid[0]}_{periodid[1]}", f"{periodname[0]} {periodname[1]}") for periodid, periodname in get_periods()]

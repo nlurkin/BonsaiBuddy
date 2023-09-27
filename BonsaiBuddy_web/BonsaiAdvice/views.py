@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .menu import BonsaiAdviceMenuMixin
 from django.views import generic, View
-from .models import BonsaiTechnique, BonsaiObjective, BonsaiWhen, timing_matches, make_timing, get_technique_categories
+from .models import BonsaiTechnique, BonsaiObjective, BonsaiStage, timing_matches, make_timing, get_technique_categories
 from utils import get_object_or_404, user_has_any_perms
 from django.urls import reverse_lazy
 from .forms import AdviceConfigForm, ReqAdviceInfo
@@ -23,7 +23,7 @@ class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
 
         top["bonsai_techniques"] = technique_list
         top["bonsai_objectives"] = BonsaiObjective.get_all(not show_unpublished).order_by("sequence")
-        top["bonsai_when"] = BonsaiWhen.get_all(not show_unpublished).order_by("sequence")
+        top["bonsai_stage"] = BonsaiStage.get_all(not show_unpublished).order_by("sequence")
         return top
 
 class TechniqueView(BonsaiAdviceMenuMixin, View):
@@ -45,10 +45,10 @@ class ObjectiveView(BonsaiAdviceMenuMixin, View):
         return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: obj_instance})
 
 
-class WhenView(BonsaiAdviceMenuMixin, View):
-    model = BonsaiWhen
-    template_name = "BonsaiAdvice/detail_when.html"
-    context_object_name = "when"
+class StageView(BonsaiAdviceMenuMixin, View):
+    model = BonsaiStage
+    template_name = "BonsaiAdvice/detail_stage.html"
+    context_object_name = "stage"
 
     def get(self, request, pk):
         obj_instance = get_object_or_404(self.model, short_name=pk)
@@ -84,9 +84,9 @@ class WhichTechniqueSelector(BonsaiAdviceMenuMixin, generic.FormView):
         context = self.get_context_data(**kwargs)
         if request.GET.get("is_submitted", False):
             # Forms has been submitted, bind it
-            form = self.form_class({"tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "when": self.info.when, "is_submitted": True})
+            form = self.form_class({"tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "stage": self.info.stage, "is_submitted": True})
         else:
-            form = self.form_class(initial={"tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "when": self.info.when})
+            form = self.form_class(initial={"tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "stage": self.info.stage})
         context['form'] = form
         return self.render_to_response(context)
 
@@ -110,7 +110,7 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
         else:
             # Then get the list of valid advices according to the criteria in info
             objective_document_id = BonsaiObjective.get(self.info.objective).id
-            when_document_id = None if not self.info.when else [BonsaiWhen.get(_).id for _ in self.info.when]
+            stage_document_id = None if not self.info.stage else [BonsaiStage.get(_).id for _ in self.info.stage]
             period = None if not self.info.period else self.info.period.split(',')
 
         selected_techniques = []
@@ -121,13 +121,13 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
             else:
                 if technique.objective.id != objective_document_id:
                     continue
-                if not timing_matches(when_document_id, period, [_.id for _ in technique.when], technique.period):
+                if not timing_matches(stage_document_id, period, [_.id for _ in technique.stage], technique.period):
                     continue
             technique_doc = technique.technique.fetch()
             if not show_unpublished and not technique_doc.published:
                 continue
             selected_techniques.append({"technique": technique_doc,
-                                        "timing": make_timing([_.fetch() for _ in technique.when], technique.period),
+                                        "timing": make_timing([_.fetch() for _ in technique.stage], technique.period),
                                         "comment": technique.comment})
         context["techniques"] = selected_techniques
         context["tree"] = tree

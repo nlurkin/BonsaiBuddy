@@ -2,10 +2,10 @@
 
 {% block content %}
     <a href="{% url 'BonsaiAdvice:index' %}">Back</a>
-    <h1>{{ when.display_name }}</h1>
-    <p>{{ when.description }}</p>
-    <p>{{ when.global_period_name|linebreaks }}</p>
+    <h1>{{ stage.display_name }}</h1>
+    <p>{{ stage.description }}</p>
+    <p>{{ stage.global_period_name|linebreaks }}</p>
     {% if 'BonsaiAdvice.change_content' in perms %}
-    <p><a href="{% url 'BonsaiAdmin:when_update' pk=when.short_name %}">Update</a></p>
+    <p><a href="{% url 'BonsaiAdmin:stage_update' pk=stage.short_name %}">Update</a></p>
     {% endif %}
 {% endblock %}

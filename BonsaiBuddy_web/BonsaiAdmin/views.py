@@ -1,4 +1,4 @@
-from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen
+from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiStage
 from BonsaiBuddy.views import CreateUpdateView
 from django import forms
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -9,7 +9,7 @@ from django.views.generic.edit import FormView
 from TreeInfo.models import TreeInfo
 from utils import user_has_any_perms
 
-from .forms import (BonsaiObjectiveForm, BonsaiTechniqueForm, BonsaiWhenForm,
+from .forms import (BonsaiObjectiveForm, BonsaiTechniqueForm, BonsaiStageForm,
                     TechniqueAssociationForm, TreeInfoForm)
 from .menu import AdminMenuMixin
 from copy import deepcopy
@@ -129,12 +129,12 @@ class BonsaiObjectiveFormView(MyFormView):
     page_title = "Bonsai Objective"
 
 
-class BonsaiWhenFormView(MyFormView):
+class BonsaiStageFormView(MyFormView):
     permission_required = 'BonsaiAdvice.change_content'
-    url_update_name = "when_update"
-    url_create_name = "when_create"
-    form_class = BonsaiWhenForm
+    url_update_name = "stage_update"
+    url_create_name = "stage_create"
+    form_class = BonsaiStageForm
     index_name = "short_name"
-    object_class = BonsaiWhen
-    display_url = "BonsaiAdvice:when_detail"
-    page_title = "Bonsai When"
+    object_class = BonsaiStage
+    display_url = "BonsaiAdvice:stage_detail"
+    page_title = "Bonsai Stage"

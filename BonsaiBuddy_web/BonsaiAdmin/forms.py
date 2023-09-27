@@ -1,12 +1,12 @@
 from functools import partial
 
-from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiWhen, periodid_to_name
+from BonsaiAdvice.models import BonsaiObjective, BonsaiTechnique, BonsaiStage, periodid_to_name
 from BonsaiBuddy.forms import CreateUpdateForm
 from BonsaiBuddy.widgets import SelectPlaceholder, TagifyWidget
 from django import forms
 from TreeInfo.models import TechniqueMapper, TreeInfo
 from utils import (build_objectives, build_periods, build_technique_categories,
-                   build_techniques, build_tree_list, build_when)
+                   build_techniques, build_tree_list, build_stage)
 from django.utils.safestring import mark_safe
 
 
@@ -90,7 +90,7 @@ class BonsaiObjectiveForm(CreateUpdateForm):
         original.delete()
 
 
-class BonsaiWhenForm(CreateUpdateForm):
+class BonsaiStageForm(CreateUpdateForm):
     short_name = forms.CharField(max_length=200)
     display_name = forms.CharField(max_length=200)
     global_period = forms.MultipleChoiceField(choices=build_periods(), required=False, widget=TagifyWidget)
@@ -100,16 +100,16 @@ class BonsaiWhenForm(CreateUpdateForm):
 
     def update_object(self):
         pk = self.cleaned_data["short_name"]
-        original = BonsaiWhen.get(pk)
+        original = BonsaiStage.get(pk)
         original.update(**self.cleaned_data)
 
     def create_object(self):
-        q = BonsaiWhen(**self.cleaned_data)
+        q = BonsaiStage(**self.cleaned_data)
         q.save()
 
     def delete_object(self):
         pk = self.cleaned_data["short_name"]
-        original = BonsaiWhen.get(pk)
+        original = BonsaiStage.get(pk)
         original.delete()
 
 
@@ -124,8 +124,8 @@ class TechniqueAssociationForm(forms.Form):
         choices=partial(build_techniques, published_only=False), widget=SelectPlaceholder)
     objective = forms.ChoiceField(
         choices=partial(build_objectives, published_only=False), widget=SelectPlaceholder)
-    when = forms.MultipleChoiceField(
-        choices=partial(build_when, published_only=False), required=False, widget=TagifyWidget)
+    stage = forms.MultipleChoiceField(
+        choices=partial(build_stage, published_only=False), required=False, widget=TagifyWidget)
     period = forms.MultipleChoiceField(
         choices=build_periods, required=False, widget=TagifyWidget)
     comment = forms.CharField(widget=forms.Textarea, required=False)
@@ -134,8 +134,8 @@ class TechniqueAssociationForm(forms.Form):
         tree = TreeInfo.get(self.cleaned_data['tree_name_hidden'])
         technique_id = BonsaiTechnique.get(self.cleaned_data['technique']).id
         objective_id = BonsaiObjective.get(self.cleaned_data['objective']).id
-        when_id = [None if not when else BonsaiWhen.get(
-            when).id for when in self.cleaned_data['when']]
+        stage_id = [None if not stage else BonsaiStage.get(
+            stage).id for stage in self.cleaned_data['stage']]
         period = self.cleaned_data['period'] if len(
             self.cleaned_data['period']) > 0 else []
         if self.cleaned_data["oid"]:
@@ -148,13 +148,13 @@ class TechniqueAssociationForm(forms.Form):
             else:
                 mapper.technique = technique_id
                 mapper.objective = objective_id
-                mapper.when = when_id
+                mapper.stage = stage_id
                 mapper.period = period
                 mapper.comment = self.cleaned_data['comment']
         else:
             # Creating a new entry
             mapper = TechniqueMapper(
-                technique=technique_id, objective=objective_id, when=when_id, period=period, comment = self.cleaned_data["comment"])
+                technique=technique_id, objective=objective_id, stage=stage_id, period=period, comment = self.cleaned_data["comment"])
             tree.techniques.append(mapper)
         tree.save()
 
@@ -164,6 +164,6 @@ class TechniqueAssociationForm(forms.Form):
         stage = self.initial["objective"]
         technique = self.initial["technique_name"]
         timing = ",".join([periodid_to_name(_) for _ in self.initial["period"]])
-        if self.initial["when"]:
-            timing += " (" + ",".join(self.initial['when']) + ")"
+        if self.initial["stage"]:
+            timing += " (" + ",".join(self.initial['stage']) + ")"
         return mark_safe(f"<div style='width:30ch;'>&nbsp;{technique}</div> - <div style='width:15ch;'>&nbsp;{stage}</div> - {timing}")
