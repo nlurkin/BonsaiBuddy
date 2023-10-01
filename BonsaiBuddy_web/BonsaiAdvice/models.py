@@ -171,7 +171,7 @@ class BonsaiStage(mongoengine.Document):
     meta = {'db_alias': 'mongo', "indexes": ["$short_name"]}
 
     def global_period_name(self):
-        return periodid_to_name(self.global_period)
+        return ", ".join(periodid_to_name(periodid) for periodid in self.global_period)
 
     def __str__(self):
         return self.short_name
