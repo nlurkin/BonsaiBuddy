@@ -57,6 +57,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries': {
+                'markdown': 'BonsaiBuddy.templatetags.markdown',
                 'tablify': 'BonsaiBuddy.templatetags.tablify'
             }
         },
