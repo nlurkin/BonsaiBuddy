@@ -10,3 +10,5 @@ django-widget-tweaks==1.4.12
 gunicorn==21.2.0
 whitenoise==6.5.0
 markdown==3.4.4
+djangorestframework==3.14.0
+django-rest-framework-mongoengine==3.4.1

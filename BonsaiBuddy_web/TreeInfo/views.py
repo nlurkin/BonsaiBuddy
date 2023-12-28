@@ -1,12 +1,17 @@
 # from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render
-from .models import TreeInfo
-from django.views import View, generic
-from utils import get_object_or_404, user_has_any_perms
-from .menu import TreeInfoMenuMixin
 from BonsaiAdvice.models import periodid_to_name
+from BonsaiUsers.models import User
+from django.shortcuts import render
+from django.views import View, generic
+from rest_framework_mongoengine import viewsets
+from utils import get_object_or_404, user_has_any_perms
+
+from .menu import TreeInfoMenuMixin
+from .models import TreeInfo, TreeInfoPermissionModelAPI
+from .serializers import TreeInfoSerializer
+
 
 class IndexView(TreeInfoMenuMixin, generic.ListView):
     template_name = "TreeInfo/index.html"
@@ -80,3 +85,15 @@ class DetailView(TreeInfoMenuMixin, View):
             table.extend(techniques_by_category[category])
 
         return table
+
+
+class TreeInfoViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    lookup_field = 'name'
+    serializer_class = TreeInfoSerializer
+    permission_classes = [TreeInfoPermissionModelAPI]
+
+    def get_queryset(self):
+        return TreeInfo.objects.all()

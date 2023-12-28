@@ -33,11 +33,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.forms',
     'bootstrap5',
-    'widget_tweaks'
+    'widget_tweaks',
+    'rest_framework',
+    'rest_framework_mongoengine',
 ]
+
 
 class CustomFormRenderer(TemplatesSetting):
     form_template_name = "form_template.html"
+
 
 # FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 FORM_RENDERER = "BonsaiBuddy.settings.base.CustomFormRenderer"
@@ -120,6 +124,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/TreeInfo'
 LOGOUT_REDIRECT_URL = '/TreeInfo'
 
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend', "BonsaiUsers.auth.DjangoBackend"]
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', "BonsaiUsers.auth.DjangoBackend"]
 
 AUTH_USER_MODEL = "BonsaiUsers.User"

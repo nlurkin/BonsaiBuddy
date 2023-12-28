@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiStage, get_periods, periodid_to_name
 from bson import ObjectId
+from rest_framework import permissions
 
 
 class TreeInfoPermissionModel(models.Model):
@@ -11,30 +12,40 @@ class TreeInfoPermissionModel(models.Model):
             ('change_content', 'Content administrators'),
         )
 
+
+class TreeInfoPermissionModelAPI(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        else:
+            return request.user.has_perm('TreeInfo.change_content')
+
+
 class TechniqueMapper(mongoengine.EmbeddedDocument):
-    oid = mongoengine.ObjectIdField(required=True, default=ObjectId, primary_key=True)
+    oid = mongoengine.ObjectIdField(
+        required=True, default=ObjectId, primary_key=True)
     technique = mongoengine.LazyReferenceField(BonsaiTechnique)
     objective = mongoengine.LazyReferenceField(BonsaiObjective)
     stage = mongoengine.ListField(mongoengine.LazyReferenceField(BonsaiStage))
-    period = mongoengine.ListField(choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
+    period = mongoengine.ListField(
+        choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
     comment = mongoengine.StringField()
 
     def __str__(self):
         return f"Mapper({self.oid}): technique={self.technique}, objective={self.objective}, stage={self.stage}, period={self.period}"
-
 
     def fetch(self):
         self.technique_f = self.technique.fetch()
         self.objective_f = self.objective.fetch()
         self.stage_f = [_.fetch().display_name for _ in self.stage]
 
-
     def link(self, tree):
         return f"<a href='{reverse('BonsaiAdvice:which_technique')}?oid={self.oid!s}&tree={tree}'>more</a>"
 
 
 class TreeInfo(mongoengine.Document):
-    name = mongoengine.StringField(max_length=200, required=True, index=True, unique=True)
+    name = mongoengine.StringField(
+        max_length=200, required=True, index=True, unique=True)
     display_name = mongoengine.StringField(max_length=200, required=True)
     latin_name = mongoengine.StringField(max_length=200)
     description = mongoengine.StringField()

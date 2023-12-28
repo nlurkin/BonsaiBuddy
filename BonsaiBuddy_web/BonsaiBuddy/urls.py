@@ -26,5 +26,7 @@ urlpatterns = [
     path('accounts/', include('BonsaiUsers.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('djangoadmin/', admin.site.urls),
+    path('api/treeinfo/', include('TreeInfo.apiurls')),
+    path('api-auth/', include('rest_framework.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
