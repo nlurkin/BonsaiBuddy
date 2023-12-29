@@ -5,7 +5,10 @@ from rest_framework_mongoengine import serializers
 from .models import TechniqueMapper, TreeInfo
 
 
-class LazyReferenceFieldSerializer(r_serializers.BaseSerializer):
+class LazyReferenceFieldSerializer(r_serializers.Serializer):
+    classname = r_serializers.CharField()
+    id = r_serializers.CharField()
+
     def to_representation(self, instance):
         return {'classname': instance.document_type.__name__, 'id': str(instance.id)}
 
@@ -22,9 +25,6 @@ class TechniqueMapperSerializer(serializers.EmbeddedDocumentSerializer):
     stage = LazyReferenceFieldSerializer(many=True)
     period = PeriodSerializer(
         choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
-
-    def get_period(self, obj):
-        return
 
     class Meta:
         model = TechniqueMapper
