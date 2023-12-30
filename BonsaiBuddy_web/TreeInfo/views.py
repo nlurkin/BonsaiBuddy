@@ -98,7 +98,7 @@ class DetailView(TreeInfoMenuMixin, View):
 
 class TreeInfoViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows TreeInfo to be viewed or edited.
     """
     lookup_field = 'name'
     serializer_class = TreeInfoSerializer
