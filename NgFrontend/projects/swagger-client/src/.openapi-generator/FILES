@@ -3,7 +3,9 @@ README.md
 api.module.ts
 api/api.ts
 api/schemaapi.service.ts
-api/treeinfoapi.service.ts
+api/tokenapi.service.ts
+api/treesapi.service.ts
+api/usersapi.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -13,6 +15,11 @@ model/models.ts
 model/patchedTreeInfo.ts
 model/periodEnum.ts
 model/techniqueMapper.ts
+model/tokenObtainPair.ts
+model/tokenObtainPairResponse.ts
+model/tokenRefresh.ts
+model/tokenRefreshResponse.ts
 model/treeInfo.ts
+model/user.ts
 param.ts
 variables.ts

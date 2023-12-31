@@ -32,7 +32,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class TreeinfoAPI {
+export class TreesAPI {
 
     protected basePath = '';
     public defaultHeaders = new HttpHeaders();
@@ -99,26 +99,26 @@ export class TreeinfoAPI {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treeinfoTreesCreate(treeInfo: TreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
-    public treeinfoTreesCreate(treeInfo: TreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
-    public treeinfoTreesCreate(treeInfo: TreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
-    public treeinfoTreesCreate(treeInfo: TreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public treesCreate(treeInfo: TreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
+    public treesCreate(treeInfo: TreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
+    public treesCreate(treeInfo: TreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
+    public treesCreate(treeInfo: TreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (treeInfo === null || treeInfo === undefined) {
-            throw new Error('Required parameter treeInfo was null or undefined when calling treeinfoTreesCreate.');
+            throw new Error('Required parameter treeInfo was null or undefined when calling treesCreate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
-        }
-
         // authentication (cookieAuth) required
         localVarCredential = this.configuration.lookupCredential('cookieAuth');
         if (localVarCredential) {
+        }
+
+        // authentication (jwtAuth) required
+        localVarCredential = this.configuration.lookupCredential('jwtAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -161,7 +161,7 @@ export class TreeinfoAPI {
             }
         }
 
-        let localVarPath = `/api/treeinfo/trees/`;
+        let localVarPath = `/api/trees/`;
         return this.httpClient.request<TreeInfo>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -181,26 +181,26 @@ export class TreeinfoAPI {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treeinfoTreesDestroy(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public treeinfoTreesDestroy(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public treeinfoTreesDestroy(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public treeinfoTreesDestroy(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public treesDestroy(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public treesDestroy(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public treesDestroy(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public treesDestroy(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling treeinfoTreesDestroy.');
+            throw new Error('Required parameter name was null or undefined when calling treesDestroy.');
         }
 
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
-        }
-
         // authentication (cookieAuth) required
         localVarCredential = this.configuration.lookupCredential('cookieAuth');
         if (localVarCredential) {
+        }
+
+        // authentication (jwtAuth) required
+        localVarCredential = this.configuration.lookupCredential('jwtAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -231,7 +231,7 @@ export class TreeinfoAPI {
             }
         }
 
-        let localVarPath = `/api/treeinfo/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
+        let localVarPath = `/api/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -249,23 +249,23 @@ export class TreeinfoAPI {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treeinfoTreesList(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<TreeInfo>>;
-    public treeinfoTreesList(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<TreeInfo>>>;
-    public treeinfoTreesList(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<TreeInfo>>>;
-    public treeinfoTreesList(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public treesList(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<TreeInfo>>;
+    public treesList(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<TreeInfo>>>;
+    public treesList(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<TreeInfo>>>;
+    public treesList(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
-        }
-
         // authentication (cookieAuth) required
         localVarCredential = this.configuration.lookupCredential('cookieAuth');
         if (localVarCredential) {
+        }
+
+        // authentication (jwtAuth) required
+        localVarCredential = this.configuration.lookupCredential('jwtAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -297,7 +297,7 @@ export class TreeinfoAPI {
             }
         }
 
-        let localVarPath = `/api/treeinfo/trees/`;
+        let localVarPath = `/api/trees/`;
         return this.httpClient.request<Array<TreeInfo>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -317,26 +317,26 @@ export class TreeinfoAPI {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treeinfoTreesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
-    public treeinfoTreesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
-    public treeinfoTreesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
-    public treeinfoTreesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public treesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
+    public treesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
+    public treesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
+    public treesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling treeinfoTreesPartialUpdate.');
+            throw new Error('Required parameter name was null or undefined when calling treesPartialUpdate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
-        }
-
         // authentication (cookieAuth) required
         localVarCredential = this.configuration.lookupCredential('cookieAuth');
         if (localVarCredential) {
+        }
+
+        // authentication (jwtAuth) required
+        localVarCredential = this.configuration.lookupCredential('jwtAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -379,7 +379,7 @@ export class TreeinfoAPI {
             }
         }
 
-        let localVarPath = `/api/treeinfo/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
+        let localVarPath = `/api/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
         return this.httpClient.request<TreeInfo>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -399,26 +399,26 @@ export class TreeinfoAPI {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treeinfoTreesRetrieve(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
-    public treeinfoTreesRetrieve(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
-    public treeinfoTreesRetrieve(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
-    public treeinfoTreesRetrieve(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public treesRetrieve(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
+    public treesRetrieve(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
+    public treesRetrieve(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
+    public treesRetrieve(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling treeinfoTreesRetrieve.');
+            throw new Error('Required parameter name was null or undefined when calling treesRetrieve.');
         }
 
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
-        }
-
         // authentication (cookieAuth) required
         localVarCredential = this.configuration.lookupCredential('cookieAuth');
         if (localVarCredential) {
+        }
+
+        // authentication (jwtAuth) required
+        localVarCredential = this.configuration.lookupCredential('jwtAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -450,7 +450,7 @@ export class TreeinfoAPI {
             }
         }
 
-        let localVarPath = `/api/treeinfo/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
+        let localVarPath = `/api/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
         return this.httpClient.request<TreeInfo>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -470,29 +470,29 @@ export class TreeinfoAPI {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treeinfoTreesUpdate(name: string, treeInfo: TreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
-    public treeinfoTreesUpdate(name: string, treeInfo: TreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
-    public treeinfoTreesUpdate(name: string, treeInfo: TreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
-    public treeinfoTreesUpdate(name: string, treeInfo: TreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public treesUpdate(name: string, treeInfo: TreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
+    public treesUpdate(name: string, treeInfo: TreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
+    public treesUpdate(name: string, treeInfo: TreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
+    public treesUpdate(name: string, treeInfo: TreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling treeinfoTreesUpdate.');
+            throw new Error('Required parameter name was null or undefined when calling treesUpdate.');
         }
         if (treeInfo === null || treeInfo === undefined) {
-            throw new Error('Required parameter treeInfo was null or undefined when calling treeinfoTreesUpdate.');
+            throw new Error('Required parameter treeInfo was null or undefined when calling treesUpdate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
-        }
-
         // authentication (cookieAuth) required
         localVarCredential = this.configuration.lookupCredential('cookieAuth');
         if (localVarCredential) {
+        }
+
+        // authentication (jwtAuth) required
+        localVarCredential = this.configuration.lookupCredential('jwtAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -535,7 +535,7 @@ export class TreeinfoAPI {
             }
         }
 
-        let localVarPath = `/api/treeinfo/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
+        let localVarPath = `/api/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
         return this.httpClient.request<TreeInfo>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
