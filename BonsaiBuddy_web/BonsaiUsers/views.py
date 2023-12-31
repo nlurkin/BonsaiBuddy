@@ -1,3 +1,6 @@
+from rest_framework_mongoengine import viewsets
+
+from .models import OwnProfilePermission, User
 from BonsaiAdvice.models import get_current_period
 from BonsaiBuddy.views import CreateUpdateView
 from django.contrib.auth import authenticate, login, views
@@ -5,6 +8,7 @@ from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View, generic
+from .serializers import UserSerializer
 from utils import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -13,6 +17,7 @@ from .forms import (CustomUserCreationForm, ModifyPasswordForm, MyTreeForm,
 from .menu import BonsaiUsersMenuMixin
 from .models import TreeCollection, UserProfile
 from mongoengine import DoesNotExist
+from rest_framework.permissions import IsAuthenticated
 
 
 class DetailView(BonsaiUsersMenuMixin, LoginRequiredMixin, View):
@@ -22,10 +27,12 @@ class DetailView(BonsaiUsersMenuMixin, LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-            profile = get_object_or_404(self.model, username=request.user.username)
+            profile = get_object_or_404(
+                self.model, username=request.user.username)
         except Http404:
             return render(request, "BonsaiUsers/not_found.html", {**self.build_menu_context(request), self.context_object_name: request.user})
         return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: profile})
+
 
 class SignupView(BonsaiUsersMenuMixin, generic.FormView):
     form_class = CustomUserCreationForm
@@ -34,12 +41,15 @@ class SignupView(BonsaiUsersMenuMixin, generic.FormView):
 
     def form_valid(self, form):
         up = form.save()
-        user = authenticate(self.request, username=up.username, password=up.password)
+        user = authenticate(
+            self.request, username=up.username, password=up.password)
         login(self.request, user)
         return super().form_valid(form)
 
+
 class MyLoginView(BonsaiUsersMenuMixin, views.LoginView):
     pass
+
 
 class ProfileUpdateView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormView):
     success_url = reverse_lazy("Profile:detail")
@@ -50,7 +60,8 @@ class ProfileUpdateView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormVi
         context = self.get_context_data(**kwargs)
 
         user = UserProfile.get_user(request.user.username)
-        form = self.form_class(initial={**user.to_mongo().to_dict(), "update": True})
+        form = self.form_class(
+            initial={**user.to_mongo().to_dict(), "update": True})
         context['form'] = form
 
         return self.render_to_response(context)
@@ -58,6 +69,7 @@ class ProfileUpdateView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormVi
     def form_valid(self, form):
         form.save(self.request.user.username)
         return super().form_valid(form)
+
 
 class ModifyPasswordView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormView):
     form_class = ModifyPasswordForm
@@ -72,6 +84,7 @@ class ModifyPasswordView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormV
     def form_valid(self, form):
         form.save(self.request.user.username)
         return super().form_valid(form)
+
 
 class MyTreesListView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.ListView):
     template_name = "BonsaiUsers/my_trees_list.html"
@@ -93,6 +106,7 @@ class MyTreesListView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.ListView
         context["profile"] = self.request.user
         return context
 
+
 class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView):
     template_name = "BonsaiUsers/my_trees_form.html"
     url_update_name = "my_trees_update"
@@ -101,7 +115,7 @@ class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView
     form_class = MyTreeForm
     index_name = "oid"
     object_class = TreeCollection
-    success_url  = reverse_lazy("Profile:my_trees")
+    success_url = reverse_lazy("Profile:my_trees")
 
     def form_valid(self, form):
         self.process_form(form, username=self.request.user.username)
@@ -113,7 +127,14 @@ class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView
         if tree is not None:
             return tree
 
-        raise Http404(f"TreeCollection {tree.oid} does not exist for user {self.request.user.username}")
+        raise Http404(
+            f"TreeCollection {tree.oid} does not exist for user {self.request.user.username}")
 
     def obj_to_dict(self, obj):
         return {"oid": obj.oid, "tree_name": obj.treeReference.name, "objective": obj.objective.short_name}
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, OwnProfilePermission]
