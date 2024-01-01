@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.views import View, generic
 from rest_framework_mongoengine import viewsets
 from utils import get_object_or_404, user_has_any_perms
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .menu import TreeInfoMenuMixin
 from .models import TreeInfo, TreeInfoPermissionModelAPI
@@ -51,8 +52,7 @@ class DetailView(TreeInfoMenuMixin, View):
         # Take all distinct objectives and sort them according to sequence
         # Consider that several may share the same sequence, so use the name
         # also in the index
-        all_objectives = {(_.objective_f.sequence, _.objective_f.short_name)
-                           : _.objective_f.display_name for _ in tech_associations}
+        all_objectives = {(_.objective_f.sequence, _.objective_f.short_name)                          : _.objective_f.display_name for _ in tech_associations}
         all_objectives_ordered = [all_objectives[_]
                                   for _ in sorted(all_objectives)]
 
@@ -103,7 +103,8 @@ class TreeInfoViewSet(viewsets.ModelViewSet):
     """
     lookup_field = 'name'
     serializer_class = TreeInfoSerializer
-    permission_classes = [TreeInfoPermissionModelAPI]
+    permission_classes = [
+        IsAuthenticatedOrReadOnly, TreeInfoPermissionModelAPI]
 
     def get_queryset(self):
         return TreeInfo.objects.all()
