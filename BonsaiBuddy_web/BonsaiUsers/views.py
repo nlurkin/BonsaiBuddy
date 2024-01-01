@@ -17,7 +17,7 @@ from .forms import (CustomUserCreationForm, ModifyPasswordForm, MyTreeForm,
 from .menu import BonsaiUsersMenuMixin
 from .models import TreeCollection, UserProfile
 from mongoengine import DoesNotExist
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 class DetailView(BonsaiUsersMenuMixin, LoginRequiredMixin, View):
@@ -137,4 +137,15 @@ class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, OwnProfilePermission]
+    permission_classes = [IsAuthenticated,
+                          OwnProfilePermission | IsAdminUser]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the users accessible to this user.
+        """
+        user = self.request.user
+        if user.is_superuser:
+            return User.objects.all()
+        else:
+            return [User.objects.get(id=user.id)]
