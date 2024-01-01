@@ -1,0 +1,36 @@
+<p-button
+  icon="fa-solid fa-bars"
+  size="large"
+  class="navbutton"
+  (click)="sidebarVisible = true"
+></p-button>
+<p-sidebar [(visible)]="sidebarVisible">
+  <ng-template pTemplate="header">
+    <div class="d-flex justify-content-between">
+      <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+        Welcome {{ userName$ | async }}
+      </h5>
+    </div>
+  </ng-template>
+  <div class="offcanvas-body">
+    <ul
+      class="navbar-nav justify-content-end flex-grow-1 pe-3"
+      *ngLet="accessibleMenuItems$ | async as menuItems"
+    >
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <ng-container *ngIf="item.routerLink">
+          <a class="nav-link" [routerLink]="item.routerLink">{{
+            item.label
+          }}</a>
+        </ng-container>
+        <ng-container *ngIf="item.action">
+          <p-button
+            label="{{ item.label }}"
+            styleClass="p-button-success w-10rem"
+            (onClick)="item.action()"
+          ></p-button>
+        </ng-container>
+      </li>
+    </ul>
+  </div>
+</p-sidebar>

@@ -1,0 +1,10 @@
+.navbutton {
+  ::ng-deep {
+    .p-button {
+      background: unset;
+      background-color: unset;
+      color: unset;
+      border-style: none;
+    }
+  }
+}
