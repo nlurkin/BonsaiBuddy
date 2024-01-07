@@ -1,8 +1,7 @@
-# from django.shortcuts import render
-
 # Create your views here.
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter
 from BonsaiAdvice.models import periodid_to_name
-from BonsaiUsers.models import User
 from django.shortcuts import render
 from django.views import View, generic
 from rest_framework_mongoengine import viewsets
@@ -97,6 +96,7 @@ class DetailView(TreeInfoMenuMixin, View):
         return table
 
 
+@extend_schema_view(retrieve=extend_schema(parameters=[OpenApiParameter("name", str, OpenApiParameter.PATH)]))
 class TreeInfoViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows TreeInfo to be viewed or edited.

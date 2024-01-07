@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View, generic
+from drf_spectacular.utils import (OpenApiParameter, extend_schema,
+                                   extend_schema_view)
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_mongoengine import viewsets
 
 from BonsaiAdvice.serializers import BonsaiTechniqueSerializer
+from BonsaiBuddy.serializers import StringListSerializer
 from TreeInfo.models import TreeInfo
 from utils import get_object_or_404, user_has_any_perms
 
@@ -144,6 +148,7 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
         return context
 
 
+@extend_schema_view(retrieve=extend_schema(parameters=[OpenApiParameter("short_name", str, OpenApiParameter.PATH)]))
 class BonsaiTechniqueViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows BonsaiTechnique to be viewed or edited.
@@ -164,10 +169,13 @@ class BonsaiTechniqueViewSet(viewsets.ModelViewSet):
             not show_unpublished).order_by("sequence")
 
 
-class BonsaiTechniqueCategoriesView(APIView):
+class BonsaiTechniqueCategoriesView(GenericAPIView):
     """
     API endpoint that returns the list of technique categories
     """
+    serializer_class = StringListSerializer
 
     def get(self, request, format=None):
-        return Response(get_technique_categories())
+        serializer = self.get_serializer(
+            get_technique_categories(), many=True)
+        return Response(serializer.data)

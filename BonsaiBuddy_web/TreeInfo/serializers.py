@@ -2,6 +2,8 @@ from BonsaiAdvice.models import get_periods, periodid_to_name
 from rest_framework import serializers as r_serializers
 from rest_framework_mongoengine import serializers
 
+from BonsaiBuddy.serializers import ObjectIdFieldSerializer
+
 from .models import TechniqueMapper, TreeInfo
 
 
@@ -20,6 +22,7 @@ class PeriodSerializer(r_serializers.ChoiceField):
 
 
 class TechniqueMapperSerializer(serializers.EmbeddedDocumentSerializer):
+    oid = ObjectIdFieldSerializer()
     technique = LazyReferenceFieldSerializer()
     objective = LazyReferenceFieldSerializer()
     stage = LazyReferenceFieldSerializer(many=True)
