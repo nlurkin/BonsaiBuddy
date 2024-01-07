@@ -30,15 +30,20 @@ class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         top = super().get_context_data(**kwargs)
-        show_unpublished = user_has_any_perms(self.request.user, ["BonsaiAdvice.change_content"])
+        show_unpublished = user_has_any_perms(
+            self.request.user, ["BonsaiAdvice.change_content"])
         technique_list = []
         for category in get_technique_categories():
-            technique_list.append((category, BonsaiTechnique.get_all(not show_unpublished, category=category.lower()).order_by("sequence")))
+            technique_list.append((category, BonsaiTechnique.get_all(
+                not show_unpublished, category=category.lower()).order_by("sequence")))
 
         top["bonsai_techniques"] = technique_list
-        top["bonsai_objectives"] = BonsaiObjective.get_all(not show_unpublished).order_by("sequence")
-        top["bonsai_stage"] = BonsaiStage.get_all(not show_unpublished).order_by("sequence")
+        top["bonsai_objectives"] = BonsaiObjective.get_all(
+            not show_unpublished).order_by("sequence")
+        top["bonsai_stage"] = BonsaiStage.get_all(
+            not show_unpublished).order_by("sequence")
         return top
+
 
 class TechniqueView(BonsaiAdviceMenuMixin, View):
     model = BonsaiTechnique
@@ -48,6 +53,7 @@ class TechniqueView(BonsaiAdviceMenuMixin, View):
     def get(self, request, pk):
         obj_instance = get_object_or_404(self.model, short_name=pk)
         return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: obj_instance})
+
 
 class ObjectiveView(BonsaiAdviceMenuMixin, View):
     model = BonsaiObjective
@@ -88,6 +94,7 @@ class WhichTechniqueView(View):
         view = WhichTechniqueSelector.as_view(info=info)
         return view(self.request)
 
+
 class WhichTechniqueSelector(BonsaiAdviceMenuMixin, generic.FormView):
     success_url = reverse_lazy("BonsaiAdvice:which_technique")
     template_name = 'BonsaiAdvice/advice_selector.html'
@@ -98,9 +105,11 @@ class WhichTechniqueSelector(BonsaiAdviceMenuMixin, generic.FormView):
         context = self.get_context_data(**kwargs)
         if request.GET.get("is_submitted", False):
             # Forms has been submitted, bind it
-            form = self.form_class({"tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "stage": self.info.stage, "is_submitted": True})
+            form = self.form_class({"tree": self.info.tree, "objective": self.info.objective,
+                                   "period": self.info.period, "stage": self.info.stage, "is_submitted": True})
         else:
-            form = self.form_class(initial={"tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "stage": self.info.stage})
+            form = self.form_class(initial={
+                                   "tree": self.info.tree, "objective": self.info.objective, "period": self.info.period, "stage": self.info.stage})
         context['form'] = form
         return self.render_to_response(context)
 
@@ -115,7 +124,8 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        show_unpublished = user_has_any_perms(self.request.user, ["BonsaiAdvice.change_content"])
+        show_unpublished = user_has_any_perms(
+            self.request.user, ["BonsaiAdvice.change_content"])
 
         tree = self.get_queryset()
 
@@ -124,8 +134,10 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
         else:
             # Then get the list of valid advices according to the criteria in info
             objective_document_id = BonsaiObjective.get(self.info.objective).id
-            stage_document_id = None if not self.info.stage else [BonsaiStage.get(_).id for _ in self.info.stage]
-            period = None if not self.info.period else self.info.period.split(',')
+            stage_document_id = None if not self.info.stage else [
+                BonsaiStage.get(_).id for _ in self.info.stage]
+            period = None if not self.info.period else self.info.period.split(
+                ',')
 
         selected_techniques = []
         for technique in tree.techniques:

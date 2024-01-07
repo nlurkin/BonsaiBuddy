@@ -51,7 +51,7 @@ class DetailView(TreeInfoMenuMixin, View):
         # Take all distinct objectives and sort them according to sequence
         # Consider that several may share the same sequence, so use the name
         # also in the index
-        all_objectives = {(_.objective_f.sequence, _.objective_f.short_name)                          : _.objective_f.display_name for _ in tech_associations}
+        all_objectives = {(_.objective_f.sequence, _.objective_f.short_name): _.objective_f.display_name for _ in tech_associations}
         all_objectives_ordered = [all_objectives[_]
                                   for _ in sorted(all_objectives)]
 
