@@ -19,7 +19,7 @@ import {
 } from 'rxjs';
 import { AdvicesAPI, BonsaiTechnique } from 'swagger-client';
 
-const store = createStore(
+const techniqueStore = createStore(
   { name: 'techniques' },
   withEntities<BonsaiTechnique>()
 );
@@ -39,10 +39,10 @@ export class AdviceService {
    */
   private initializedStore$: Observable<boolean> = this.refresh$.pipe(
     switchMap(() =>
-      this.techniqueApiService.advicesList().pipe(
+      this.techniqueApiService.advicesTechniquesList().pipe(
         take(1),
         map((techniques) => {
-          store.update(setEntities(techniques));
+          techniqueStore.update(setEntities(techniques));
           return true;
         })
       )
@@ -52,12 +52,12 @@ export class AdviceService {
 
   private fetchTechnique(id: string): Observable<BonsaiTechnique | undefined> {
     this.techniqueApiService
-      .advicesRetrieve(id)
+      .advicesTechniquesRetrieve(id)
       .pipe(take(1))
       .subscribe((techniques) => {
-        store.update(addEntities(techniques));
+        techniqueStore.update(addEntities(techniques));
       });
-    return store.pipe(selectEntity(id));
+    return techniqueStore.pipe(selectEntity(id));
   }
 
   public getTechniqueCategories(): Observable<string[]> {
@@ -69,14 +69,14 @@ export class AdviceService {
    */
   public getTechniques(): Observable<BonsaiTechnique[]> {
     return this.initializedStore$.pipe(
-      switchMap(() => store.pipe(selectAllEntities()))
+      switchMap(() => techniqueStore.pipe(selectAllEntities()))
     );
   }
 
   public getTechnique(name: string): Observable<BonsaiTechnique | undefined> {
     return this.initializedStore$.pipe(
       switchMap(() =>
-        store.pipe(
+        techniqueStore.pipe(
           selectEntityByPredicate(({ short_name }) => short_name === name),
           switchMap((entity) =>
             entity ? of(entity) : this.fetchTechnique(name)
