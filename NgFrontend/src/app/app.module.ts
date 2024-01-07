@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from './Components/Menu/menu/menu.component';
-import { NgLetDirective } from './Directives/ng-let.directive';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgLetModule } from 'ng-let';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
@@ -20,7 +20,6 @@ import { TechniqueComponent } from './Components/Advices/Technique/technique/tec
   declarations: [
     AppComponent,
     MenuComponent,
-    NgLetDirective,
     AuthenticationComponent,
     AdvicesComponent,
     TechniqueComponent,
@@ -35,6 +34,7 @@ import { TechniqueComponent } from './Components/Advices/Technique/technique/tec
     FormsModule,
     ReactiveFormsModule,
     SidebarModule,
+    NgLetModule,
   ],
   providers: [
     {
