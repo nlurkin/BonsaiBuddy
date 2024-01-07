@@ -1,7 +1,7 @@
 import mongoengine
 from django.db import models
 from django.urls import reverse
-from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiStage, get_periods, periodid_to_name
+from BonsaiAdvice.models import BonsaiTechnique, BonsaiObjective, BonsaiStage, period_enum
 from bson import ObjectId
 from rest_framework import permissions
 
@@ -28,7 +28,7 @@ class TechniqueMapper(mongoengine.EmbeddedDocument):
     objective = mongoengine.LazyReferenceField(BonsaiObjective)
     stage = mongoengine.ListField(mongoengine.LazyReferenceField(BonsaiStage))
     period = mongoengine.ListField(
-        choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
+        choices=period_enum)
     comment = mongoengine.StringField()
 
     def __str__(self):

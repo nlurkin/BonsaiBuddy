@@ -29,6 +29,13 @@ def get_periods():
     return [((isub, iseason), (sub, season)) for isub, sub in enumerate(subsection) for iseason, season in enumerate(seasons)]
 
 
+def get_period_enum():
+    return [f"{_[0][0]}_{_[0][1]}" for _ in get_periods()]
+
+
+period_enum = get_period_enum()
+
+
 def periodid_to_name(periodid):
     if isinstance(periodid, str):
         periodid = tuple([int(_) for _ in periodid.split("_")])
@@ -191,7 +198,7 @@ class BonsaiStage(mongoengine.Document):
     display_name = mongoengine.StringField(max_length=200)
     description = mongoengine.StringField()
     global_period = mongoengine.ListField(
-        choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
+        choices=period_enum)
     published = mongoengine.BooleanField(default=False)
     sequence = mongoengine.IntField(default=99)
 
