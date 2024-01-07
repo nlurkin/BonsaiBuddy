@@ -1,8 +1,8 @@
-from BonsaiAdvice.models import get_periods, periodid_to_name
+from BonsaiAdvice.models import period_enum
 from rest_framework import serializers as r_serializers
 from rest_framework_mongoengine import serializers
 
-from BonsaiBuddy.serializers import ObjectIdFieldSerializer
+from BonsaiBuddy.serializers import ObjectIdFieldSerializer, PeriodSerializer
 
 from .models import TechniqueMapper, TreeInfo
 
@@ -15,19 +15,13 @@ class LazyReferenceFieldSerializer(r_serializers.Serializer):
         return {'classname': instance.document_type.__name__, 'id': str(instance.id)}
 
 
-class PeriodSerializer(r_serializers.ChoiceField):
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        return [periodid_to_name(_) for _ in ret]
-
-
 class TechniqueMapperSerializer(serializers.EmbeddedDocumentSerializer):
     oid = ObjectIdFieldSerializer()
     technique = LazyReferenceFieldSerializer()
     objective = LazyReferenceFieldSerializer()
     stage = LazyReferenceFieldSerializer(many=True)
     period = PeriodSerializer(
-        choices=[f"{_[0][0]}_{_[0][1]}" for _ in get_periods()])
+        choices=period_enum,)
 
     class Meta:
         model = TechniqueMapper

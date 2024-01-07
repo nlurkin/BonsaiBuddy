@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework_mongoengine import viewsets
 
-from BonsaiAdvice.serializers import (BonsaiObjectiveSerializer,
+from BonsaiAdvice.serializers import (BonsaiObjectiveSerializer, BonsaiStageSerializer,
                                       BonsaiTechniqueSerializer)
 from BonsaiBuddy.serializers import StringListSerializer
 from TreeInfo.models import TreeInfo
@@ -199,6 +199,27 @@ class BonsaiObjectiveViewSet(viewsets.ModelViewSet):
         show_unpublished = user_has_any_perms(
             self.request.user, ["BonsaiAdvice.change_content"])
         return BonsaiObjective.get_all(
+            not show_unpublished).order_by("sequence")
+
+
+@extend_schema_view(retrieve=extend_schema(parameters=[OpenApiParameter("short_name", str, OpenApiParameter.PATH)]))
+class BonsaiStageViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows BonsaiStage to be viewed or edited.
+    """
+    lookup_field = 'short_name'
+    serializer_class = BonsaiStageSerializer
+    permission_classes = [
+        IsAuthenticatedOrReadOnly, AdvicePermissionModelAPI]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the published
+        stages unless the user has permissions.
+        """
+        show_unpublished = user_has_any_perms(
+            self.request.user, ["BonsaiAdvice.change_content"])
+        return BonsaiStage.get_all(
             not show_unpublished).order_by("sequence")
 
 

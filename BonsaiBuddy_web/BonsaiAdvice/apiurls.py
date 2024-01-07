@@ -8,6 +8,8 @@ router.register(r'advices/techniques', views.BonsaiTechniqueViewSet,
                 basename='techniques')
 router.register(r'advices/objectives', views.BonsaiObjectiveViewSet,
                 basename='objectives')
+router.register(r'advices/stages', views.BonsaiStageViewSet,
+                basename='stages')
 
 urlpatterns = [path('', include(router.urls)),
                path('advices/techniques_categories',

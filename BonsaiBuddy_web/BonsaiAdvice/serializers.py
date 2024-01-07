@@ -1,7 +1,7 @@
 from rest_framework_mongoengine import serializers
-from BonsaiBuddy.serializers import ObjectIdFieldSerializer
+from BonsaiBuddy.serializers import ObjectIdFieldSerializer, PeriodSerializer
 
-from .models import BonsaiObjective, BonsaiTechnique
+from .models import BonsaiObjective, BonsaiStage, BonsaiTechnique, period_enum
 
 
 class BonsaiTechniqueSerializer(serializers.DocumentSerializer):
@@ -17,4 +17,14 @@ class BonsaiObjectiveSerializer(serializers.DocumentSerializer):
 
     class Meta:
         model = BonsaiObjective
+        fields = '__all__'
+
+
+class BonsaiStageSerializer(serializers.DocumentSerializer):
+    id = ObjectIdFieldSerializer()
+    global_period = PeriodSerializer(
+        choices=period_enum)
+
+    class Meta:
+        model = BonsaiStage
         fields = '__all__'
