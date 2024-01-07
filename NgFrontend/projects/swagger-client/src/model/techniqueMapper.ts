@@ -17,6 +17,7 @@ import { LazyReferenceField } from './lazyReferenceField';
  * Serializer for EmbeddedDocuments.  Skips id field and uniqueness validation. When saving, skips calling instance.save
  */
 export interface TechniqueMapper { 
+    oid: string;
     comment?: string;
     technique: LazyReferenceField;
     objective: LazyReferenceField;
