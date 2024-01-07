@@ -1,4 +1,4 @@
-<a href="{% url 'BonsaiAdvice:index' %}">Back</a>
+<a [routerLink]="['../..']">Back</a>
 <ng-container *ngLet="technique$ | async as technique">
   <div *ngIf="technique">
     <h1>{{ technique.display_name }}</h1>
