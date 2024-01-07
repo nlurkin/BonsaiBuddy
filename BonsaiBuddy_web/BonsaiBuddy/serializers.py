@@ -1,7 +1,7 @@
 from bson import ObjectId
 from bson.errors import InvalidId
 from django.utils.encoding import smart_str
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 from BonsaiAdvice.models import periodid_to_name
 
@@ -11,7 +11,7 @@ class StringListSerializer(serializers.Serializer):
         return value
 
 
-class ObjectIdFieldSerializer(serializers.Serializer):
+class ObjectIdFieldSerializer(fields.Field):
     def to_internal_value(self, data):
         try:
             return ObjectId(str(data))
