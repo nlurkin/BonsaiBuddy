@@ -10,3 +10,11 @@ class BonsaiTechniqueSerializer(serializers.DocumentSerializer):
     class Meta:
         model = BonsaiTechnique
         fields = '__all__'
+
+
+class BonsaiObjectiveSerializer(serializers.DocumentSerializer):
+    id = ObjectIdFieldSerializer()
+
+    class Meta:
+        model = BonsaiObjective
+        fields = '__all__'
