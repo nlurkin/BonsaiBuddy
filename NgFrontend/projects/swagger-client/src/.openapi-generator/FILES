@@ -11,9 +11,13 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/bonsaiObjective.ts
+model/bonsaiStage.ts
 model/bonsaiTechnique.ts
 model/lazyReferenceField.ts
 model/models.ts
+model/patchedBonsaiObjective.ts
+model/patchedBonsaiStage.ts
 model/patchedBonsaiTechnique.ts
 model/patchedTreeInfo.ts
 model/periodEnum.ts
