@@ -20,6 +20,8 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@fortawesome/angular-fontawesome": "^0.13.0",
+    "@ngneat/elf": "^2.4.0",
+    "@ngneat/elf-entities": "^4.6.0",
     "bootstrap": "^5.3.2",
     "lodash": "^4.17.21",
     "ng-let": "^17.0.4",

@@ -11,7 +11,7 @@ import { BonsaiTechnique } from 'swagger-client';
   styleUrls: ['./technique.component.scss'],
 })
 export class TechniqueComponent {
-  public readonly technique$: Observable<BonsaiTechnique> =
+  public readonly technique$: Observable<BonsaiTechnique | undefined> =
     this.route.paramMap.pipe(
       map((params) => params.get('id')),
       filterNullish(),
