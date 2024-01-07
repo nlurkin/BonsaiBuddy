@@ -19,9 +19,9 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { PatchedTreeInfo } from '../model/patchedTreeInfo';
+import { BonsaiTechnique } from '../model/bonsaiTechnique';
 // @ts-ignore
-import { TreeInfo } from '../model/treeInfo';
+import { PatchedBonsaiTechnique } from '../model/patchedBonsaiTechnique';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -32,7 +32,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class TreesAPI {
+export class AdvicesAPI {
 
     protected basePath = '';
     public defaultHeaders = new HttpHeaders();
@@ -94,17 +94,17 @@ export class TreesAPI {
     }
 
     /**
-     * API endpoint that allows TreeInfo to be viewed or edited.
-     * @param treeInfo 
+     * API endpoint that allows BonsaiTechnique to be viewed or edited.
+     * @param bonsaiTechnique 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treesCreate(treeInfo: TreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
-    public treesCreate(treeInfo: TreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
-    public treesCreate(treeInfo: TreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
-    public treesCreate(treeInfo: TreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (treeInfo === null || treeInfo === undefined) {
-            throw new Error('Required parameter treeInfo was null or undefined when calling treesCreate.');
+    public advicesCreate(bonsaiTechnique: BonsaiTechnique, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<BonsaiTechnique>;
+    public advicesCreate(bonsaiTechnique: BonsaiTechnique, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<BonsaiTechnique>>;
+    public advicesCreate(bonsaiTechnique: BonsaiTechnique, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<BonsaiTechnique>>;
+    public advicesCreate(bonsaiTechnique: BonsaiTechnique, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (bonsaiTechnique === null || bonsaiTechnique === undefined) {
+            throw new Error('Required parameter bonsaiTechnique was null or undefined when calling advicesCreate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -156,11 +156,11 @@ export class TreesAPI {
             }
         }
 
-        let localVarPath = `/api/trees/`;
-        return this.httpClient.request<TreeInfo>('post', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/advices/`;
+        return this.httpClient.request<BonsaiTechnique>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: treeInfo,
+                body: bonsaiTechnique,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -171,17 +171,17 @@ export class TreesAPI {
     }
 
     /**
-     * API endpoint that allows TreeInfo to be viewed or edited.
-     * @param name 
+     * API endpoint that allows BonsaiTechnique to be viewed or edited.
+     * @param shortName 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treesDestroy(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public treesDestroy(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public treesDestroy(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public treesDestroy(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling treesDestroy.');
+    public advicesDestroy(shortName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public advicesDestroy(shortName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public advicesDestroy(shortName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public advicesDestroy(shortName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (shortName === null || shortName === undefined) {
+            throw new Error('Required parameter shortName was null or undefined when calling advicesDestroy.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -221,7 +221,7 @@ export class TreesAPI {
             }
         }
 
-        let localVarPath = `/api/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
+        let localVarPath = `/api/advices/${this.configuration.encodeParam({name: "shortName", value: shortName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -235,14 +235,14 @@ export class TreesAPI {
     }
 
     /**
-     * API endpoint that allows TreeInfo to be viewed or edited.
+     * API endpoint that allows BonsaiTechnique to be viewed or edited.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treesList(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<TreeInfo>>;
-    public treesList(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<TreeInfo>>>;
-    public treesList(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<TreeInfo>>>;
-    public treesList(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public advicesList(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<BonsaiTechnique>>;
+    public advicesList(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<BonsaiTechnique>>>;
+    public advicesList(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<BonsaiTechnique>>>;
+    public advicesList(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -282,8 +282,8 @@ export class TreesAPI {
             }
         }
 
-        let localVarPath = `/api/trees/`;
-        return this.httpClient.request<Array<TreeInfo>>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/advices/`;
+        return this.httpClient.request<Array<BonsaiTechnique>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -296,18 +296,18 @@ export class TreesAPI {
     }
 
     /**
-     * API endpoint that allows TreeInfo to be viewed or edited.
-     * @param name 
-     * @param patchedTreeInfo 
+     * API endpoint that allows BonsaiTechnique to be viewed or edited.
+     * @param shortName 
+     * @param patchedBonsaiTechnique 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
-    public treesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
-    public treesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
-    public treesPartialUpdate(name: string, patchedTreeInfo?: PatchedTreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling treesPartialUpdate.');
+    public advicesPartialUpdate(shortName: string, patchedBonsaiTechnique?: PatchedBonsaiTechnique, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<BonsaiTechnique>;
+    public advicesPartialUpdate(shortName: string, patchedBonsaiTechnique?: PatchedBonsaiTechnique, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<BonsaiTechnique>>;
+    public advicesPartialUpdate(shortName: string, patchedBonsaiTechnique?: PatchedBonsaiTechnique, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<BonsaiTechnique>>;
+    public advicesPartialUpdate(shortName: string, patchedBonsaiTechnique?: PatchedBonsaiTechnique, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (shortName === null || shortName === undefined) {
+            throw new Error('Required parameter shortName was null or undefined when calling advicesPartialUpdate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -359,11 +359,11 @@ export class TreesAPI {
             }
         }
 
-        let localVarPath = `/api/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
-        return this.httpClient.request<TreeInfo>('patch', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/advices/${this.configuration.encodeParam({name: "shortName", value: shortName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
+        return this.httpClient.request<BonsaiTechnique>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: patchedTreeInfo,
+                body: patchedBonsaiTechnique,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -374,17 +374,17 @@ export class TreesAPI {
     }
 
     /**
-     * API endpoint that allows TreeInfo to be viewed or edited.
-     * @param name 
+     * API endpoint that allows BonsaiTechnique to be viewed or edited.
+     * @param shortName 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treesRetrieve(name: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
-    public treesRetrieve(name: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
-    public treesRetrieve(name: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
-    public treesRetrieve(name: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling treesRetrieve.');
+    public advicesRetrieve(shortName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<BonsaiTechnique>;
+    public advicesRetrieve(shortName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<BonsaiTechnique>>;
+    public advicesRetrieve(shortName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<BonsaiTechnique>>;
+    public advicesRetrieve(shortName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (shortName === null || shortName === undefined) {
+            throw new Error('Required parameter shortName was null or undefined when calling advicesRetrieve.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -425,8 +425,8 @@ export class TreesAPI {
             }
         }
 
-        let localVarPath = `/api/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
-        return this.httpClient.request<TreeInfo>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/advices/${this.configuration.encodeParam({name: "shortName", value: shortName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
+        return this.httpClient.request<BonsaiTechnique>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -439,21 +439,80 @@ export class TreesAPI {
     }
 
     /**
-     * API endpoint that allows TreeInfo to be viewed or edited.
-     * @param name 
-     * @param treeInfo 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treesUpdate(name: string, treeInfo: TreeInfo, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TreeInfo>;
-    public treesUpdate(name: string, treeInfo: TreeInfo, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TreeInfo>>;
-    public treesUpdate(name: string, treeInfo: TreeInfo, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TreeInfo>>;
-    public treesUpdate(name: string, treeInfo: TreeInfo, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling treesUpdate.');
+    public advicesTechniquesCategoriesRetrieve(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public advicesTechniquesCategoriesRetrieve(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public advicesTechniquesCategoriesRetrieve(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public advicesTechniquesCategoriesRetrieve(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (jwtAuth) required
+        localVarCredential = this.configuration.lookupCredential('jwtAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
-        if (treeInfo === null || treeInfo === undefined) {
-            throw new Error('Required parameter treeInfo was null or undefined when calling treesUpdate.');
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/advices/techniques_categories`;
+        return this.httpClient.request<any>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * API endpoint that allows BonsaiTechnique to be viewed or edited.
+     * @param shortName 
+     * @param bonsaiTechnique 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public advicesUpdate(shortName: string, bonsaiTechnique: BonsaiTechnique, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<BonsaiTechnique>;
+    public advicesUpdate(shortName: string, bonsaiTechnique: BonsaiTechnique, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<BonsaiTechnique>>;
+    public advicesUpdate(shortName: string, bonsaiTechnique: BonsaiTechnique, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<BonsaiTechnique>>;
+    public advicesUpdate(shortName: string, bonsaiTechnique: BonsaiTechnique, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (shortName === null || shortName === undefined) {
+            throw new Error('Required parameter shortName was null or undefined when calling advicesUpdate.');
+        }
+        if (bonsaiTechnique === null || bonsaiTechnique === undefined) {
+            throw new Error('Required parameter bonsaiTechnique was null or undefined when calling advicesUpdate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -505,11 +564,11 @@ export class TreesAPI {
             }
         }
 
-        let localVarPath = `/api/trees/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
-        return this.httpClient.request<TreeInfo>('put', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/advices/${this.configuration.encodeParam({name: "shortName", value: shortName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/`;
+        return this.httpClient.request<BonsaiTechnique>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: treeInfo,
+                body: bonsaiTechnique,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

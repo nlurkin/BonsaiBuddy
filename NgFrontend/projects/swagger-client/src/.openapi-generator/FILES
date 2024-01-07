@@ -1,6 +1,7 @@
 .gitignore
 README.md
 api.module.ts
+api/advicesapi.service.ts
 api/api.ts
 api/schemaapi.service.ts
 api/tokenapi.service.ts
@@ -10,8 +11,10 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/bonsaiTechnique.ts
 model/lazyReferenceField.ts
 model/models.ts
+model/patchedBonsaiTechnique.ts
 model/patchedTreeInfo.ts
 model/periodEnum.ts
 model/techniqueMapper.ts

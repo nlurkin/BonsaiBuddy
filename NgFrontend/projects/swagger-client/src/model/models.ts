@@ -1,4 +1,6 @@
+export * from './bonsaiTechnique';
 export * from './lazyReferenceField';
+export * from './patchedBonsaiTechnique';
 export * from './patchedTreeInfo';
 export * from './periodEnum';
 export * from './techniqueMapper';

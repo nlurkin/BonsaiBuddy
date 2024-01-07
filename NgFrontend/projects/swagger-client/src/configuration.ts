@@ -87,17 +87,6 @@ export class Configuration {
             this.credentials = {};
         }
 
-        // init default cookieAuth credential
-        if (!this.credentials['cookieAuth']) {
-            this.credentials['cookieAuth'] = () => {
-                if (this.apiKeys === null || this.apiKeys === undefined) {
-                    return undefined;
-                } else {
-                    return this.apiKeys['cookieAuth'] || this.apiKeys['sessionid'];
-                }
-            };
-        }
-
         // init default jwtAuth credential
         if (!this.credentials['jwtAuth']) {
             this.credentials['jwtAuth'] = () => {

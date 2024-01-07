@@ -114,11 +114,6 @@ export class SchemaAPI {
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
-        // authentication (cookieAuth) required
-        localVarCredential = this.configuration.lookupCredential('cookieAuth');
-        if (localVarCredential) {
-        }
-
         // authentication (jwtAuth) required
         localVarCredential = this.configuration.lookupCredential('jwtAuth');
         if (localVarCredential) {
