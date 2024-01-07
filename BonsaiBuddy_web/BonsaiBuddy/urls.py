@@ -31,6 +31,7 @@ urlpatterns = [
     path('djangoadmin/', admin.site.urls),
     path('api/', include('TreeInfo.apiurls')),
     path('api/', include('BonsaiUsers.apiurls')),
+    path('api/', include('BonsaiAdvice.apiurls')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/token/', DecoratedTokenObtainPairView.as_view(),
          name='token_obtain_pair'),

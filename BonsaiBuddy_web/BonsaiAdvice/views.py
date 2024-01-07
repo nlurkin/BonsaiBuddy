@@ -1,11 +1,21 @@
 from django.shortcuts import render
-from .menu import BonsaiAdviceMenuMixin
-from django.views import generic, View
-from .models import BonsaiTechnique, BonsaiObjective, BonsaiStage, timing_matches, make_timing, get_technique_categories
-from utils import get_object_or_404, user_has_any_perms
 from django.urls import reverse_lazy
-from .forms import AdviceConfigForm, ReqAdviceInfo
+from django.views import View, generic
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_mongoengine import viewsets
+
+from BonsaiAdvice.serializers import BonsaiTechniqueSerializer
 from TreeInfo.models import TreeInfo
+from utils import get_object_or_404, user_has_any_perms
+
+from .forms import AdviceConfigForm, ReqAdviceInfo
+from .menu import BonsaiAdviceMenuMixin
+from .models import (AdvicePermissionModelAPI, BonsaiObjective, BonsaiStage,
+                     BonsaiTechnique, get_technique_categories, make_timing,
+                     timing_matches)
+
 
 class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
     template_name = "BonsaiAdvice/index.html"
@@ -132,3 +142,32 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
         context["techniques"] = selected_techniques
         context["tree"] = tree
         return context
+
+
+class BonsaiTechniqueViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows BonsaiTechnique to be viewed or edited.
+    """
+    lookup_field = 'short_name'
+    serializer_class = BonsaiTechniqueSerializer
+    permission_classes = [
+        IsAuthenticatedOrReadOnly, AdvicePermissionModelAPI]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the published 
+        techniques unless the user has permissions.
+        """
+        show_unpublished = user_has_any_perms(
+            self.request.user, ["BonsaiAdvice.change_content"])
+        return BonsaiTechnique.get_all(
+            not show_unpublished).order_by("sequence")
+
+
+class BonsaiTechniqueCategoriesView(APIView):
+    """
+    API endpoint that returns the list of technique categories
+    """
+
+    def get(self, request, format=None):
+        return Response(get_technique_categories())

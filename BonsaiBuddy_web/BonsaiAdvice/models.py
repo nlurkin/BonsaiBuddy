@@ -2,12 +2,25 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 import mongoengine
+from rest_framework import permissions
+
 
 class AdvicePermissionModel(models.Model):
     class Meta:
         permissions = (
             ('change_content', 'Content administrators'),
         )
+
+
+class AdvicePermissionModelAPI(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        else:
+            return request.user.has_perm('BonsaiAdvice.change_content')
+
+    def has_object_permission(self, request, view, obj):
+        return obj.published or request.user.has_perm('BonsaiAdvice.change_content')
 
 
 def get_periods():
