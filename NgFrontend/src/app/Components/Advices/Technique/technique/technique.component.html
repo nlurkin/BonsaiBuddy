@@ -1,0 +1,13 @@
+<a href="{% url 'BonsaiAdvice:index' %}">Back</a>
+<ng-container *ngLet="technique$ | async as technique">
+  <div *ngIf="technique">
+    <h1>{{ technique.display_name }}</h1>
+    <p>Technique category: {{ technique.category | titlecase }}</p>
+    <p class="text-line-breaks">{{ technique.description }}</p>
+    <p *ngIf="true">
+      <a href="{% url 'BonsaiAdmin:technique_update' pk=technique.short_name %}"
+        >Update</a
+      >
+    </p>
+  </div>
+</ng-container>

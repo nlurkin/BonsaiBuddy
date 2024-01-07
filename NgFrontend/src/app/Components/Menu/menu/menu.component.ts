@@ -34,11 +34,11 @@ export class MenuComponent {
       routerLink: '/treeinfo',
       requireLogin: false,
     },
-    // {
-    //   label: 'Advices',
-    //   routerLink: '/advices',
-    //   requireLogin: false,
-    // },
+    {
+      label: 'Advices',
+      routerLink: '/advices',
+      requireLogin: false,
+    },
     // {
     //   label: 'Profile',
     //   routerLink: '/profile',

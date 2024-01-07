@@ -7,12 +7,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from './Components/Menu/menu/menu.component';
 import { NgLetDirective } from './Directives/ng-let.directive';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthenticationComponent } from './Components/Users/authentication/authentication.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdvicesComponent } from './Components/Advices/advices.component';
+import { AuthenticationComponent } from './Components/Users/authentication/authentication.component';
 import { JwtInterceptor } from './jwt.interceptor';
+import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { JwtInterceptor } from './jwt.interceptor';
     MenuComponent,
     NgLetDirective,
     AuthenticationComponent,
+    AdvicesComponent,
+    TechniqueComponent,
   ],
   imports: [
     BrowserModule,
