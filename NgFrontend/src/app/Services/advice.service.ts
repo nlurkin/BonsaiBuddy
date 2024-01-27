@@ -18,6 +18,7 @@ import {
   shareReplay,
   switchMap,
   take,
+  tap,
 } from 'rxjs';
 import { AdvicesAPI, BonsaiTechnique } from 'swagger-client';
 
@@ -68,25 +69,33 @@ export class AdviceService {
     return this.techniqueApiService.advicesTechniquesCategoriesRetrieve();
   }
 
-  public updateTechnique(technique: BonsaiTechnique): void {
-    this.techniqueApiService
+  public updateTechnique(
+    technique: BonsaiTechnique
+  ): Observable<BonsaiTechnique> {
+    return this.techniqueApiService
       .advicesTechniquesUpdate(technique.short_name, technique)
-      .pipe(take(1))
-      .subscribe((technique) => this.updateStore(technique, 'update'));
+      .pipe(
+        take(1),
+        tap((technique) => this.updateStore(technique, 'update'))
+      );
   }
 
-  public createTechnique(technique: BonsaiTechnique): void {
-    this.techniqueApiService
-      .advicesTechniquesCreate(technique)
-      .pipe(take(1))
-      .subscribe((technique) => this.updateStore(technique, 'create'));
+  public createTechnique(
+    technique: BonsaiTechnique
+  ): Observable<BonsaiTechnique> {
+    return this.techniqueApiService.advicesTechniquesCreate(technique).pipe(
+      take(1),
+      tap((technique) => this.updateStore(technique, 'create'))
+    );
   }
 
-  public deleteTechnique(technique_short_name: string): void {
-    this.techniqueApiService
+  public deleteTechnique(technique_short_name: string): Observable<any> {
+    return this.techniqueApiService
       .advicesTechniquesDestroy(technique_short_name)
-      .pipe(take(1))
-      .subscribe((technique) => this.deleteFromStore(technique_short_name));
+      .pipe(
+        take(1),
+        tap(() => this.deleteFromStore(technique_short_name))
+      );
   }
 
   /**

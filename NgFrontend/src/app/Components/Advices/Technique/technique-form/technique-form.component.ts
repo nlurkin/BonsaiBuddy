@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, map, take } from 'rxjs';
 import {
   InputType,
@@ -8,6 +8,7 @@ import {
 } from 'src/app/Components/Generic/text-input/custom-input.component';
 import { AdviceService } from 'src/app/Services/advice.service';
 import { bsonIdNull } from 'src/app/constants';
+import { RouterURL } from 'src/app/types';
 import { BonsaiTechnique } from 'swagger-client';
 
 @Component({
@@ -53,7 +54,8 @@ export class TechniqueFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private adviceService: AdviceService
+    private adviceService: AdviceService,
+    private router: Router
   ) {
     this.route.params.pipe(take(1)).subscribe((params) => {
       this.techniqueIdName.next(params['id']);
@@ -85,15 +87,28 @@ export class TechniqueFormComponent implements OnInit {
       !this.isCreating
     ) {
       // Delete
-      this.adviceService.deleteTechnique(shortName);
+      this.done(this.adviceService.deleteTechnique(shortName), ['advices']);
     } else {
       const entity = this.formToEntity();
       // Update or create
       if (entity && !this.isCreating)
-        this.adviceService.updateTechnique(entity);
+        this.done(this.adviceService.updateTechnique(entity), ['..']);
       else if (entity && this.isCreating)
-        this.adviceService.createTechnique(entity);
+        this.done(this.adviceService.createTechnique(entity), [
+          'advices/technique',
+          entity.short_name,
+        ]);
     }
+  }
+
+  public done(updateObs: Observable<any>, returnUrl: RouterURL): void {
+    updateObs.pipe(take(1)).subscribe(() =>
+      this.router.navigate(returnUrl, {
+        relativeTo: returnUrl.some((segment) => segment.includes('..'))
+          ? this.route
+          : undefined,
+      })
+    );
   }
 
   private formToEntity(): BonsaiTechnique | undefined {
