@@ -13,6 +13,8 @@ class StringListSerializer(serializers.Serializer):
 
 class ObjectIdFieldSerializer(fields.Field):
     def to_internal_value(self, data):
+        if data == 'null_bson_id':
+            return None
         try:
             return ObjectId(str(data))
         except InvalidId:

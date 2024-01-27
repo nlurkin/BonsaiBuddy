@@ -16,9 +16,9 @@
  */
 export interface PatchedBonsaiTechnique { 
     id?: string;
+    description?: string;
     short_name?: string;
     display_name?: string;
-    description?: string;
     category?: string;
     published?: boolean;
     sequence?: number;
