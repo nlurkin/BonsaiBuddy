@@ -1,4 +1,5 @@
 from rest_framework_mongoengine import serializers
+from rest_framework import serializers as rest_serializers
 from BonsaiBuddy.serializers import ObjectIdFieldSerializer, PeriodSerializer
 
 from .models import BonsaiObjective, BonsaiStage, BonsaiTechnique, period_enum
@@ -6,6 +7,7 @@ from .models import BonsaiObjective, BonsaiStage, BonsaiTechnique, period_enum
 
 class BonsaiTechniqueSerializer(serializers.DocumentSerializer):
     id = ObjectIdFieldSerializer()
+    description = rest_serializers.CharField(allow_blank=True)
 
     class Meta:
         model = BonsaiTechnique
