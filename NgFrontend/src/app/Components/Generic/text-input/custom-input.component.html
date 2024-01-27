@@ -1,4 +1,5 @@
-<div class="form-floating">
+<div [ngClass]="{ 'form-floating': type !== InputType.CHECKBOX }">
+  <!-- Input types templates -->
   <ng-template #textType>
     <input
       type="{{ type }}"
@@ -34,17 +35,38 @@
     ></textarea>
   </ng-template>
 
+  <ng-template #checkBoxType>
+    <input
+      type="checkbox"
+      class="form-check-input"
+      [id]="'id_' + formName"
+      [formControl]="control"
+    />
+  </ng-template>
+
+  <!-- Selection of the template -->
+  <ng-template #option3>
+    <ng-container *ngIf="type === InputType.CHECKBOX; else textType">
+      <ng-container *ngTemplateOutlet="checkBoxType"></ng-container>
+    </ng-container>
+  </ng-template>
+
   <ng-template #option2>
-    <ng-container *ngIf="type === 'textarea'; else textType">
+    <ng-container *ngIf="type === InputType.TEXTAREA; else option3">
       <ng-container *ngTemplateOutlet="textAreaType"></ng-container>
     </ng-container>
   </ng-template>
+
   <ng-container *ngIf="type === InputType.SELECT; else option2">
     <ng-container *ngTemplateOutlet="selectType"></ng-container>
   </ng-container>
+
   <label
     [for]="'id_' + formName"
-    class="form-label floating-label"
+    class="floating-label"
+    [ngClass]="{
+      'form-label': type !== InputType.CHECKBOX,
+    }"
     [class]="validityCheck()"
     >{{ placeholder }}
     <span *ngIf="isRequired()">*</span>
