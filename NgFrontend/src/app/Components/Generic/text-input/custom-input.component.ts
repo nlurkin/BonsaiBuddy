@@ -5,6 +5,7 @@ export enum InputType {
   TEXT = 'text',
   NUMBER = 'number',
   SELECT = 'select',
+  TEXTAREA = 'textarea',
 }
 
 export type SelectOption = { label: string; value: string };
@@ -19,6 +20,8 @@ export class CustomInputComponent {
   @Input() placeholder!: string;
   @Input() type: InputType = InputType.TEXT;
   @Input() options: SelectOption[] = [];
+
+  public InputType = InputType;
 
   control!: FormControl;
 

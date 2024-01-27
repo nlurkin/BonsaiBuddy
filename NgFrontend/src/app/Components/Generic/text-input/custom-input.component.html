@@ -12,8 +12,7 @@
   <ng-template #selectType>
     <select
       [formControl]="control"
-      name="category"
-      class="form-control"
+      class="form-control form-select"
       [id]="'id_' + formName"
     >
       <option value disabled>Please select a value</option>
@@ -24,7 +23,23 @@
     </select>
   </ng-template>
 
-  <ng-container *ngIf="type === 'select'; else textType">
+  <ng-template #textAreaType>
+    <textarea
+      cols="40"
+      rows="10"
+      class="description-lg form-control"
+      [placeholder]="placeholder"
+      [id]="'id_' + formName"
+      [formControl]="control"
+    ></textarea>
+  </ng-template>
+
+  <ng-template #option2>
+    <ng-container *ngIf="type === 'textarea'; else textType">
+      <ng-container *ngTemplateOutlet="textAreaType"></ng-container>
+    </ng-container>
+  </ng-template>
+  <ng-container *ngIf="type === InputType.SELECT; else option2">
     <ng-container *ngTemplateOutlet="selectType"></ng-container>
   </ng-container>
   <label
