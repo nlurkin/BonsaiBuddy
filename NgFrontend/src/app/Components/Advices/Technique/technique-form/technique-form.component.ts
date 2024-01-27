@@ -78,8 +78,14 @@ export class TechniqueFormComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    if (this.techniqueForm.controls.delete.value) {
+    const shortName = this.techniqueForm.controls.short_name.value;
+    if (
+      this.techniqueForm.controls.delete.value &&
+      shortName &&
+      !this.isCreating
+    ) {
       // Delete
+      this.adviceService.deleteTechnique(shortName);
     } else {
       const entity = this.formToEntity();
       // Update or create

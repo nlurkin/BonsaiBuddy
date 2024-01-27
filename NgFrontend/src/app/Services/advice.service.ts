@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { createStore } from '@ngneat/elf';
 import {
   addEntities,
+  deleteEntitiesByPredicate,
   selectAllEntities,
   selectEntity,
   selectEntityByPredicate,
@@ -24,6 +25,8 @@ const techniqueStore = createStore(
   { name: 'techniques' },
   withEntities<BonsaiTechnique>()
 );
+
+type StoreCommands = 'update' | 'create' | 'delete';
 
 @Injectable({
   providedIn: 'root',
@@ -69,14 +72,21 @@ export class AdviceService {
     this.techniqueApiService
       .advicesTechniquesUpdate(technique.short_name, technique)
       .pipe(take(1))
-      .subscribe((technique) => this.updateStore(technique, true));
+      .subscribe((technique) => this.updateStore(technique, 'update'));
   }
 
   public createTechnique(technique: BonsaiTechnique): void {
     this.techniqueApiService
       .advicesTechniquesCreate(technique)
       .pipe(take(1))
-      .subscribe((technique) => this.updateStore(technique, false));
+      .subscribe((technique) => this.updateStore(technique, 'create'));
+  }
+
+  public deleteTechnique(technique_short_name: string): void {
+    this.techniqueApiService
+      .advicesTechniquesDestroy(technique_short_name)
+      .pipe(take(1))
+      .subscribe((technique) => this.deleteFromStore(technique_short_name));
   }
 
   /**
@@ -101,11 +111,26 @@ export class AdviceService {
     );
   }
 
-  private updateStore(technique: BonsaiTechnique, isUpdate: boolean): void {
+  private updateStore(
+    technique: BonsaiTechnique,
+    command: StoreCommands
+  ): void {
+    if (command === 'update')
+      techniqueStore.update(
+        updateEntitiesByPredicate(
+          ({ short_name }) => short_name === technique.short_name,
+          () => technique
+        )
+      );
+    else if (command === 'create')
+      techniqueStore.update(addEntities([technique]));
+    else if (command === 'delete') this.deleteFromStore(technique.short_name);
+  }
+
+  private deleteFromStore(technique_short_name: string): void {
     techniqueStore.update(
-      updateEntitiesByPredicate(
-        ({ short_name }) => short_name === technique.short_name,
-        () => technique
+      deleteEntitiesByPredicate(
+        ({ short_name }) => short_name === technique_short_name
       )
     );
   }
