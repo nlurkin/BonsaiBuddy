@@ -19,50 +19,30 @@
   </ng-container>
 </div>
 
-<!-- 
-                <h2>Bonsai Objectives</h2>
-                {% if bonsai_objectives %}
-                <ul>
-                    {% for objective in bonsai_objectives %}
-  <li>
-    <a
-      {%
-      if
-      not
-      objective.published
-      %}class="unpublished"
-      {%
-      endif
-      %}
-      href="{% url 'BonsaiAdvice:objective_detail' objective.short_name %}"
-      >{{ objective.display_name }}</a
-    >
-  </li>
-  {% endfor %}
-</ul>
-{% else %}
-<p>No objectives are available.</p>
-{% endif %}
+<h2>Bonsai Objectives</h2>
+<div *ngLet="objectives$ | async as objectives">
+  <ul *ngIf="objectives">
+    <li *ngFor="let objective of objectives">
+      <a
+        [ngClass]="{ unpublished: !objective.published }"
+        [routerLink]="['objective', objective.short_name]"
+        >{{ objective.display_name }}</a
+      >
+    </li>
+  </ul>
+  <p *ngIf="!objectives">No objectives are available.</p>
+</div>
 
 <h2>Bonsai Stage</h2>
-{% if bonsai_stage %}
-<ul>
-  {% for stage in bonsai_stage %}
-  <li>
-    <a
-      {%
-      if
-      not
-      stage.published
-      %}class="unpublished"
-      {%
-      endif
-      %}
-      href="{% url 'BonsaiAdvice:stage_detail' stage.short_name %}"
-      >{{ stage.display_name }}</a
-    >
-  </li>
-  {% endfor %}
-</ul>
-{% else %}
-<p>No stage are available.</p> -->
+<div *ngLet="stages$ | async as stages">
+  <ul *ngIf="stages">
+    <li *ngFor="let stage of stages">
+      <a
+        [ngClass]="{ unpublished: !stage.published }"
+        [routerLink]="['objective', stage.short_name]"
+        >{{ stage.display_name }}</a
+      >
+    </li>
+  </ul>
+  <p *ngIf="!stages">No stages are available.</p>
+</div>
