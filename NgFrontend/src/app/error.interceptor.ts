@@ -18,6 +18,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error) => {
+        if (error.status === 401) of(); // Do not intercept authentication errors here. Leave it to JWT
         const description = error?.error?.description
           ? error.error.description
           : 'Unknown error';
