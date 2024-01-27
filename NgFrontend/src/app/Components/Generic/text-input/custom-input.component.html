@@ -27,7 +27,11 @@
   <ng-container *ngIf="type === 'select'; else textType">
     <ng-container *ngTemplateOutlet="selectType"></ng-container>
   </ng-container>
-  <label [for]="'id_' + formName" class="form-label" [class]="validityCheck()"
+  <label
+    [for]="'id_' + formName"
+    class="form-label floating-label"
+    [class]="validityCheck()"
     >{{ placeholder }}
     <span *ngIf="isRequired()">*</span>
   </label>
+</div>
