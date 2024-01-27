@@ -6,6 +6,7 @@ import {
   selectEntity,
   selectEntityByPredicate,
   setEntities,
+  updateEntitiesByPredicate,
   withEntities,
 } from '@ngneat/elf-entities';
 import {
@@ -84,5 +85,19 @@ export class AdviceService {
         )
       )
     );
+  }
+
+  public updateTechnique(technique: BonsaiTechnique): void {
+    this.techniqueApiService
+      .advicesTechniquesUpdate(technique.short_name, technique)
+      .pipe(take(1))
+      .subscribe((technique) =>
+        techniqueStore.update(
+          updateEntitiesByPredicate(
+            ({ short_name }) => short_name === technique.short_name,
+            () => technique
+          )
+        )
+      );
   }
 }

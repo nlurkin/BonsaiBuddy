@@ -7,6 +7,7 @@ import {
   SelectOption,
 } from 'src/app/Components/Generic/text-input/custom-input.component';
 import { AdviceService } from 'src/app/Services/advice.service';
+import { BonsaiTechnique } from 'swagger-client';
 
 @Component({
   selector: 'app-technique-form',
@@ -72,19 +73,40 @@ export class TechniqueFormComponent implements OnInit {
     }
   }
 
-  public validityCheck(controlName: string): string {
-    const control = this.techniqueForm.get(controlName);
-    if (control?.invalid && (control.dirty || control.touched))
-      return 'invalid';
-    else return '';
-  }
-
-  public isRequired(controlName: string): boolean {
-    const control = this.techniqueForm.get(controlName);
-    return control?.hasValidator(Validators.required) ?? false;
-  }
-
   public onSubmit(): void {
     console.log(this.techniqueForm.value);
+
+    if (this.techniqueForm.controls.delete.value) {
+      // Delete
+    } else {
+      const entity = this.formToEntity();
+      // Update
+
+      if (entity) this.adviceService.updateTechnique(entity);
+
+      //New
+    }
+  }
+
+  private formToEntity(): BonsaiTechnique | undefined {
+    if (!this.techniqueForm.valid) return undefined;
+
+    const short_name = this.techniqueForm.controls.short_name.value ?? '';
+    const id = this.techniqueForm.controls.id.value ?? '';
+    const display_name = this.techniqueForm.controls.display_name.value ?? '';
+    const description = this.techniqueForm.controls.description.value ?? '';
+    const category = this.techniqueForm.controls.category.value ?? '';
+    const published = this.techniqueForm.controls.published.value ?? false;
+    const sequence = this.techniqueForm.controls.sequence.value ?? 99;
+
+    return {
+      short_name,
+      id,
+      display_name,
+      description,
+      category,
+      published,
+      sequence,
+    };
   }
 }
