@@ -65,6 +65,20 @@ export class AdviceService {
     return this.techniqueApiService.advicesTechniquesCategoriesRetrieve();
   }
 
+  public updateTechnique(technique: BonsaiTechnique): void {
+    this.techniqueApiService
+      .advicesTechniquesUpdate(technique.short_name, technique)
+      .pipe(take(1))
+      .subscribe((technique) => this.updateStore(technique, true));
+  }
+
+  public createTechnique(technique: BonsaiTechnique): void {
+    this.techniqueApiService
+      .advicesTechniquesCreate(technique)
+      .pipe(take(1))
+      .subscribe((technique) => this.updateStore(technique, false));
+  }
+
   /**
    * Interactions with the store
    */
@@ -87,17 +101,12 @@ export class AdviceService {
     );
   }
 
-  public updateTechnique(technique: BonsaiTechnique): void {
-    this.techniqueApiService
-      .advicesTechniquesUpdate(technique.short_name, technique)
-      .pipe(take(1))
-      .subscribe((technique) =>
-        techniqueStore.update(
-          updateEntitiesByPredicate(
-            ({ short_name }) => short_name === technique.short_name,
-            () => technique
-          )
-        )
-      );
+  private updateStore(technique: BonsaiTechnique, isUpdate: boolean): void {
+    techniqueStore.update(
+      updateEntitiesByPredicate(
+        ({ short_name }) => short_name === technique.short_name,
+        () => technique
+      )
+    );
   }
 }

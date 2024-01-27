@@ -16,6 +16,7 @@ import { AdvicesComponent } from './Components/Advices/advices.component';
 import { AuthenticationComponent } from './Components/Users/authentication/authentication.component';
 import { JwtInterceptor } from './jwt.interceptor';
 import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
+import { TechniqueFormComponent } from './Components/Advices/Technique/technique-form/technique-form.component';
 import { CustomInputComponent } from './Components/Generic/text-input/custom-input.component';
 import { ErrorInterceptor } from './error.interceptor';
 

@@ -1,7 +1,6 @@
 <h2>Bonsai Technique</h2>
 
 <form class="row g-3" [formGroup]="techniqueForm" (ngSubmit)="onSubmit()">
-
   <app-custom-input
     formName="short_name"
     placeholder="Short name"
@@ -64,5 +63,6 @@
     >
       Submit
     </button>
+    <button class="btn btn-secondary" routerLink="..">Cancel</button>
   </div>
 </form>

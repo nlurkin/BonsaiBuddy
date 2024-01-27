@@ -7,6 +7,7 @@ import {
   SelectOption,
 } from 'src/app/Components/Generic/text-input/custom-input.component';
 import { AdviceService } from 'src/app/Services/advice.service';
+import { bsonIdNull } from 'src/app/constants';
 import { BonsaiTechnique } from 'swagger-client';
 
 @Component({
@@ -37,6 +38,7 @@ export class TechniqueFormComponent implements OnInit {
   private techniqueIdName: BehaviorSubject<string | undefined> =
     new BehaviorSubject<string | undefined>(undefined);
   private techniqueCategories$ = this.adviceService.getTechniqueCategories();
+  private isCreating = false;
 
   public techniqueCategoriesOptoins$: Observable<SelectOption[]> =
     this.techniqueCategories$.pipe(
@@ -59,9 +61,9 @@ export class TechniqueFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.techniqueForm.controls.short_name.disable();
     const techniqueId = this.techniqueIdName.value;
     if (techniqueId) {
+      this.techniqueForm.controls.short_name.disable();
       this.adviceService
         .getTechnique(techniqueId)
         .pipe(take(1))
@@ -70,29 +72,29 @@ export class TechniqueFormComponent implements OnInit {
             ...advice,
           });
         });
+    } else {
+      this.isCreating = true;
     }
   }
 
   public onSubmit(): void {
-    console.log(this.techniqueForm.value);
-
     if (this.techniqueForm.controls.delete.value) {
       // Delete
     } else {
       const entity = this.formToEntity();
-      // Update
-
-      if (entity) this.adviceService.updateTechnique(entity);
-
-      //New
+      // Update or create
+      if (entity && !this.isCreating)
+        this.adviceService.updateTechnique(entity);
+      else if (entity && this.isCreating)
+        this.adviceService.createTechnique(entity);
     }
   }
 
   private formToEntity(): BonsaiTechnique | undefined {
     if (!this.techniqueForm.valid) return undefined;
 
+    const id = this.techniqueForm.controls.id.value ?? bsonIdNull;
     const short_name = this.techniqueForm.controls.short_name.value ?? '';
-    const id = this.techniqueForm.controls.id.value ?? '';
     const display_name = this.techniqueForm.controls.display_name.value ?? '';
     const description = this.techniqueForm.controls.description.value ?? '';
     const category = this.techniqueForm.controls.category.value ?? '';

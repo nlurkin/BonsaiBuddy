@@ -20,6 +20,10 @@ const routes: Routes = [
     path: 'advices/technique/:id/update',
     component: TechniqueFormComponent,
   },
+  {
+    path: 'admin/technique/create',
+    component: TechniqueFormComponent,
+  },
   { path: '', redirectTo: '/treeinfo', pathMatch: 'full' },
 ];
 
