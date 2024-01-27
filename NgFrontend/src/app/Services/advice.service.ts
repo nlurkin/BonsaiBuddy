@@ -31,6 +31,14 @@ const techniqueStore = createStore(
   { name: 'techniques' },
   withEntities<BonsaiTechnique>()
 );
+
+const objectiveStore = createStore(
+  { name: 'objective' },
+  withEntities<BonsaiObjective>()
+);
+
+const stageStore = createStore({ name: 'stage' }, withEntities<BonsaiStage>());
+
 type StoreType<T> = Store<
   {
     name: string;
@@ -48,6 +56,10 @@ type BonsaiEntity = BonsaiTechnique | BonsaiObjective | BonsaiStage;
 })
 export class AdviceService {
   private readonly refreshTechnique$: BehaviorSubject<void> =
+    new BehaviorSubject<void>(undefined); // To force the refresh of the store
+  private readonly refreshObjective$: BehaviorSubject<void> =
+    new BehaviorSubject<void>(undefined); // To force the refresh of the store
+  private readonly refreshStage$: BehaviorSubject<void> =
     new BehaviorSubject<void>(undefined); // To force the refresh of the store
 
   constructor(private techniqueApiService: AdvicesAPI) {}
@@ -189,6 +201,18 @@ export class AdviceService {
     techniqueStore
   );
 
+  private initializedObjectiveStore$ = this.initializeStore(
+    this.refreshObjective$,
+    this.techniqueApiService.advicesObjectivesList,
+    objectiveStore
+  );
+
+  private initializedStageStore$ = this.initializeStore(
+    this.refreshStage$,
+    this.techniqueApiService.advicesStagesList,
+    stageStore
+  );
+
   private fetchTechnique(id: string): Observable<BonsaiTechnique | undefined> {
     return this.fetchEntity<BonsaiTechnique>(
       id,
@@ -197,6 +221,20 @@ export class AdviceService {
     );
   }
 
+  private fetchObjective(id: string): Observable<BonsaiObjective | undefined> {
+    return this.fetchEntity<BonsaiObjective>(
+      id,
+      this.techniqueApiService.advicesObjectivesRetrieve,
+      objectiveStore
+    );
+  }
+
+  private fetchStage(id: string): Observable<BonsaiStage | undefined> {
+    return this.fetchEntity<BonsaiStage>(
+      id,
+      this.techniqueApiService.advicesStagesRetrieve,
+      stageStore
+    );
   }
 
   public getTechniqueCategories(): Observable<string[]> {
@@ -231,6 +269,56 @@ export class AdviceService {
     );
   }
 
+  public updateObjective(
+    objective: BonsaiObjective
+  ): Observable<BonsaiObjective> {
+    return this.updateEntity(
+      objective,
+      this.techniqueApiService.advicesObjectivesUpdate,
+      objectiveStore
+    );
+  }
+
+  public createObjective(
+    objective: BonsaiObjective
+  ): Observable<BonsaiObjective> {
+    return this.createEntity(
+      objective,
+      this.techniqueApiService.advicesObjectivesCreate,
+      objectiveStore
+    );
+  }
+
+  public deleteObjective(objective_short_name: string): Observable<any> {
+    return this.deleteEntity(
+      objective_short_name,
+      this.techniqueApiService.advicesObjectivesDestroy,
+      objectiveStore
+    );
+  }
+
+  public updateStage(stage: BonsaiStage): Observable<BonsaiStage> {
+    return this.updateEntity(
+      stage,
+      this.techniqueApiService.advicesStagesUpdate,
+      stageStore
+    );
+  }
+
+  public createStage(stage: BonsaiStage): Observable<BonsaiStage> {
+    return this.createEntity(
+      stage,
+      this.techniqueApiService.advicesStagesCreate,
+      stageStore
+    );
+  }
+
+  public deleteStage(stage_short_name: string): Observable<any> {
+    return this.deleteEntity(
+      stage_short_name,
+      this.techniqueApiService.advicesStagesDestroy,
+      stageStore
+    );
   }
 
   /**
@@ -239,6 +327,18 @@ export class AdviceService {
   public getTechniques(): Observable<BonsaiTechnique[]> {
     return this.initializedTechniqueStore$.pipe(
       switchMap(() => techniqueStore.pipe(selectAllEntities()))
+    );
+  }
+
+  public getObjectives(): Observable<BonsaiObjective[]> {
+    return this.initializedObjectiveStore$.pipe(
+      switchMap(() => objectiveStore.pipe(selectAllEntities()))
+    );
+  }
+
+  public getStages(): Observable<BonsaiStage[]> {
+    return this.initializedStageStore$.pipe(
+      switchMap(() => stageStore.pipe(selectAllEntities()))
     );
   }
 
@@ -251,4 +351,21 @@ export class AdviceService {
     );
   }
 
+  public getObjective(name: string): Observable<BonsaiObjective | undefined> {
+    return this.getEntity<BonsaiObjective>(
+      name,
+      this.techniqueApiService.advicesObjectivesRetrieve,
+      this.initializedObjectiveStore$,
+      objectiveStore
+    );
+  }
+
+  public getStage(name: string): Observable<BonsaiStage | undefined> {
+    return this.getEntity<BonsaiStage>(
+      name,
+      this.techniqueApiService.advicesStagesRetrieve,
+      this.initializedStageStore$,
+      stageStore
+    );
+  }
 }
