@@ -1,0 +1,33 @@
+<div class="form-floating">
+  <ng-template #textType>
+    <input
+      type="{{ type }}"
+      [formControl]="control"
+      class="form-control"
+      [placeholder]="placeholder"
+      [id]="'id_' + formName"
+    />
+  </ng-template>
+
+  <ng-template #selectType>
+    <select
+      [formControl]="control"
+      name="category"
+      class="form-control"
+      [id]="'id_' + formName"
+    >
+      <option value disabled>Please select a value</option>
+
+      <option *ngFor="let option of options" value="{{ option.value }}">
+        {{ option.label }}
+      </option>
+    </select>
+  </ng-template>
+
+  <ng-container *ngIf="type === 'select'; else textType">
+    <ng-container *ngTemplateOutlet="selectType"></ng-container>
+  </ng-container>
+  <label [for]="'id_' + formName" class="form-label" [class]="validityCheck()"
+    >{{ placeholder }}
+    <span *ngIf="isRequired()">*</span>
+  </label>
