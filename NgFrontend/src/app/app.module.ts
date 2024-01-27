@@ -11,10 +11,13 @@ import { NgLetModule } from 'ng-let';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
+import { ToastModule } from 'primeng/toast';
 import { AdvicesComponent } from './Components/Advices/advices.component';
 import { AuthenticationComponent } from './Components/Users/authentication/authentication.component';
 import { JwtInterceptor } from './jwt.interceptor';
 import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
+import { CustomInputComponent } from './Components/Generic/text-input/custom-input.component';
+import { ErrorInterceptor } from './error.interceptor';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,8 @@ import { TechniqueComponent } from './Components/Advices/Technique/technique/tec
     AuthenticationComponent,
     AdvicesComponent,
     TechniqueComponent,
+    TechniqueFormComponent,
+    CustomInputComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,11 +40,17 @@ import { TechniqueComponent } from './Components/Advices/Technique/technique/tec
     ReactiveFormsModule,
     SidebarModule,
     NgLetModule,
+    ToastModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
       multi: true,
     },
   ],
