@@ -32,6 +32,7 @@ export abstract class EntityForm<T extends BonsaiEntity> {
       Validators.maxLength(200),
     ]),
     id: this.fb.control<string | undefined>(undefined),
+    sequence: this.fb.control<number | undefined>(99),
     published: this.fb.control<boolean>(false),
     delete: this.fb.control<boolean>(false),
   });

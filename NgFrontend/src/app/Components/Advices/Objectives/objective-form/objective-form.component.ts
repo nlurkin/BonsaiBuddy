@@ -21,7 +21,6 @@ export class ObjectiveFormComponent extends EntityForm<BonsaiObjective> {
       Validators.maxLength(200),
     ]),
     description: this.fb.control<string | undefined>(undefined),
-    sequence: this.fb.control<number | undefined>(99),
   });
 
   constructor(
@@ -59,7 +58,7 @@ export class ObjectiveFormComponent extends EntityForm<BonsaiObjective> {
     const display_name = this.entityForm.controls.display_name.value ?? '';
     const description = this.entityForm.controls.description.value ?? '';
     const published = this.commonControls.controls.published.value ?? false;
-    const sequence = this.entityForm.controls.sequence.value ?? 99;
+    const sequence = this.commonControls.controls.sequence.value ?? 99;
 
     return {
       short_name,
