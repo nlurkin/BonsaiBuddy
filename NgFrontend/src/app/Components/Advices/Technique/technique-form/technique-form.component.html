@@ -1,6 +1,6 @@
 <h2>Bonsai Technique</h2>
 
-<form class="row g-3" [formGroup]="techniqueForm" (ngSubmit)="onSubmit()">
+<form class="row g-3" [formGroup]="combinedForm" (ngSubmit)="onSubmit()">
   <app-custom-input
     formName="short_name"
     placeholder="Short name"
@@ -19,7 +19,7 @@
       formName="category"
       placeholder="Category"
       class="col-md-6"
-      [options]="(techniqueCategoriesOptoins$ | async) || []"
+      [options]="(techniqueCategoriesOptions$ | async) || []"
     ></app-custom-input>
   </div>
 
@@ -59,7 +59,7 @@
     <button
       type="submit"
       class="btn btn-primary"
-      [disabled]="!techniqueForm.valid"
+      [disabled]="!combinedForm.valid"
     >
       Submit
     </button>
