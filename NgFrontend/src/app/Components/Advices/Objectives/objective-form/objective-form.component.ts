@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, take } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
@@ -26,7 +26,7 @@ export class ObjectiveFormComponent extends EntityForm<BonsaiObjective> {
 
   constructor(
     private adviceService: AdviceService,
-    fb: FormBuilder,
+    fb: NonNullableFormBuilder,
     route: ActivatedRoute,
     router: Router
   ) {

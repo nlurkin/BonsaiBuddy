@@ -1,7 +1,7 @@
 import { BonsaiEntity } from 'src/app/Services/advice.service';
 
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { RouterURL } from 'src/app/types';
@@ -42,7 +42,7 @@ export abstract class EntityForm<T extends BonsaiEntity> {
   private isCreating = false;
 
   protected constructor(
-    protected fb: FormBuilder,
+    protected fb: NonNullableFormBuilder,
     protected route: ActivatedRoute,
     protected router: Router
   ) {
