@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { Observable, map, of, switchMap } from 'rxjs';
-import { Profile, User, UsersAPI } from 'swagger-client';
+import { PatchedProfile, Profile, User, UsersAPI } from 'swagger-client';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,13 @@ export class UserService {
     return this.user$.pipe(
       map((user) => (user ? user.permissions.includes(permissions) : false))
     );
+  }
+
+  public updateCurrentUserProfile(
+    username: string,
+    profile: PatchedProfile
+  ): Observable<Profile> {
+    return this.userApi.usersProfilePartialUpdate(username, profile);
   }
 
   constructor(
