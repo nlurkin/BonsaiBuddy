@@ -44,9 +44,27 @@
     />
   </ng-template>
 
+  <ng-template #multiselectType>
+    <p-multiSelect
+      [formControl]="control"
+      [options]="options"
+      optionLabel="label"
+      optionValue="value"
+      display="chip"
+      [styleClass]="'form-control'"
+      [id]="'id_' + formName"
+    ></p-multiSelect>
+  </ng-template>
+
   <!-- Selection of the template -->
+  <ng-template #option4>
+    <ng-container *ngIf="type === InputType.MULTISELECT; else textType">
+      <ng-container *ngTemplateOutlet="multiselectType"></ng-container>
+    </ng-container>
+  </ng-template>
+
   <ng-template #option3>
-    <ng-container *ngIf="type === InputType.CHECKBOX; else textType">
+    <ng-container *ngIf="type === InputType.CHECKBOX; else option4">
       <ng-container *ngTemplateOutlet="checkBoxType"></ng-container>
     </ng-container>
   </ng-template>

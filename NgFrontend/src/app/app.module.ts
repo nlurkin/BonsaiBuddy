@@ -21,6 +21,7 @@ import { CustomInputComponent } from './Components/Generic/text-input/custom-inp
 import { ErrorInterceptor } from './error.interceptor';
 import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ObjectiveFormComponent } from './Components/Advices/Objectives/objectiv
     SidebarModule,
     NgLetModule,
     ToastModule,
+    MultiSelectModule,
   ],
   providers: [
     {

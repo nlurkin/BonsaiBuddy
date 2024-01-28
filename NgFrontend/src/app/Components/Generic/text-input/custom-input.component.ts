@@ -7,6 +7,7 @@ export enum InputType {
   SELECT = 'select',
   TEXTAREA = 'textarea',
   CHECKBOX = 'checkbox',
+  MULTISELECT = 'multiselect',
 }
 
 export type SelectOption = { label: string; value: string };
