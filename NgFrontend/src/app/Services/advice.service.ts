@@ -26,6 +26,7 @@ import {
   BonsaiStage,
   BonsaiTechnique,
 } from 'swagger-client';
+import { AuthenticationService } from './authentication.service';
 
 const techniqueStore = createStore(
   { name: 'techniques' },
@@ -62,7 +63,16 @@ export class AdviceService {
   private readonly refreshStage$: BehaviorSubject<void> =
     new BehaviorSubject<void>(undefined); // To force the refresh of the store
 
-  constructor(private techniqueApiService: AdvicesAPI) {}
+  constructor(
+    private techniqueApiService: AdvicesAPI,
+    private authenticationService: AuthenticationService
+  ) {
+    this.authenticationService.isUserLoggedIn().subscribe((loggedIn) => {
+      this.refreshTechnique$.next();
+      this.refreshObjective$.next();
+      this.refreshStage$.next();
+    });
+  }
 
   /**
    * Generic methods
