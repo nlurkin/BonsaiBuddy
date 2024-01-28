@@ -39,7 +39,7 @@
     <li *ngFor="let stage of stages">
       <a
         [ngClass]="{ unpublished: !stage.published }"
-        [routerLink]="['objective', stage.short_name]"
+        [routerLink]="['stage', stage.short_name]"
         >{{ stage.display_name }}</a
       >
     </li>

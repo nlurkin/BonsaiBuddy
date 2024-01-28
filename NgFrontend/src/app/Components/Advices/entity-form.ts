@@ -109,7 +109,7 @@ export abstract class EntityForm<T extends BonsaiEntity> {
   }
 
   private getEntityFromForm(): T | undefined {
-    if (!this.entityForm.valid) return undefined;
+    if (!this.combinedForm.valid) return undefined;
 
     return this.formToEntity();
   }

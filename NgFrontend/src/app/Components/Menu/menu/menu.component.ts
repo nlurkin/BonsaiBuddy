@@ -7,7 +7,7 @@ interface MenuItem {
   routerLink?: string;
   action?: () => void;
   requireLogin: boolean;
-  requireRole?: [];
+  requireRole?: string[];
 }
 
 @Component({
