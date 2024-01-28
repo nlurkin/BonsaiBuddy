@@ -8,7 +8,7 @@ import { RouterURL } from 'src/app/types';
 import { InputType } from '../Generic/text-input/custom-input.component';
 import { bsonIdNull } from 'src/app/constants';
 
-export type EntityType = 'technique' | 'objective';
+export type EntityType = 'technique' | 'objective' | 'stage';
 
 @Component({
   selector: 'app-entity-form',

@@ -21,6 +21,8 @@ import { CustomInputComponent } from './Components/Generic/text-input/custom-inp
 import { ErrorInterceptor } from './error.interceptor';
 import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
+import { StageComponent } from './Components/Advices/Stages/stage/stage.component';
+import { StageFormComponent } from './Components/Advices/Stages/stage-form/stage-form.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
@@ -34,6 +36,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     CustomInputComponent,
     ObjectiveComponent,
     ObjectiveFormComponent,
+    StageComponent,
+    StageFormComponent,
   ],
   imports: [
     BrowserModule,

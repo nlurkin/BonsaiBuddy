@@ -6,6 +6,8 @@ import { TechniqueComponent } from './Components/Advices/Technique/technique/tec
 import { TechniqueFormComponent } from './Components/Advices/Technique/technique-form/technique-form.component';
 import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
+import { StageComponent } from './Components/Advices/Stages/stage/stage.component';
+import { StageFormComponent } from './Components/Advices/Stages/stage-form/stage-form.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -37,6 +39,18 @@ const routes: Routes = [
   {
     path: 'admin/objective/create',
     component: ObjectiveFormComponent,
+  },
+  {
+    path: 'advices/stage/:id',
+    component: StageComponent,
+  },
+  {
+    path: 'advices/stage/:id/update',
+    component: StageFormComponent,
+  },
+  {
+    path: 'admin/stage/create',
+    component: StageFormComponent,
   },
   { path: '', redirectTo: '/treeinfo', pathMatch: 'full' },
 ];

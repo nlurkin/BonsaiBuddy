@@ -1,0 +1,10 @@
+<a [routerLink]="['../..']">Back</a>
+<ng-container *ngLet="stage$ | async as stage">
+  <div *ngIf="stage">
+    <h1>{{ stage.display_name }}</h1>
+    <p class="text-line-breaks">{{ stage.description }}</p>
+    <p *ngIf="true">
+      <a [routerLink]="'./update'">Update</a>
+    </p>
+  </div>
+</ng-container>
