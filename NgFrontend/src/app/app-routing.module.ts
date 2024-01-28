@@ -5,6 +5,7 @@ import { AuthenticationComponent } from './Components/Users/authentication/authe
 import { AdvicesComponent } from './Components/Advices/advices.component';
 import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
 import { TechniqueFormComponent } from './Components/Advices/Technique/technique-form/technique-form.component';
+import { AdminComponent } from './Components/Admin/admin/admin.component';
 import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
 import { StageComponent } from './Components/Advices/Stages/stage/stage.component';
@@ -87,6 +88,11 @@ const routes: Routes = [
     component: ProfileFormComponent,
     canActivate: [isLoggedInGuard],
   },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [isLoggedInGuard, hasRoleGuard],
+    data: { roles: ['content_manager'] },
   },
   { path: '', redirectTo: '/treeinfo', pathMatch: 'full' },
 ];

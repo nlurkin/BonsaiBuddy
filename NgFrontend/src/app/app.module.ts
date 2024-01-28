@@ -11,6 +11,7 @@ import { DividerModule } from 'primeng/divider';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SidebarModule } from 'primeng/sidebar';
 import { ToastModule } from 'primeng/toast';
+import { AdminComponent } from './Components/Admin/admin/admin.component';
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
 import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
 import { StageFormComponent } from './Components/Advices/Stages/stage-form/stage-form.component';
@@ -40,6 +41,7 @@ import { CountryPipe } from './country.pipe';
     TechniqueComponent,
     TechniqueFormComponent,
     CustomInputComponent,
+    AdminComponent,
     ObjectiveComponent,
     ObjectiveFormComponent,
     StageComponent,

@@ -53,12 +53,12 @@ export class MenuComponent {
     //   routerLink: '/mytrees',
     //   requireLogin: true,
     // },
-    // {
-    //   label: 'Admin',
-    //   routerLink: '/admin',
-    //   requireLogin: true,
-    //   requireRole: ['CanChangeContent'],
-    // },
+    {
+      label: 'Admin',
+      routerLink: '/admin',
+      requireLogin: true,
+      requireRole: ['content_manager'],
+    },
     {
       label: 'Login',
       routerLink: '/login',
@@ -76,16 +76,16 @@ export class MenuComponent {
     this.userService.getCurrentUserAccount(),
   ]).pipe(
     map(([isLoggedIn, userAccount]) =>
-        this.menuItems.filter((item) => {
-          if (item.label === 'Login' && isLoggedIn) return false;
+      this.menuItems.filter((item) => {
+        if (item.label === 'Login' && isLoggedIn) return false;
         const loginOk = !item.requireLogin || isLoggedIn;
         const roleOk =
           !item.requireRole ||
           item.requireRole.some((role) => userAccount?.groups.includes(role));
         return loginOk && roleOk;
-        })
-      )
-    );
+      })
+    )
+  );
 
   private logout() {
     this.authService.logOut();
