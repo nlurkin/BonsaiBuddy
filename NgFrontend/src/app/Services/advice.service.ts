@@ -49,7 +49,7 @@ type StoreType<T> = Store<
 >;
 
 type StoreCommands = 'update' | 'create' | 'delete';
-type BonsaiEntity = BonsaiTechnique | BonsaiObjective | BonsaiStage;
+export type BonsaiEntity = BonsaiTechnique | BonsaiObjective | BonsaiStage;
 
 @Injectable({
   providedIn: 'root',

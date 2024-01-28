@@ -1,0 +1,11 @@
+<a [routerLink]="['../..']">Back</a>
+<ng-container *ngLet="objective$ | async as objective">
+  <div *ngIf="objective">
+    <h1>{{ objective.display_name }}</h1>
+    <p class="text-line-breaks">{{ objective.description }}</p>
+    <p *ngIf="true">
+      <!-- TODO: To update with roles -->
+      <a [routerLink]="'./update'">Update</a>
+    </p>
+  </div>
+</ng-container>

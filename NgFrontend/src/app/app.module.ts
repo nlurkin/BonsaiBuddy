@@ -19,6 +19,8 @@ import { TechniqueComponent } from './Components/Advices/Technique/technique/tec
 import { TechniqueFormComponent } from './Components/Advices/Technique/technique-form/technique-form.component';
 import { CustomInputComponent } from './Components/Generic/text-input/custom-input.component';
 import { ErrorInterceptor } from './error.interceptor';
+import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
+import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { ErrorInterceptor } from './error.interceptor';
     TechniqueComponent,
     TechniqueFormComponent,
     CustomInputComponent,
+    ObjectiveComponent,
+    ObjectiveFormComponent,
   ],
   imports: [
     BrowserModule,

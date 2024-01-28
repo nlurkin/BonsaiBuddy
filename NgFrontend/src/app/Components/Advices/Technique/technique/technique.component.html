@@ -5,6 +5,7 @@
     <p>Technique category: {{ technique.category | titlecase }}</p>
     <p class="text-line-breaks">{{ technique.description }}</p>
     <p *ngIf="true">
+      <!-- TODO: To update with roles -->
       <a [routerLink]="'./update'">Update</a>
     </p>
   </div>

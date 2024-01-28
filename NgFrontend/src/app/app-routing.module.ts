@@ -4,6 +4,8 @@ import { AuthenticationComponent } from './Components/Users/authentication/authe
 import { AdvicesComponent } from './Components/Advices/advices.component';
 import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
 import { TechniqueFormComponent } from './Components/Advices/Technique/technique-form/technique-form.component';
+import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
+import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -23,6 +25,18 @@ const routes: Routes = [
   {
     path: 'admin/technique/create',
     component: TechniqueFormComponent,
+  },
+  {
+    path: 'advices/objective/:id',
+    component: ObjectiveComponent,
+  },
+  {
+    path: 'advices/objective/:id/update',
+    component: ObjectiveFormComponent,
+  },
+  {
+    path: 'admin/objective/create',
+    component: ObjectiveFormComponent,
   },
   { path: '', redirectTo: '/treeinfo', pathMatch: 'full' },
 ];
