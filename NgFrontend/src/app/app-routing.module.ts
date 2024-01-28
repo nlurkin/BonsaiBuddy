@@ -9,7 +9,11 @@ import { ObjectiveComponent } from './Components/Advices/Objectives/objective/ob
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
 import { StageComponent } from './Components/Advices/Stages/stage/stage.component';
 import { StageFormComponent } from './Components/Advices/Stages/stage-form/stage-form.component';
-import { hasPermissionsGuard, isLoggedInGuard } from './has-permissions.guard';
+import {
+  hasPermissionsGuard,
+  hasRoleGuard,
+  isLoggedInGuard,
+} from './has-permissions.guard';
 import { ProfileComponent } from './Components/Users/profile/profile.component';
 import { ProfileFormComponent } from './Components/Users/profile-form/profile-form.component';
 

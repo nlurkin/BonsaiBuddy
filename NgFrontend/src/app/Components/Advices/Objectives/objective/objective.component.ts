@@ -19,9 +19,8 @@ export class ObjectiveComponent {
       switchMap((id) => this.adviceService.getObjective(id))
     );
 
-  public canEdit$: Observable<boolean> = this.userService.currentHasPermissions(
-    'BonsaiAdvice.change_content'
-  );
+  public canEdit$: Observable<boolean> =
+    this.userService.currentUserHasPermissions('BonsaiAdvice.change_content');
 
   constructor(
     private adviceService: AdviceService,

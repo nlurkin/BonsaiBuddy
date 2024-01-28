@@ -30,9 +30,17 @@ export class UserService {
     return this.userProfiles$;
   }
 
-  public currentHasPermissions(permissions: string): Observable<boolean> {
+  public currentUserHasPermissions(permissions: string): Observable<boolean> {
     return this.user$.pipe(
       map((user) => (user ? user.permissions.includes(permissions) : false))
+    );
+  }
+
+  public currentUserHasAnyOfRole(roles: string[]): Observable<boolean> {
+    return this.user$.pipe(
+      map((user) =>
+        user ? roles.some((role) => user.groups.includes(role)) : false
+      )
     );
   }
 

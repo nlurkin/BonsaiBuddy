@@ -4,7 +4,13 @@ import { UserService } from './Services/user.service';
 import { AuthenticationService } from './Services/authentication.service';
 
 export const hasPermissionsGuard: CanActivateFn = (route, state) => {
-  return inject(UserService).currentHasPermissions(route.data['permissions']);
+  return inject(UserService).currentUserHasPermissions(
+    route.data['permissions']
+  );
+};
+
+export const hasRoleGuard: CanActivateFn = (route, state) => {
+  return inject(UserService).currentUserHasAnyOfRole(route.data['roles']);
 };
 
 export const isLoggedInGuard: CanActivateFn = (route, state) => {
