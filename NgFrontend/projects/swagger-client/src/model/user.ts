@@ -19,6 +19,7 @@ export interface User {
     username: string;
     email?: string;
     readonly permissions: string;
+    readonly groups: string;
     last_login?: string | null;
     first_name?: string;
     last_name?: string;
