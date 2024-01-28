@@ -3,8 +3,7 @@
   <div *ngIf="objective">
     <h1>{{ objective.display_name }}</h1>
     <markdown [data]="objective.description"></markdown>
-    <p *ngIf="true">
-      <!-- TODO: To update with roles -->
+    <p *ngIf="canEdit$ | async">
       <a [routerLink]="'./update'">Update</a>
     </p>
   </div>

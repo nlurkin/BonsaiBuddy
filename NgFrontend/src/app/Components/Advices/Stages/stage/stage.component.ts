@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, map, switchMap } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
+import { UserService } from 'src/app/Services/user.service';
 import { filterNullish } from 'src/app/utils';
 import { BonsaiStage } from 'swagger-client';
 
@@ -33,8 +34,13 @@ export class StageComponent {
       })
     );
 
+  public canEdit$: Observable<boolean> = this.userService.currentHasPermissions(
+    'BonsaiAdvice.change_content'
+  );
+
   constructor(
     private adviceService: AdviceService,
+    private userService: UserService,
     private route: ActivatedRoute
   ) {}
 }
