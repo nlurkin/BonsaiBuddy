@@ -39,7 +39,7 @@ class TreeCollection(mongoengine.EmbeddedDocument):
 
 
 class UserProfile(mongoengine.Document):
-    username = mongoengine.StringField()
+    username = mongoengine.StringField(required=True, unique=True)
     password = mongoengine.BinaryField(max_length=128)
     last_pwd_update = mongoengine.DateTimeField(null=True)
     last_login = mongoengine.DateTimeField(null=True)

@@ -5,6 +5,7 @@ export * from './lazyReferenceField';
 export * from './patchedBonsaiObjective';
 export * from './patchedBonsaiStage';
 export * from './patchedBonsaiTechnique';
+export * from './patchedProfile';
 export * from './patchedTreeInfo';
 export * from './periodEnum';
 export * from './profile';

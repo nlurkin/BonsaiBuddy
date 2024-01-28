@@ -151,7 +151,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             return User.objects.filter(id=user.id)
 
 
-class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
+class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated,
                           OwnProfilePermission | IsAdminUser]
