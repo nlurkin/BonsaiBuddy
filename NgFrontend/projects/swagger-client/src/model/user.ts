@@ -26,5 +26,9 @@ export interface User {
      * Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
      */
     is_active?: boolean;
+    /**
+     * Designates that this user has all permissions without explicitly assigning them.
+     */
+    is_superuser?: boolean;
 }
 

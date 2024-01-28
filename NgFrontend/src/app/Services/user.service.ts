@@ -15,7 +15,7 @@ export class UserService {
       )
     );
 
-  public getCurrentUserProfile(): Observable<User | undefined> {
+  public getCurrentUserAccount(): Observable<User | undefined> {
     return this.user$;
   }
 
