@@ -2,7 +2,8 @@
 <ng-container *ngLet="stage$ | async as stage">
   <div *ngIf="stage">
     <h1>{{ stage.display_name }}</h1>
-    <p class="text-line-breaks">{{ stage.description }}</p>
+    <markdown [data]="stage.description"></markdown>
+    <p>Relevant periods: {{ stage.global_period_names.join(", ") }}</p>
     <p *ngIf="true">
       <a [routerLink]="'./update'">Update</a>
     </p>

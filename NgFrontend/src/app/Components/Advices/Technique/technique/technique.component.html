@@ -3,7 +3,7 @@
   <div *ngIf="technique">
     <h1>{{ technique.display_name }}</h1>
     <p>Technique category: {{ technique.category | titlecase }}</p>
-    <p class="text-line-breaks">{{ technique.description }}</p>
+    <markdown [data]="technique.description"></markdown>
     <p *ngIf="true">
       <!-- TODO: To update with roles -->
       <a [routerLink]="'./update'">Update</a>

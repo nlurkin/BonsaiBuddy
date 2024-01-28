@@ -24,6 +24,7 @@ import { ObjectiveFormComponent } from './Components/Advices/Objectives/objectiv
 import { StageComponent } from './Components/Advices/Stages/stage/stage.component';
 import { StageFormComponent } from './Components/Advices/Stages/stage-form/stage-form.component';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
     NgLetModule,
     ToastModule,
     MultiSelectModule,
+    MarkdownModule.forRoot(),
   ],
   providers: [
     {

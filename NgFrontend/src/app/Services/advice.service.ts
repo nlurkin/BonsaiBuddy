@@ -376,7 +376,7 @@ export class AdviceService {
       .map((season, seasonIndex) =>
         subsection.map((sub, subsectionIndex): [string, string] => [
           `${subsectionIndex}_${seasonIndex}`,
-          `${sub}_${season}`,
+          `${sub} ${season}`,
         ])
       )
       .flat();
