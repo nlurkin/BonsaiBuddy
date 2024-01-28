@@ -18,13 +18,15 @@ export class ErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error) => {
-        if (error.status === 401) of(); // Do not intercept authentication errors here. Leave it to JWT
-        const description = error?.error?.description
-          ? error.error.description
-          : 'Unknown error';
-        this.errorService.provideError({ code: error.status, description });
-        console.log(error);
-        return throwError(() => error);
+        if (error.status === 401) {
+          // Do not intercept authentication errors here. Leave it to JWT
+        } else {
+          const description = error?.error?.description
+            ? error.error.description
+            : 'Unknown error';
+          this.errorService.provideError({ code: error.status, description });
+        }
+        return throwError(() => error); // Forward error to the next interceptor
       })
     );
   }
