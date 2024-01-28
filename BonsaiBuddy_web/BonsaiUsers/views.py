@@ -139,6 +139,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated,
                           OwnProfilePermission | IsAdminUser]
+    lookup_field = 'username'
 
     def get_queryset(self):
         """
@@ -148,4 +149,4 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if user.is_superuser:
             return User.objects.all()
         else:
-            return [User.objects.get(id=user.id)]
+            return User.objects.filter(id=user.id)
