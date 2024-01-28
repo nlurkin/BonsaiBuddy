@@ -3,7 +3,6 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, take } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
-import { bsonIdNull } from 'src/app/constants';
 import { BonsaiObjective } from 'swagger-client';
 import { EntityForm, EntityType } from '../../entity-form';
 
@@ -53,20 +52,14 @@ export class ObjectiveFormComponent extends EntityForm<BonsaiObjective> {
   }
 
   formToEntity(): BonsaiObjective | undefined {
-    const id = this.commonControls.controls.id.value ?? bsonIdNull;
-    const short_name = this.commonControls.controls.short_name.value ?? '';
+    const commonFields = this.getCommonFieldsFromForm();
     const display_name = this.entityForm.controls.display_name.value ?? '';
     const description = this.entityForm.controls.description.value ?? '';
-    const published = this.commonControls.controls.published.value ?? false;
-    const sequence = this.commonControls.controls.sequence.value ?? 99;
 
     return {
-      short_name,
-      id,
+      ...commonFields,
       display_name,
       description,
-      published,
-      sequence,
     };
   }
 }

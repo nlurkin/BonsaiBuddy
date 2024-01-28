@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { RouterURL } from 'src/app/types';
 import { InputType } from '../Generic/text-input/custom-input.component';
+import { bsonIdNull } from 'src/app/constants';
 
 export type EntityType = 'technique' | 'objective';
 
@@ -96,6 +97,15 @@ export abstract class EntityForm<T extends BonsaiEntity> {
           : undefined,
       })
     );
+  }
+
+  protected getCommonFieldsFromForm() {
+    return {
+      id: this.commonControls.controls.id.value ?? bsonIdNull,
+      short_name: this.commonControls.controls.short_name.value ?? '',
+      sequence: this.commonControls.controls.sequence.value ?? 99,
+      published: this.commonControls.controls.published.value ?? false,
+    };
   }
 
   private getEntityFromForm(): T | undefined {

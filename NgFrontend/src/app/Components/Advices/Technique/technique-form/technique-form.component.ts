@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, take } from 'rxjs';
 import { SelectOption } from 'src/app/Components/Generic/text-input/custom-input.component';
 import { AdviceService } from 'src/app/Services/advice.service';
-import { bsonIdNull } from 'src/app/constants';
 import { BonsaiTechnique } from 'swagger-client';
 import { EntityForm, EntityType } from '../../entity-form';
 
@@ -67,22 +66,16 @@ export class TechniqueFormComponent extends EntityForm<BonsaiTechnique> {
   }
 
   formToEntity(): BonsaiTechnique | undefined {
-    const id = this.commonControls.controls.id.value ?? bsonIdNull;
-    const short_name = this.commonControls.controls.short_name.value ?? '';
+    const commonFields = this.getCommonFieldsFromForm();
     const display_name = this.entityForm.controls.display_name.value ?? '';
     const description = this.entityForm.controls.description.value ?? '';
     const category = this.entityForm.controls.category.value ?? '';
-    const published = this.commonControls.controls.published.value ?? false;
-    const sequence = this.commonControls.controls.sequence.value ?? 99;
 
     return {
-      short_name,
-      id,
+      ...commonFields,
       display_name,
       description,
       category,
-      published,
-      sequence,
     };
   }
 }
