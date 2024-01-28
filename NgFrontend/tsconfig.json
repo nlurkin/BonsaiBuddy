@@ -21,10 +21,7 @@
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
     "paths": {
-      "swagger-client": [
-        "swagger-client",
-        "dist/swagger-client"
-      ]
+      "swagger-client": ["swagger-client", "dist/swagger-client"]
     }
   },
   "angularCompilerOptions": {

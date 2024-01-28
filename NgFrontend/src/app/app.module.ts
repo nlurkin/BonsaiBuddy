@@ -27,6 +27,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ErrorInterceptor } from './error.interceptor';
 import { JwtInterceptor } from './jwt.interceptor';
+import { CountryPipe } from './country.pipe';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { JwtInterceptor } from './jwt.interceptor';
     StageComponent,
     StageFormComponent,
     ProfileComponent,
+    CountryPipe,
   ],
   imports: [
     BrowserModule,
