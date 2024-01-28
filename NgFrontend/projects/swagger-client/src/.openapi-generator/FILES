@@ -21,11 +21,13 @@ model/patchedBonsaiStage.ts
 model/patchedBonsaiTechnique.ts
 model/patchedTreeInfo.ts
 model/periodEnum.ts
+model/profile.ts
 model/techniqueMapper.ts
 model/tokenObtainPair.ts
 model/tokenObtainPairResponse.ts
 model/tokenRefresh.ts
 model/tokenRefreshResponse.ts
+model/treeCollection.ts
 model/treeInfo.ts
 model/user.ts
 param.ts

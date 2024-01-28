@@ -8,7 +8,7 @@ from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View, generic
-from .serializers import UserSerializer
+from .serializers import ProfileSerializer, UserSerializer
 from utils import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -135,7 +135,6 @@ class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated,
                           OwnProfilePermission | IsAdminUser]
@@ -150,3 +149,20 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             return User.objects.all()
         else:
             return User.objects.filter(id=user.id)
+
+
+class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated,
+                          OwnProfilePermission | IsAdminUser]
+    lookup_field = 'username'
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the users accessible to this user.
+        """
+        user = self.request.user
+        if user.is_superuser:
+            return UserProfile.objects.all()
+        else:
+            return UserProfile.objects.filter(username=user.username)

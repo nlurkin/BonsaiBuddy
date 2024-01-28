@@ -17,7 +17,11 @@ class User(AbstractUser):
 
 class OwnProfilePermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj == request.user
+        if isinstance(obj, UserProfile):
+            return obj.username == request.user.username
+        elif isinstance(obj, User):
+            return obj == request.user
+        return False
 
 
 def build_country_list():
