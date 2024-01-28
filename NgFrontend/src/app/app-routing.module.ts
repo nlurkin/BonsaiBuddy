@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TreeInfoComponent } from './Components/TreeInfo/tree-info/tree-info.component';
 import { AuthenticationComponent } from './Components/Users/authentication/authentication.component';
 import { AdvicesComponent } from './Components/Advices/advices.component';
 import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
@@ -12,6 +13,11 @@ import { hasPermissionsGuard } from './has-permissions.guard';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
+  {
+    path: 'treeinfo',
+    component: TreeInfoComponent,
+    title: 'BonsaiBuddy - Tree Information',
+  },
   {
     path: 'advices',
     component: AdvicesComponent,
