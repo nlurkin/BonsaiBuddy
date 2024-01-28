@@ -22,9 +22,6 @@ export interface TechniqueMapper {
     technique: LazyReferenceField;
     objective: LazyReferenceField;
     stage: Array<LazyReferenceField>;
-    period: PeriodEnum;
+    period: Array<PeriodEnum>;
 }
-export namespace TechniqueMapper {
-}
-
 

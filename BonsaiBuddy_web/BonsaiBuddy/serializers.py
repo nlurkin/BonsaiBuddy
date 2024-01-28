@@ -27,7 +27,7 @@ class ObjectIdFieldSerializer(fields.Field):
         return smart_str(value)
 
 
-class PeriodSerializer(serializers.ChoiceField):
+class PeriodSerializer(serializers.MultipleChoiceField):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         return [periodid_to_name(_) for _ in ret]

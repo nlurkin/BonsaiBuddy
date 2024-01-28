@@ -17,14 +17,11 @@ import { PeriodEnum } from './periodEnum';
  */
 export interface PatchedBonsaiStage { 
     id?: string;
-    global_period?: PeriodEnum;
+    global_period?: Array<PeriodEnum>;
     short_name?: string;
     display_name?: string;
     description?: string;
     published?: boolean;
     sequence?: number;
 }
-export namespace PatchedBonsaiStage {
-}
-
 
