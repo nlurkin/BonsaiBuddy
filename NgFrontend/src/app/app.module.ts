@@ -27,6 +27,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ErrorInterceptor } from './error.interceptor';
 import { JwtInterceptor } from './jwt.interceptor';
+import { ProfileFormComponent } from './Components/Users/profile-form/profile-form.component';
 import { CountryPipe } from './country.pipe';
 
 @NgModule({
@@ -44,6 +45,7 @@ import { CountryPipe } from './country.pipe';
     StageComponent,
     StageFormComponent,
     ProfileComponent,
+    ProfileFormComponent,
     CountryPipe,
   ],
   imports: [

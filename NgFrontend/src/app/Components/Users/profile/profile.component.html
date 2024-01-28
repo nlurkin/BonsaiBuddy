@@ -6,6 +6,7 @@
     <p>Last login: {{ profile?.last_login }} UTC</p>
     <p>Country: {{ profile?.country }}</p>
     <p>
+      <a [routerLink]="'./update'">Update profile</a
     </p>
   </ng-container>
   <ng-container *ngIf="!profile">

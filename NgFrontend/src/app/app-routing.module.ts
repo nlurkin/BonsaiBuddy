@@ -11,6 +11,7 @@ import { StageComponent } from './Components/Advices/Stages/stage/stage.componen
 import { StageFormComponent } from './Components/Advices/Stages/stage-form/stage-form.component';
 import { hasPermissionsGuard, isLoggedInGuard } from './has-permissions.guard';
 import { ProfileComponent } from './Components/Users/profile/profile.component';
+import { ProfileFormComponent } from './Components/Users/profile-form/profile-form.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -75,6 +76,11 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [isLoggedInGuard],
+  },
+  {
+    path: 'profile/update',
+    component: ProfileFormComponent,
     canActivate: [isLoggedInGuard],
   },
   },
