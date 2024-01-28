@@ -30,4 +30,4 @@ class ObjectIdFieldSerializer(fields.Field):
 class PeriodSerializer(serializers.MultipleChoiceField):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        return [periodid_to_name(_) for _ in ret]
+        return ret
