@@ -39,11 +39,11 @@ export class MenuComponent {
       routerLink: '/advices',
       requireLogin: false,
     },
-    // {
-    //   label: 'Profile',
-    //   routerLink: '/profile',
-    //   requireLogin: true,
-    // },
+    {
+      label: 'Profile',
+      routerLink: '/profile',
+      requireLogin: true,
+    },
     // {
     //   label: 'My Trees',
     //   routerLink: '/mytrees',

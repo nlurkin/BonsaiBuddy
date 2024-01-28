@@ -9,7 +9,8 @@ import { ObjectiveComponent } from './Components/Advices/Objectives/objective/ob
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
 import { StageComponent } from './Components/Advices/Stages/stage/stage.component';
 import { StageFormComponent } from './Components/Advices/Stages/stage-form/stage-form.component';
-import { hasPermissionsGuard } from './has-permissions.guard';
+import { hasPermissionsGuard, isLoggedInGuard } from './has-permissions.guard';
+import { ProfileComponent } from './Components/Users/profile/profile.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -70,6 +71,11 @@ const routes: Routes = [
     component: StageFormComponent,
     canActivate: [hasPermissionsGuard],
     data: { permissions: 'BonsaiAdvice.change_content' },
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [isLoggedInGuard],
   },
   },
   { path: '', redirectTo: '/treeinfo', pathMatch: 'full' },
