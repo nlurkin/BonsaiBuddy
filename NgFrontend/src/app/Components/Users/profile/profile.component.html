@@ -7,6 +7,7 @@
     <p>Country: {{ (profile?.country | country)?.countryNameEn }}</p>
     <p>
       <a [routerLink]="'./update'">Update profile</a
+      ><a [routerLink]="'./password'">Change password</a>
     </p>
   </ng-container>
   <ng-container *ngIf="!profile">

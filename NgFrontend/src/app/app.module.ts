@@ -23,13 +23,14 @@ import { CustomInputComponent } from './Components/Generic/text-input/custom-inp
 import { MenuComponent } from './Components/Menu/menu/menu.component';
 import { TreeInfoComponent } from './Components/TreeInfo/tree-info/tree-info.component';
 import { AuthenticationComponent } from './Components/Users/authentication/authentication.component';
+import { PasswordFormComponent } from './Components/Users/password-form/password-form.component';
+import { ProfileFormComponent } from './Components/Users/profile-form/profile-form.component';
 import { ProfileComponent } from './Components/Users/profile/profile.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CountryPipe } from './country.pipe';
 import { ErrorInterceptor } from './error.interceptor';
 import { JwtInterceptor } from './jwt.interceptor';
-import { ProfileFormComponent } from './Components/Users/profile-form/profile-form.component';
-import { CountryPipe } from './country.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { CountryPipe } from './country.pipe';
     ProfileComponent,
     ProfileFormComponent,
     CountryPipe,
+    PasswordFormComponent,
   ],
   imports: [
     BrowserModule,

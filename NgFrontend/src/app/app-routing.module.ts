@@ -17,6 +17,7 @@ import {
 } from './has-permissions.guard';
 import { ProfileComponent } from './Components/Users/profile/profile.component';
 import { ProfileFormComponent } from './Components/Users/profile-form/profile-form.component';
+import { PasswordFormComponent } from './Components/Users/password-form/password-form.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -86,6 +87,11 @@ const routes: Routes = [
   {
     path: 'profile/update',
     component: ProfileFormComponent,
+    canActivate: [isLoggedInGuard],
+  },
+  {
+    path: 'profile/password',
+    component: PasswordFormComponent,
     canActivate: [isLoggedInGuard],
   },
   {
