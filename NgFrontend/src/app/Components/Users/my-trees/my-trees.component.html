@@ -1,0 +1,33 @@
+<h2>My trees</h2>
+<div *ngLet="resolvedTrees$ | async as resolvedTrees">
+  <ul *ngIf="(resolvedTrees?.length ?? 0) > 0">
+    <li *ngFor="let tree of resolvedTrees">
+      {{ tree.tree?.display_name }} with objective
+      {{ tree.objective?.display_name }}
+    </li>
+  </ul>
+  <p *ngIf="(resolvedTrees?.length ?? 0) == 0">No TreeInfo are available.</p>
+</div>
+
+<div>
+  <h3 class="mt-5">Add a tree</h3>
+  <form [formGroup]="form" class="flex flex-row" (ngSubmit)="onSubmit()">
+    <app-custom-input
+      [formName]="'tree'"
+      [type]="InputType.SELECT"
+      [options]="(treeOptions$ | async) ?? []"
+      [placeholder]="'Select a tree'"
+      class="col-md-3"
+    ></app-custom-input>
+    <app-custom-input
+      [formName]="'objective'"
+      [type]="InputType.SELECT"
+      [options]="(objectiveOptions$ | async) ?? []"
+      [placeholder]="'Select an objective'"
+      class="col-md-3"
+    ></app-custom-input>
+    <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
+      Add to collection
+    </button>
+  </form>
+</div>

@@ -18,6 +18,7 @@ import {
 import { ProfileComponent } from './Components/Users/profile/profile.component';
 import { ProfileFormComponent } from './Components/Users/profile-form/profile-form.component';
 import { PasswordFormComponent } from './Components/Users/password-form/password-form.component';
+import { MyTreesComponent } from './Components/Users/my-trees/my-trees.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -92,6 +93,11 @@ const routes: Routes = [
   {
     path: 'profile/password',
     component: PasswordFormComponent,
+    canActivate: [isLoggedInGuard],
+  },
+  {
+    path: 'profile/mytrees',
+    component: MyTreesComponent,
     canActivate: [isLoggedInGuard],
   },
   {

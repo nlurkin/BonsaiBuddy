@@ -48,11 +48,11 @@ export class MenuComponent {
       routerLink: '/profile',
       requireLogin: true,
     },
-    // {
-    //   label: 'My Trees',
-    //   routerLink: '/mytrees',
-    //   requireLogin: true,
-    // },
+    {
+      label: 'My Trees',
+      routerLink: '/profile/mytrees',
+      requireLogin: true,
+    },
     {
       label: 'Admin',
       routerLink: '/admin',

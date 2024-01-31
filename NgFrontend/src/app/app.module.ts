@@ -31,6 +31,7 @@ import { AppComponent } from './app.component';
 import { CountryPipe } from './country.pipe';
 import { ErrorInterceptor } from './error.interceptor';
 import { JwtInterceptor } from './jwt.interceptor';
+import { MyTreesComponent } from './Components/Users/my-trees/my-trees.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { JwtInterceptor } from './jwt.interceptor';
     ProfileFormComponent,
     CountryPipe,
     PasswordFormComponent,
+    MyTreesComponent,
   ],
   imports: [
     BrowserModule,
