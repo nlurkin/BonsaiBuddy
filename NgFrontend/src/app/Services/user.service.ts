@@ -85,6 +85,24 @@ export class UserService {
     );
   }
 
+  public addTreeToCurrentUserProfile(
+    treeReference: string,
+    objective: string
+  ): Observable<Profile> {
+    return this.userProfiles$.pipe(
+      filterDefined(),
+      take(1),
+      switchMap((user) =>
+        this.userApi.usersProfilePartialUpdate(user.username, {
+          my_trees: [
+            ...user.my_trees,
+            { oid: bsonIdNull, treeReference, objective },
+          ],
+        })
+      )
+    );
+  }
+
   public checkPassword(password: string): Observable<PasswordCheckResponse> {
     return this.userApi.userProfileCheckPasswordValidity({ password });
   }
