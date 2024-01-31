@@ -30,9 +30,10 @@ class TechniqueMapperSerializer(serializers.EmbeddedDocumentSerializer):
 
 
 class TreeInfoSerializer(serializers.DocumentSerializer):
+    id = ObjectIdFieldSerializer()
     techniques = TechniqueMapperSerializer(TechniqueMapper, many=True)
 
     class Meta:
         model = TreeInfo
-        fields = ['name', 'display_name', 'latin_name', 'description', 'placement', 'watering',
+        fields = ['id', 'name', 'display_name', 'latin_name', 'description', 'placement', 'watering',
                   'fertilizing', 'pruning_wiring', 'repotting', 'propagation', 'pests', 'published', 'techniques']

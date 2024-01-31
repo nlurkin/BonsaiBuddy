@@ -1,9 +1,11 @@
 import bcrypt
-from BonsaiBuddy.serializers import ObjectIdFieldSerializer
-from .models import TreeCollection, User, UserProfile
+from django.contrib.auth import password_validation
 from rest_framework import serializers as rest_serializers
 from rest_framework_mongoengine import serializers
-from django.contrib.auth import password_validation
+
+from BonsaiBuddy.serializers import ObjectIdFieldSerializer
+
+from .models import TreeCollection, User, UserProfile
 
 
 class UserSerializer(rest_serializers.ModelSerializer):
@@ -36,6 +38,22 @@ class ProfileSerializer(serializers.DocumentSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+        my_tree_data = validated_data.pop('my_trees')
+
+        if my_tree_data is not None:
+            for tree_data in my_tree_data:
+                tree = instance.my_trees.filter(oid=tree_data['oid']).first()
+                if tree:
+                    # Update existing tree
+                    TreeCollectionSerializer().update(tree, tree_data)
+                else:
+                    # Create new tree and add it to instance.my_trees
+                    new_tree = TreeCollectionSerializer().create(tree_data)
+                    instance.my_trees.append(new_tree)
+
+        return super().update(instance, validated_data)
 
 
 class ChangePasswordSerializer(serializers.DocumentSerializer):
