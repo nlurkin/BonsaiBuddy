@@ -21,13 +21,24 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error.status === 401) {
           // Do not intercept authentication errors here. Leave it to JWT
         } else {
-          const description = error?.error?.description
-            ? error.error.description
-            : 'Unknown error';
-          this.errorService.provideError({ code: error.status, description });
+          const description = this.extractStandardError(error.error);
+          this.errorService.provideError({
+            code: error.status,
+            description: description ?? 'Unknown error',
+          });
         }
         return throwError(() => error); // Forward error to the next interceptor
       })
     );
+  }
+
+  private extractStandardError(error: any): string | null {
+    const errorClass = Object.values(error)[0] as Object;
+    const maybeDescription = Object.entries(errorClass)
+      .map(([key, value]: [string, any]) =>
+        key === 'description' ? value : null
+      )
+      .filter((x) => x !== null);
+    return maybeDescription.length > 0 ? maybeDescription[0] : null;
   }
 }
