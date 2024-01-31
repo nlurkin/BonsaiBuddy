@@ -9,6 +9,15 @@
       [id]="'id_' + formName"
     />
   </ng-template>
+  <ng-template #passwordType>
+    <input
+      [type]="'password'"
+      [formControl]="control"
+      class="form-control"
+      [placeholder]="placeholder"
+      [id]="'id_' + formName"
+    />
+  </ng-template>
 
   <ng-template #selectType>
     <select
@@ -58,25 +67,31 @@
   </ng-template>
 
   <!-- Selection of the template -->
-  <ng-template #option4>
-    <ng-container *ngIf="type === InputType.MULTISELECT; else textType">
+  <ng-template #optionPassword>
+    <ng-container *ngIf="type === InputType.PASSWORD; else textType">
+      <ng-container *ngTemplateOutlet="passwordType"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #optionMultiSelect>
+    <ng-container *ngIf="type === InputType.MULTISELECT; else optionPassword">
       <ng-container *ngTemplateOutlet="multiselectType"></ng-container>
     </ng-container>
   </ng-template>
 
-  <ng-template #option3>
-    <ng-container *ngIf="type === InputType.CHECKBOX; else option4">
+  <ng-template #optionCheckBox>
+    <ng-container *ngIf="type === InputType.CHECKBOX; else optionMultiSelect">
       <ng-container *ngTemplateOutlet="checkBoxType"></ng-container>
     </ng-container>
   </ng-template>
 
-  <ng-template #option2>
-    <ng-container *ngIf="type === InputType.TEXTAREA; else option3">
+  <ng-template #optionTextArea>
+    <ng-container *ngIf="type === InputType.TEXTAREA; else optionCheckBox">
       <ng-container *ngTemplateOutlet="textAreaType"></ng-container>
     </ng-container>
   </ng-template>
 
-  <ng-container *ngIf="type === InputType.SELECT; else option2">
+  <ng-container *ngIf="type === InputType.SELECT; else optionTextArea">
     <ng-container *ngTemplateOutlet="selectType"></ng-container>
   </ng-container>
 

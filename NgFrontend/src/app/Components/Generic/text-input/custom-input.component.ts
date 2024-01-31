@@ -3,6 +3,7 @@ import { FormControl, FormGroupDirective, Validators } from '@angular/forms';
 
 export enum InputType {
   TEXT = 'text',
+  PASSWORD = 'password',
   NUMBER = 'number',
   SELECT = 'select',
   TEXTAREA = 'textarea',
