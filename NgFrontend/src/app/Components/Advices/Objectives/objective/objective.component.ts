@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, map, switchMap } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
 import { UserService } from 'src/app/Services/user.service';
-import { filterNullish } from 'src/app/utils';
+import { filterNullish } from 'src/app/rxjs-util';
 import { BonsaiObjective } from 'swagger-client';
 
 @Component({
