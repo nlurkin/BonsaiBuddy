@@ -19,12 +19,18 @@ import { ProfileComponent } from './Components/Users/profile/profile.component';
 import { ProfileFormComponent } from './Components/Users/profile-form/profile-form.component';
 import { PasswordFormComponent } from './Components/Users/password-form/password-form.component';
 import { MyTreesComponent } from './Components/Users/my-trees/my-trees.component';
+import { TreeDetailComponent } from './Components/TreeInfo/tree-detail/tree-detail.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
   {
     path: 'treeinfo',
     component: TreeInfoComponent,
+    title: 'BonsaiBuddy - Tree Information',
+  },
+  {
+    path: 'treeinfo/:id',
+    component: TreeDetailComponent,
     title: 'BonsaiBuddy - Tree Information',
   },
   {

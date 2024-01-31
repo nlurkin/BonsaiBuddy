@@ -3,7 +3,7 @@
     <li *ngFor="let treeInfo of treeInfos">
       <a
         [ngClass]="{ unpublished: !treeInfo.published }"
-        [routerLink]="['treeinfo', treeInfo.name]"
+        [routerLink]="treeInfo.name"
         >{{ treeInfo.display_name }}</a
       >
     </li>

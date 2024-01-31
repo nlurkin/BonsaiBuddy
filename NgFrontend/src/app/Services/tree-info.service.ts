@@ -11,4 +11,8 @@ export class TreeInfoService {
   getAllTreeInfo(): Observable<TreeInfo[]> {
     return this.treeInfoService.treesList();
   }
+
+  getTreeInfo(id: string): Observable<TreeInfo> {
+    return this.treeInfoService.treesRetrieve(id);
+  }
 }

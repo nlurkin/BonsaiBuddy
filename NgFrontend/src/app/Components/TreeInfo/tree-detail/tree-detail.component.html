@@ -1,0 +1,39 @@
+<div *ngLet="tree$ | async as tree_info">
+  <h1>{{ tree_info?.display_name }}</h1>
+  {{ tree_info?.latin_name }}
+  <p>{{ tree_info?.description }}</p>
+
+  <p *ngIf="(tree_info?.placement?.length ?? 0) > 0">
+    <strong>Placement: </strong>
+  </p>
+  <markdown [data]="tree_info?.placement"></markdown>
+
+  <p *ngIf="(tree_info?.watering?.length ?? 0) > 0">
+    <strong>Watering: </strong>
+  </p>
+  <markdown [data]="tree_info?.watering"></markdown>
+
+  <p *ngIf="(tree_info?.fertilizing?.length ?? 0) > 0">
+    <strong>Fertilizing: </strong>
+  </p>
+  <markdown [data]="tree_info?.fertilizing"></markdown>
+  
+  <p *ngIf="(tree_info?.pruning_wiring?.length ?? 0) > 0">
+    <strong>Pruning and wiring: </strong>
+  </p>
+  <markdown [data]="tree_info?.pruning_wiring"></markdown>
+  
+  <p *ngIf="(tree_info?.repotting?.length ?? 0) > 0">
+    <strong>Repotting: </strong>
+  </p>
+  <markdown [data]="tree_info?.repotting"></markdown>
+  
+  <p *ngIf="(tree_info?.propagation?.length ?? 0) > 0">
+    <strong>Propagation: </strong>
+  </p>
+  <markdown [data]="tree_info?.propagation"></markdown>
+  
+  <p *ngIf="(tree_info?.pests?.length ?? 0) > 0">
+    <strong>Pests: </strong>
+  </p>
+</div>
