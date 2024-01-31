@@ -107,4 +107,6 @@ class TreeInfoViewSet(viewsets.ModelViewSet):
         IsAuthenticatedOrReadOnly, TreeInfoPermissionModelAPI]
 
     def get_queryset(self):
-        return TreeInfo.objects.all()
+        show_unpublished = user_has_any_perms(
+            self.request.user, ["TreeInfo.change_content"])
+        return TreeInfo.get_all(not show_unpublished).order_by("display_name")
