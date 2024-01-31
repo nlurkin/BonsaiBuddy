@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, filter, map, takeUntil } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { ErrorService } from './Services/error.service';
+import { ToastingService } from './Services/toasting.service';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +14,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private messageService: MessageService,
-    private errorService: ErrorService
+    private toastingService: ToastingService
   ) {}
 
   ngOnInit(): void {
-    this.errorService
+    this.toastingService
       .getLastError()
       .pipe(takeUntil(this.destroy$))
       .subscribe((error) => {
@@ -26,6 +26,28 @@ export class AppComponent implements OnInit, OnDestroy {
           severity: 'error',
           summary: `Error ${error.code}`,
           detail: error.description,
+          key: 'app-message',
+        });
+      });
+    this.toastingService
+      .getLastSuccess()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((message) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: `Success`,
+          detail: message,
+          key: 'app-message',
+        });
+      });
+    this.toastingService
+      .getLastMessage()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((message) => {
+        this.messageService.add({
+          severity: 'info',
+          summary: `Info`,
+          detail: message,
           key: 'app-message',
         });
       });

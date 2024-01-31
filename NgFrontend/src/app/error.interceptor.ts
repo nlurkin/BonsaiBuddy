@@ -6,11 +6,11 @@ import {
   HttpInterceptor,
 } from '@angular/common/http';
 import { Observable, catchError, of, throwError } from 'rxjs';
-import { ErrorService } from './Services/error.service';
+import { ToastingService } from './Services/toasting.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private errorService: ErrorService) {}
+  constructor(private toastingService: ToastingService) {}
 
   intercept(
     request: HttpRequest<unknown>,
@@ -22,7 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           // Do not intercept authentication errors here. Leave it to JWT
         } else {
           const description = this.extractStandardError(error.error);
-          this.errorService.provideError({
+          this.toastingService.provideError({
             code: error.status,
             description: description ?? 'Unknown error',
           });
