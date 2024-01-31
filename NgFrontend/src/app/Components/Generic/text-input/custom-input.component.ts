@@ -26,6 +26,7 @@ export class CustomInputComponent {
   @Input() invalid: boolean = false;
 
   public InputType = InputType;
+  public showPassword: boolean = false;
 
   control!: FormControl;
 
@@ -48,5 +49,9 @@ export class CustomInputComponent {
 
   public isRequired(): boolean {
     return this.control?.hasValidator(Validators.required) ?? false;
+  }
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
   }
 }

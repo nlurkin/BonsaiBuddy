@@ -1,4 +1,7 @@
-<div [ngClass]="{ 'form-floating': type !== InputType.CHECKBOX }">
+<div
+  [ngClass]="{ 'form-floating': type !== InputType.CHECKBOX }"
+  class="input-group"
+>
   <!-- Input types templates -->
   <ng-template #textType>
     <input
@@ -12,12 +15,24 @@
 
   <ng-template #passwordType>
     <input
-      [type]="'password'"
+      [type]="showPassword ? 'text' : 'password'"
       [formControl]="control"
       class="form-control"
       [placeholder]="placeholder"
       [id]="'id_' + formName"
     />
+    <div class="input-group-append">
+      <span class="input-group-text eye-icon">
+        <i
+          class="fa"
+          [ngClass]="{
+            'fa-eye-slash': !showPassword,
+            'fa-eye': showPassword
+          }"
+          (click)="toggleShowPassword()"
+        ></i>
+      </span>
+    </div>
   </ng-template>
 
   <ng-template #selectType>
