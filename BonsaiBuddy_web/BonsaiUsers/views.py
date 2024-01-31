@@ -1,23 +1,29 @@
-from rest_framework_mongoengine import viewsets
-
-from .models import OwnProfilePermission, User
-from BonsaiAdvice.models import get_current_period
-from BonsaiBuddy.views import CreateUpdateView
-from django.contrib.auth import authenticate, login, views
+from django.contrib.auth import authenticate, login, password_validation, views
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View, generic
-from .serializers import ProfileSerializer, UserSerializer
+from drf_spectacular.utils import extend_schema, inline_serializer
+from mongoengine import DoesNotExist
+from rest_framework import generics, serializers
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_mongoengine import viewsets
+
+from BonsaiAdvice.models import get_current_period
+from BonsaiBuddy.views import CreateUpdateView
 from utils import get_object_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import (CustomUserCreationForm, ModifyPasswordForm, MyTreeForm,
                     UpdateUserProfileForm)
 from .menu import BonsaiUsersMenuMixin
-from .models import TreeCollection, UserProfile
-from mongoengine import DoesNotExist
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from .models import OwnProfilePermission, TreeCollection, User, UserProfile
+from .serializers import (ChangePasswordSerializer, ProfileSerializer,
+                          UserSerializer)
 
 
 class DetailView(BonsaiUsersMenuMixin, LoginRequiredMixin, View):
@@ -166,3 +172,24 @@ class ProfileViewSet(viewsets.ModelViewSet):
             return UserProfile.objects.all()
         else:
             return UserProfile.objects.filter(username=user.username)
+
+
+class CheckPasswordValidityView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    @extend_schema(
+        operation_id="userProfileCheckPasswordValidity",
+        request=inline_serializer(name='PasswordCheckQuery', fields={
+                                  'password': serializers.CharField()}, required=True),
+        responses={200: inline_serializer(name="PasswordCheckResponse", fields={'status': serializers.BooleanField(),
+                                                                                'message': serializers.ListField(child=serializers.CharField())})}
+    )
+    def post(self, request: Request):
+        password = request.data.get('password')
+        try:
+            password_validation.validate_password(password, None)
+        except ValidationError as e:
+            return Response({'status': False, 'message': [_.code for _ in e.error_list]})
+
+        return Response({'status': True, 'message': 'Password is valid'})

@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { Observable, map, of, switchMap } from 'rxjs';
-import { PatchedProfile, Profile, User, UsersAPI } from 'swagger-client';
+import {
+  PasswordCheckResponse,
+  PatchedProfile,
+  Profile,
+  User,
+  UsersAPI,
+} from 'swagger-client';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +55,10 @@ export class UserService {
     profile: PatchedProfile
   ): Observable<Profile> {
     return this.userApi.usersProfilePartialUpdate(username, profile);
+  }
+
+  public checkPassword(password: string): Observable<PasswordCheckResponse> {
+    return this.userApi.userProfileCheckPasswordValidity({ password });
   }
 
   constructor(

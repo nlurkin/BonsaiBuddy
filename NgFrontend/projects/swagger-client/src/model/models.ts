@@ -2,6 +2,8 @@ export * from './bonsaiObjective';
 export * from './bonsaiStage';
 export * from './bonsaiTechnique';
 export * from './lazyReferenceField';
+export * from './passwordCheckQuery';
+export * from './passwordCheckResponse';
 export * from './patchedBonsaiObjective';
 export * from './patchedBonsaiStage';
 export * from './patchedBonsaiTechnique';

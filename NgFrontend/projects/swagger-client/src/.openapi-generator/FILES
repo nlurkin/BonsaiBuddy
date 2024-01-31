@@ -16,6 +16,8 @@ model/bonsaiStage.ts
 model/bonsaiTechnique.ts
 model/lazyReferenceField.ts
 model/models.ts
+model/passwordCheckQuery.ts
+model/passwordCheckResponse.ts
 model/patchedBonsaiObjective.ts
 model/patchedBonsaiStage.ts
 model/patchedBonsaiTechnique.ts

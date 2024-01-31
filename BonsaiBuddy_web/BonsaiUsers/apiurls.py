@@ -7,4 +7,5 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet, basename='users')
 router.register(r'users/profile', views.ProfileViewSet, basename='profile')
 
-urlpatterns = [path('', include(router.urls))]
+urlpatterns = [path('', include(router.urls)),
+               path('users/profile/passwordcheck', views.CheckPasswordValidityView.as_view(), name='check_password')]
