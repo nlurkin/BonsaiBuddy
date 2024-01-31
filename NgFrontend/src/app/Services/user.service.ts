@@ -18,11 +18,14 @@ import {
   UsersAPI,
 } from 'swagger-client';
 import { filterDefined } from '../rxjs-util';
+import { bsonIdNull } from '../constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private refresh$ = new BehaviorSubject<void>(undefined);
+
   private readonly user$ = this.authService
     .getLoggedInUser()
     .pipe(
@@ -30,8 +33,11 @@ export class UserService {
         user ? this.userApi.usersRetrieve(user.username) : of(undefined)
       )
     );
-  private readonly userProfiles$ = this.user$.pipe(
-    switchMap((user) =>
+  private readonly userProfiles$ = combineLatest([
+    this.user$,
+    this.refresh$,
+  ]).pipe(
+    switchMap(([user]) =>
       user && !user.is_superuser
         ? this.userApi.usersProfileRetrieve(user.username)
         : of(undefined)
@@ -94,6 +100,10 @@ export class UserService {
       password: newPassword,
       password2: newPasswordConfirm,
     });
+  }
+
+  public requestRefresh() {
+    this.refresh$.next(undefined);
   }
 
   constructor(
