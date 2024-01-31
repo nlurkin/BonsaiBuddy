@@ -1,5 +1,6 @@
 .floating-label {
-  left: -7px;
+  left: -6px;
+  z-index: 5;
 }
 
 .description-lg {
@@ -7,5 +8,5 @@
 }
 
 .invalid {
-  color: red;
+  color: red !important;
 }

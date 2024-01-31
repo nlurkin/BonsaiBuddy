@@ -23,6 +23,7 @@ export class CustomInputComponent {
   @Input() placeholder!: string;
   @Input() type: InputType = InputType.TEXT;
   @Input() options: SelectOption[] = [];
+  @Input() invalid: boolean = false;
 
   public InputType = InputType;
 
@@ -37,7 +38,10 @@ export class CustomInputComponent {
   }
 
   public validityCheck(): string {
-    if (this.control?.invalid && (this.control.dirty || this.control.touched))
+    if (
+      (this.control?.invalid || this.invalid) &&
+      (this.control.dirty || this.control.touched)
+    )
       return 'invalid';
     else return '';
   }
