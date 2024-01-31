@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
-import { Observable, map, of, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  combineLatest,
+  map,
+  of,
+  switchMap,
+  take,
+} from 'rxjs';
 import {
   ChangePassword,
   PasswordCheckResponse,
@@ -9,6 +17,7 @@ import {
   User,
   UsersAPI,
 } from 'swagger-client';
+import { filterDefined } from '../rxjs-util';
 
 @Injectable({
   providedIn: 'root',
@@ -51,11 +60,23 @@ export class UserService {
     );
   }
 
-  public updateCurrentUserProfile(
+  public updateUserProfile(
     username: string,
     profile: PatchedProfile
   ): Observable<Profile> {
     return this.userApi.usersProfilePartialUpdate(username, profile);
+  }
+
+  public updateCurrentUserProfile(
+    profile: PatchedProfile
+  ): Observable<Profile> {
+    return this.user$.pipe(
+      filterDefined(),
+      take(1),
+      switchMap((user) =>
+        this.userApi.usersProfilePartialUpdate(user.username, profile)
+      )
+    );
   }
 
   public checkPassword(password: string): Observable<PasswordCheckResponse> {

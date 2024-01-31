@@ -48,7 +48,7 @@ export class ProfileFormComponent {
     if (!updatedProfile) return;
 
     this.userService
-      .updateCurrentUserProfile(this.currentProfile.username, updatedProfile)
+      .updateUserProfile(this.currentProfile.username, updatedProfile)
       .pipe(take(1))
       .subscribe(() => {});
   }
