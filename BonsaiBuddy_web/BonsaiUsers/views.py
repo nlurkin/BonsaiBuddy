@@ -174,6 +174,22 @@ class ProfileViewSet(viewsets.ModelViewSet):
             return UserProfile.objects.filter(username=user.username)
 
 
+class ChangePasswordView(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+    lookup_field = 'username'
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the users accessible to this user.
+        """
+        user = self.request.user
+        if user.is_superuser:
+            return UserProfile.objects.all()
+        else:
+            return UserProfile.objects.filter(username=user.username)
+
+
 class CheckPasswordValidityView(APIView):
     authentication_classes = []
     permission_classes = []

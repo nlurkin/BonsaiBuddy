@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { Observable, map, of, switchMap } from 'rxjs';
 import {
+  ChangePassword,
   PasswordCheckResponse,
   PatchedProfile,
   Profile,
@@ -59,6 +60,19 @@ export class UserService {
 
   public checkPassword(password: string): Observable<PasswordCheckResponse> {
     return this.userApi.userProfileCheckPasswordValidity({ password });
+  }
+
+  public changePassword(
+    username: string,
+    oldPassword: string,
+    newPassword: string,
+    newPasswordConfirm: string
+  ): Observable<ChangePassword> {
+    return this.userApi.usersProfilePasswordUpdate(username, {
+      old_password: oldPassword,
+      password: newPassword,
+      password2: newPasswordConfirm,
+    });
   }
 
   constructor(

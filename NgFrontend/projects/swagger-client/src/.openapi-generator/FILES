@@ -14,6 +14,7 @@ index.ts
 model/bonsaiObjective.ts
 model/bonsaiStage.ts
 model/bonsaiTechnique.ts
+model/changePassword.ts
 model/lazyReferenceField.ts
 model/models.ts
 model/passwordCheckQuery.ts
@@ -21,6 +22,7 @@ model/passwordCheckResponse.ts
 model/patchedBonsaiObjective.ts
 model/patchedBonsaiStage.ts
 model/patchedBonsaiTechnique.ts
+model/patchedChangePassword.ts
 model/patchedProfile.ts
 model/patchedTreeInfo.ts
 model/periodEnum.ts
