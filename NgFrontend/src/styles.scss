@@ -31,3 +31,14 @@ p-multiselect > .form-control {
   color: rgba(var(--bs-body-color-rgb), 0.65);
   transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
+
+.inline-select {
+  width: 200px;
+  span {
+    padding: 0px 0px 0px 10px;
+  }
+}
+
+.inline-select-panel > div > ul {
+  padding: 0px;
+}

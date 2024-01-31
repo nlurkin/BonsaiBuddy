@@ -10,6 +10,7 @@ import {
   InputType,
   SelectOption,
 } from '../../Generic/text-input/custom-input.component';
+import { DropdownChangeEvent } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-my-trees',
@@ -64,6 +65,7 @@ export class MyTreesComponent {
         );
         console.log(allTrees);
         return {
+          oid: profileTree.oid,
           tree,
           objective,
         };
@@ -95,4 +97,10 @@ export class MyTreesComponent {
     }
   }
 
+  updateTreeObjective(treeId: string, event: DropdownChangeEvent) {
+    const newObjective = event.value as string;
+    this.userService
+      .updateTreeOfCurrentUserProfile(treeId, newObjective)
+      .subscribe(() => this.userService.requestRefresh());
+  }
 }

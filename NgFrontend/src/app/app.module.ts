@@ -11,6 +11,7 @@ import { DividerModule } from 'primeng/divider';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SidebarModule } from 'primeng/sidebar';
 import { ToastModule } from 'primeng/toast';
+import { DropdownModule } from 'primeng/dropdown';
 import { AdminComponent } from './Components/Admin/admin/admin.component';
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
 import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
@@ -68,6 +69,7 @@ import { MyTreesComponent } from './Components/Users/my-trees/my-trees.component
     ToastModule,
     MultiSelectModule,
     MarkdownModule.forRoot(),
+    DropdownModule,
   ],
   providers: [
     {

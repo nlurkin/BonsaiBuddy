@@ -3,7 +3,13 @@
   <ul *ngIf="(resolvedTrees?.length ?? 0) > 0">
     <li *ngFor="let tree of resolvedTrees">
       {{ tree.tree?.display_name }} with objective
-      {{ tree.objective?.display_name }}
+      <p-dropdown
+        [options]="(objectiveOptions$ | async) ?? []"
+        [ngModel]="tree.objective?.id"
+        [styleClass]="'inline-select'"
+        [panelStyleClass]="'inline-select-panel'"
+        (onChange)="updateTreeObjective(tree.oid, $event)"
+      ></p-dropdown>
     </li>
   </ul>
   <p *ngIf="(resolvedTrees?.length ?? 0) == 0">No TreeInfo are available.</p>
