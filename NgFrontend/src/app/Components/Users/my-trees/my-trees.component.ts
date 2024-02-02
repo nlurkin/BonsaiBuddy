@@ -63,7 +63,6 @@ export class MyTreesComponent {
         const objective = objectives.find(
           (o) => o.id === profileTree.objective
         );
-        console.log(allTrees);
         return {
           oid: profileTree.oid,
           tree,
