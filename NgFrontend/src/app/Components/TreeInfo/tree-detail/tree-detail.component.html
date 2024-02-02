@@ -17,23 +17,25 @@
     <strong>Fertilizing: </strong>
   </p>
   <markdown [data]="tree_info?.fertilizing"></markdown>
-  
+
   <p *ngIf="(tree_info?.pruning_wiring?.length ?? 0) > 0">
     <strong>Pruning and wiring: </strong>
   </p>
   <markdown [data]="tree_info?.pruning_wiring"></markdown>
-  
+
   <p *ngIf="(tree_info?.repotting?.length ?? 0) > 0">
     <strong>Repotting: </strong>
   </p>
   <markdown [data]="tree_info?.repotting"></markdown>
-  
+
   <p *ngIf="(tree_info?.propagation?.length ?? 0) > 0">
     <strong>Propagation: </strong>
   </p>
   <markdown [data]="tree_info?.propagation"></markdown>
-  
+
   <p *ngIf="(tree_info?.pests?.length ?? 0) > 0">
     <strong>Pests: </strong>
   </p>
+  <markdown [data]="tree_info?.pests"></markdown>
+
 </div>
