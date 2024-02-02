@@ -9,7 +9,7 @@ ng build swagger-client
 sleep .5
 
 # install the freshly built lib
-npm install $(pwd)/dist/swagger-client
+npm install -f ./dist/swagger-client
 
 # run prettier to retablish lib syntax
-npx pretty-quick
+npx pretty-quick --pattern "projects/swagger-client/src/**/*.ts"
