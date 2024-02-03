@@ -89,7 +89,6 @@ export class TreeDetailComponent {
     })
   );
 
-
   constructor(
     public route: ActivatedRoute,
     public treeService: TreeInfoService,

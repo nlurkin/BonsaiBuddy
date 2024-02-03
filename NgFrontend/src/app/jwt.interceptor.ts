@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
   Observable,
+  OperatorFunction,
   catchError,
   combineLatest,
   filter,
@@ -16,11 +17,13 @@ import {
   map,
   switchMap,
   take,
-  tap,
   throwError,
   timer,
 } from 'rxjs';
-import { AuthenticationService } from './Services/authentication.service';
+import {
+  AuthenticationService,
+  LoggedInUser,
+} from './Services/authentication.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -28,12 +31,46 @@ export class JwtInterceptor implements HttpInterceptor {
 
   constructor(private authService: AuthenticationService) {}
 
-  private updateRequestWithToken(request: HttpRequest<any>, token: string) {
-    return request.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  private updateRequestWithTokenIfNeeded(
+    request: HttpRequest<any>,
+    token: string | undefined
+  ): HttpRequest<any> {
+    const isApiUrl = request.url.includes('/api/');
+    const isTokenUrl = request.url.includes('api/token');
+    return token && isApiUrl && !isTokenUrl
+      ? request.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      : request;
+  }
+
+  private holdRequestIfNeeded(
+    request: HttpRequest<any>
+  ): OperatorFunction<
+    [boolean, LoggedInUser | undefined],
+    [HttpRequest<any>, LoggedInUser | undefined]
+  > {
+    const isTokenUrl = request.url.includes('api/token');
+    const isApiUrl = request.url.includes('/api/');
+    return (
+      from: Observable<[boolean, LoggedInUser | undefined]>
+    ): Observable<[HttpRequest<any>, LoggedInUser | undefined]> => {
+      return from.pipe(
+        filter(
+          ([refreshing, user]) =>
+            // We must block for API call to non-refresh token URLs, if a refresh is ongoing
+            // In any other case, we don't block
+            !isApiUrl || !refreshing || isTokenUrl || !user
+        ),
+        take(1),
+        map(([refreshing, user]) => [
+          this.updateRequestWithTokenIfNeeded(request, user?.token),
+          user,
+        ])
+      );
+    };
   }
 
   intercept(
@@ -42,21 +79,14 @@ export class JwtInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     const isTokenUrl = request.url.includes('api/token');
     const isApiUrl = request.url.includes('/api/');
+
     return combineLatest([
       this.isRefreshing,
       this.authService.getLoggedInUser(),
     ]).pipe(
-      filter(([refreshing, user]) => {
-        // We must block for API call to non-refresh token URLs, if a refresh is ongoing
-        // In any other case, we don't block
-        return !isApiUrl || !refreshing || isTokenUrl || !user;
-      }),
-      take(1),
-      switchMap(([_, user]) => {
+      this.holdRequestIfNeeded(request),
+      switchMap(([request, user]) => {
         const isLoggedIn = !!user;
-        if (isLoggedIn && isApiUrl && !isTokenUrl) {
-          request = this.updateRequestWithToken(request, user.token);
-        }
 
         return next.handle(request).pipe(
           catchError((error) => {
@@ -89,13 +119,8 @@ export class JwtInterceptor implements HttpInterceptor {
             this.isRefreshing,
             this.authService.getLoggedInUser(),
           ]).pipe(
-            filter(([isRefreshing, _]) => {
-              return !isRefreshing;
-            }),
-            take(1),
-            map(([_, user]) => {
-              return this.updateRequestWithToken(request, user?.token ?? '');
-            })
+            this.holdRequestIfNeeded(request),
+            map(([request]) => request)
           )
     ).pipe(switchMap((request) => next.handle(request)));
   }
@@ -111,7 +136,7 @@ export class JwtInterceptor implements HttpInterceptor {
       map((token) => {
         this.isRefreshing.next(false);
 
-        request = this.updateRequestWithToken(request, token ?? '');
+        request = this.updateRequestWithTokenIfNeeded(request, token);
 
         return request;
       }),
