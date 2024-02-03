@@ -78,12 +78,12 @@ export class AuthenticationService {
     return oldUserValue
       ? this.auth.tokenRefreshCreate({ refresh: token, access: '' }).pipe(
           take(1),
-          switchMap((response) => {
+          map((response) => {
             this.saveUserData({
               ...oldUserValue,
               token: response.access,
             });
-            return of(response.access);
+            return response.access;
           })
         )
       : of(undefined);

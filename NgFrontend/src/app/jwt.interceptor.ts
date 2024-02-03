@@ -6,12 +6,25 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of, switchMap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  combineLatest,
+  filter,
+  finalize,
+  map,
+  switchMap,
+  take,
+  tap,
+  throwError,
+  timer,
+} from 'rxjs';
 import { AuthenticationService } from './Services/authentication.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  private isRefreshing = false;
+  private isRefreshing = new BehaviorSubject<boolean>(false);
 
   constructor(private authService: AuthenticationService) {}
 
@@ -27,25 +40,39 @@ export class JwtInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const user = this.authService.userValue();
-    const isLoggedIn = !!user;
+    const isTokenUrl = request.url.includes('api/token');
     const isApiUrl = request.url.includes('/api/');
-    if (isLoggedIn && isApiUrl) {
-      request = this.updateRequestWithToken(request, user.token);
-    }
-
-    return next.handle(request).pipe(
-      catchError((error) => {
-        if (
-          isLoggedIn &&
-          error instanceof HttpErrorResponse &&
-          !request.url.includes('api/token') &&
-          error.status === 401
-        ) {
-          return this.handle401Error(request, next);
+    return combineLatest([
+      this.isRefreshing,
+      this.authService.getLoggedInUser(),
+    ]).pipe(
+      filter(([refreshing, user]) => {
+        // We must block for API call to non-refresh token URLs, if a refresh is ongoing
+        // In any other case, we don't block
+        return !isApiUrl || !refreshing || isTokenUrl || !user;
+      }),
+      take(1),
+      switchMap(([_, user]) => {
+        const isLoggedIn = !!user;
+        if (isLoggedIn && isApiUrl && !isTokenUrl) {
+          request = this.updateRequestWithToken(request, user.token);
         }
 
-        return throwError(() => error);
+        return next.handle(request).pipe(
+          catchError((error) => {
+            if (
+              isLoggedIn &&
+              isApiUrl &&
+              !isTokenUrl &&
+              error instanceof HttpErrorResponse &&
+              error.status === 401
+            ) {
+              return this.handle401Error(request, next);
+            }
+
+            return throwError(() => error);
+          })
+        );
       })
     );
   }
@@ -54,11 +81,22 @@ export class JwtInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const user = this.authService.userValue()!; // We made sure of that before calling the method
+    const refreshToken = this.authService.userValue()!.refreshToken; // We made sure of that before calling the method
     return (
-      !this.isRefreshing
-        ? this.submitRefreshTokenRequest(request, user.refreshToken)
-        : of(this.updateRequestWithToken(request, user.refreshToken))
+      !this.isRefreshing.value
+        ? this.submitRefreshTokenRequest(request, refreshToken)
+        : combineLatest([
+            this.isRefreshing,
+            this.authService.getLoggedInUser(),
+          ]).pipe(
+            filter(([isRefreshing, _]) => {
+              return !isRefreshing;
+            }),
+            take(1),
+            map(([_, user]) => {
+              return this.updateRequestWithToken(request, user?.token ?? '');
+            })
+          )
     ).pipe(switchMap((request) => next.handle(request)));
   }
 
@@ -66,21 +104,27 @@ export class JwtInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     refreshToken: string
   ): Observable<HttpRequest<any>> {
-    this.isRefreshing = true;
+    this.isRefreshing.next(true);
 
     return this.authService.refreshToken(refreshToken).pipe(
-      switchMap((token) => {
-        this.isRefreshing = false;
+      take(1),
+      map((token) => {
+        this.isRefreshing.next(false);
 
         request = this.updateRequestWithToken(request, token ?? '');
 
-        return of(request);
+        return request;
       }),
       catchError((err) => {
-        this.isRefreshing = false;
+        this.isRefreshing.next(false);
 
         this.authService.logOut();
         return throwError(() => err);
+      }),
+      finalize(() => {
+        // Wait a bit of time to make sure that the token refresh is completed
+        // before allowing any other request (we just lost all visibility on that)
+        timer(150).subscribe(() => this.isRefreshing.next(false));
       })
     );
   }
