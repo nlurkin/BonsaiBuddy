@@ -45,6 +45,15 @@ export class TreeDetailComponent {
     this.sortedObjectives$,
   ]).pipe(
     map(([techniqueMappers, techniqueMap, sortedObjectives]) => {
+      // The following does a three-level grouping of the techniqueMappers
+      // - First by technique category
+      // - Second by technique
+      // - Last by objective
+      // Each level consist in a list of objects sorted according to some rules:
+      //  - By sequence id then lexically (for groups with sequence id) or just lexically
+      // The object in each item of the lists contains the id/name of the group, the complete object
+      // representing the group (i.e. the BonsaiTechnique or BonsaiObjective), and the nested
+      // list group (values).
       const mapByCategory = _(techniqueMappers)
         .groupBy(
           (mapper) => techniqueMap.get(mapper.technique.id)?.category ?? ''
