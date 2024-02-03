@@ -1,3 +1,4 @@
+import { BonsaiEntity } from './Services/advice.service';
 import { CountryObject } from './types';
 
 const countryCodes = require('country-codes-list');
@@ -31,4 +32,15 @@ export function periodIdToName(periodId: string): string | undefined {
   const periodMap = new Map(periods);
   if (periodMap.has(periodId)) return periodMap.get(periodId);
   return periodId;
+}
+
+export function standardEntitySort(
+  a: BonsaiEntity | undefined,
+  b: BonsaiEntity | undefined
+) {
+  if (!a) return -1;
+  if (!b) return 1;
+  const sequenceDiff = (a.sequence ?? 99) - (b.sequence ?? 99);
+  if (sequenceDiff !== 0) return sequenceDiff;
+  else return (a.display_name ?? '').localeCompare(b.display_name ?? '');
 }
