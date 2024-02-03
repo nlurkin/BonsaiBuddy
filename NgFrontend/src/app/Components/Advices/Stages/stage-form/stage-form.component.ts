@@ -5,6 +5,7 @@ import { Observable, take } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
 import { BonsaiStage, PeriodEnum } from 'swagger-client';
 import { EntityForm, EntityType } from '../../entity-form';
+import { periodIdToName } from 'src/app/utils';
 
 @Component({
   selector: 'app-stage-form',
@@ -29,7 +30,7 @@ export class StageFormComponent extends EntityForm<BonsaiStage> {
     const stringKey = PeriodEnum[key as keyof typeof PeriodEnum];
     return {
       value: stringKey,
-      label: AdviceService.periodIdToName(stringKey) ?? '',
+      label: periodIdToName(stringKey) ?? '',
     };
   });
 

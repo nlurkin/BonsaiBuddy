@@ -34,6 +34,7 @@ import { ErrorInterceptor } from './error.interceptor';
 import { JwtInterceptor } from './jwt.interceptor';
 import { MyTreesComponent } from './Components/Users/my-trees/my-trees.component';
 import { TreeDetailComponent } from './Components/TreeInfo/tree-detail/tree-detail.component';
+import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { TreeDetailComponent } from './Components/TreeInfo/tree-detail/tree-deta
     PasswordFormComponent,
     MyTreesComponent,
     TreeDetailComponent,
+    PeriodIdToNamePipe,
   ],
   imports: [
     BrowserModule,

@@ -6,17 +6,13 @@ import { UserService } from 'src/app/Services/user.service';
 import { filterNullish } from 'src/app/rxjs-util';
 import { BonsaiStage } from 'swagger-client';
 
-type BonsaiStageWithPeriodNames = BonsaiStage & {
-  global_period_names: string[];
-};
-
 @Component({
   selector: 'app-stage',
   templateUrl: './stage.component.html',
   styleUrls: ['./stage.component.scss'],
 })
 export class StageComponent {
-  public readonly stage$: Observable<BonsaiStageWithPeriodNames | undefined> =
+  public readonly stage$: Observable<BonsaiStage | undefined> =
     this.route.paramMap.pipe(
       map((params) => params.get('id')),
       filterNullish(),
@@ -25,12 +21,7 @@ export class StageComponent {
         if (!stage) {
           return undefined;
         }
-        return {
-          ...stage,
-          global_period_names: stage.global_period.map(
-            (p) => AdviceService.periodIdToName(p) ?? p
-          ),
-        };
+        return stage;
       })
     );
 
