@@ -108,4 +108,8 @@
       </table>
     </ng-container>
   </div>
+
+  <p *ngIf="canEdit$ | async">
+    <a [routerLink]="'./update'">Update</a> -
+  </p>
 </div>

@@ -1,0 +1,126 @@
+<div class="accordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button
+        class="accordion-button"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainForm"
+        aria-expanded="true"
+        aria-controls="mainForm"
+      >
+        Tree description
+      </button>
+    </h2>
+    <div id="mainForm" class="accordion-collapse collapse show">
+      <div class="accordion-body">
+        <form [formGroup]="form" class="row g-3" (ngSubmit)="onSubmit()">
+          <app-custom-input
+            name="display_name"
+            placeholder="Tree name"
+            [formName]="'display_name'"
+            class="col-md-6"
+          ></app-custom-input>
+
+          <app-custom-input
+            name="latin_name"
+            placeholder="Latin name"
+            [formName]="'latin_name'"
+            class="col-md-6"
+          >
+          </app-custom-input>
+
+          <app-custom-input
+            name="description"
+            placeholder="Description"
+            class="col-12 description-std"
+            [formName]="'description'"
+            [type]="InputType.TEXTAREA"
+          ></app-custom-input>
+
+          <app-custom-input
+            class="col-12 description-std"
+            name="placement"
+            placeholder="Placement"
+            [formName]="'placement'"
+            [type]="InputType.TEXTAREA"
+          ></app-custom-input>
+
+          <app-custom-input
+            name="watering"
+            placeholder="Watering"
+            class="col-12 description-std"
+            [type]="InputType.TEXTAREA"
+            [formName]="'watering'"
+          ></app-custom-input>
+
+          <app-custom-input
+            name="fertilizing"
+            placeholder="Fertilizing"
+            class="col-12 description-std"
+            [type]="InputType.TEXTAREA"
+            [formName]="'fertilizing'"
+          ></app-custom-input>
+
+          <app-custom-input
+            name="pruning_wiring"
+            placeholder="Pruning wiring"
+            class="col-12 description-std"
+            [type]="InputType.TEXTAREA"
+            [formName]="'pruning_wiring'"
+          ></app-custom-input>
+
+          <app-custom-input
+            name="repotting"
+            placeholder="Repotting"
+            class="col-12 description-std"
+            [type]="InputType.TEXTAREA"
+            [formName]="'repotting'"
+          ></app-custom-input>
+
+          <app-custom-input
+            name="propagation"
+            placeholder="Propagation"
+            class="col-12 description-std"
+            [type]="InputType.TEXTAREA"
+            [formName]="'propagation'"
+          ></app-custom-input>
+
+          <app-custom-input
+            name="pests"
+            placeholder="Pests"
+            class="col-12 description-std"
+            [type]="InputType.TEXTAREA"
+            [formName]="'pests'"
+          ></app-custom-input>
+
+          <div class="form-check form-check-inline" style="width: unset">
+            <app-custom-input
+              [type]="InputType.CHECKBOX"
+              formName="published"
+              placeholder="Published"
+            ></app-custom-input>
+          </div>
+
+          <div class="form-check form-check-inline" style="width: unset">
+            <app-custom-input
+              [type]="InputType.CHECKBOX"
+              formName="delete"
+              placeholder="Delete"
+            ></app-custom-input>
+          </div>
+          <div class="col-12">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!form.valid"
+            >
+              Submit
+            </button>
+            <button class="btn btn-secondary" routerLink="..">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -34,6 +34,16 @@ const routes: Routes = [
     title: 'BonsaiBuddy - Tree Information',
   },
   {
+    path: 'treeinfo/:id/update',
+    component: TreeFormComponent,
+    title: 'BonsaiBuddy - Tree Information',
+  },
+  {
+    path: 'admin/treeinfo/create',
+    component: TreeFormComponent,
+    title: 'BonsaiBuddy - Tree Information',
+  },
+  {
     path: 'advices',
     component: AdvicesComponent,
     title: 'BonsaiBuddy - Techniques',
