@@ -14,6 +14,6 @@ export class TreeInfoComponent {
   public treeInfos$ = this.treeInfoService
     .getAllTreeInfo()
     .pipe(
-      map((treeInfos) => _.sortBy(treeInfos, (v) => _.deburr(v.latin_name)))
+      map((treeInfos) => _.sortBy(treeInfos, (v) => _.deburr(v.display_name)))
     );
 }
