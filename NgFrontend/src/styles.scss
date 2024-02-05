@@ -42,3 +42,11 @@ p-multiselect > .form-control {
 .inline-select-panel > div > ul {
   padding: 0px;
 }
+
+.description-lg textarea {
+  height: 400px !important;
+}
+
+.description-std textarea {
+  height: 100px !important;
+}
