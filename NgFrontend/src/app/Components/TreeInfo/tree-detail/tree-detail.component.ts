@@ -1,9 +1,17 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
-import { Observable, combineLatest, map, switchMap } from 'rxjs';
+import {
+  Observable,
+  combineLatest,
+  map,
+  shareReplay,
+  switchMap,
+  take,
+} from 'rxjs';
 import { AdviceService, BonsaiEntity } from 'src/app/Services/advice.service';
 import { TreeInfoService } from 'src/app/Services/tree-info.service';
+import { UserService } from 'src/app/Services/user.service';
 import { filterNullish } from 'src/app/rxjs-util';
 import { standardEntitySort } from 'src/app/utils';
 import {
@@ -19,10 +27,15 @@ import {
   styleUrls: ['./tree-detail.component.scss'],
 })
 export class TreeDetailComponent {
+  public canEdit$: Observable<boolean> =
+    this.userService.currentUserHasPermissions('BonsaiAdvice.change_content');
+
   public readonly tree$ = this.route.paramMap.pipe(
     map((params) => params.get('id')),
     filterNullish(),
-    switchMap((id) => this.treeService.getTreeInfo(id))
+    switchMap((id) => this.treeService.getTreeInfo(id)),
+    take(1),
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   private techniqueMappers$ = this.tree$.pipe(map((tree) => tree.techniques));
 
@@ -90,9 +103,10 @@ export class TreeDetailComponent {
   );
 
   constructor(
-    public route: ActivatedRoute,
-    public treeService: TreeInfoService,
-    public adviceService: AdviceService
+    private route: ActivatedRoute,
+    private treeService: TreeInfoService,
+    private adviceService: AdviceService,
+    private userService: UserService
   ) {}
 
   private extractEntityForTree<T extends BonsaiEntity>(
