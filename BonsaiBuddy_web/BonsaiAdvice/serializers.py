@@ -16,6 +16,7 @@ class BonsaiTechniqueSerializer(serializers.DocumentSerializer):
 
 class BonsaiObjectiveSerializer(serializers.DocumentSerializer):
     id = ObjectIdFieldSerializer()
+    description = rest_serializers.CharField(allow_blank=True)
 
     class Meta:
         model = BonsaiObjective
@@ -24,6 +25,7 @@ class BonsaiObjectiveSerializer(serializers.DocumentSerializer):
 
 class BonsaiStageSerializer(serializers.DocumentSerializer):
     id = ObjectIdFieldSerializer()
+    description = rest_serializers.CharField(allow_blank=True)
     global_period = PeriodSerializer(
         choices=period_enum)
 
