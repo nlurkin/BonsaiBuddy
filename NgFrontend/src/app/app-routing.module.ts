@@ -20,6 +20,7 @@ import { ProfileFormComponent } from './Components/Users/profile-form/profile-fo
 import { PasswordFormComponent } from './Components/Users/password-form/password-form.component';
 import { MyTreesComponent } from './Components/Users/my-trees/my-trees.component';
 import { TreeDetailComponent } from './Components/TreeInfo/tree-detail/tree-detail.component';
+import { TreeFormComponent } from './Components/TreeInfo/tree-form/tree-form.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },

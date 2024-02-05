@@ -50,3 +50,10 @@ p-multiselect > .form-control {
 .description-std textarea {
   height: 100px !important;
 }
+
+.my-accordion-header {
+  color: #0c63e4;
+  background-color: #e7f1ff;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.125);
+  text-decoration: none;
+}

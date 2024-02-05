@@ -12,6 +12,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SidebarModule } from 'primeng/sidebar';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
+import { AccordionModule } from 'primeng/accordion';
 import { AdminComponent } from './Components/Admin/admin/admin.component';
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
 import { ObjectiveComponent } from './Components/Advices/Objectives/objective/objective.component';
@@ -35,6 +36,7 @@ import { JwtInterceptor } from './jwt.interceptor';
 import { MyTreesComponent } from './Components/Users/my-trees/my-trees.component';
 import { TreeDetailComponent } from './Components/TreeInfo/tree-detail/tree-detail.component';
 import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
+import { TreeFormComponent } from './Components/TreeInfo/tree-form/tree-form.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,7 @@ import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
     MyTreesComponent,
     TreeDetailComponent,
     PeriodIdToNamePipe,
+    TreeFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +77,7 @@ import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
     MultiSelectModule,
     MarkdownModule.forRoot(),
     DropdownModule,
+    AccordionModule,
   ],
   providers: [
     {
