@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Table } from 'primeng/table';
-import { BehaviorSubject, Observable, map, take } from 'rxjs';
+import { BehaviorSubject, Observable, map, take, tap } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
 import {
   BasicTreeInfo,
@@ -52,10 +52,11 @@ export class TreeFormComponent implements OnInit {
     pests: this.fb.control<string | undefined>(undefined),
     published: this.fb.control<boolean>(false),
     delete: this.fb.control<boolean>(false),
-    techniques: this.fb.group<TechniqueMapperGroup>({}),
   });
-  public formTechniques = this.form.controls.techniques;
-  public formTechniquesControlList: TechniqueMapperGroupControls[] = [];
+  public formTechniques = this.fb.group<TechniqueMapperGroup>({});
+  public formTechniquesControlList$ = new BehaviorSubject<
+    TechniqueMapperGroupControls[]
+  >([]);
 
   private treeIdName: BehaviorSubject<string | undefined> = new BehaviorSubject<
     string | undefined
@@ -118,28 +119,37 @@ export class TreeFormComponent implements OnInit {
   public initializeEntity(entityId: string): void {
     this.treeService
       .getTreeInfo(entityId)
-      .pipe(take(1))
-      .subscribe((tree) => {
-        const { techniques, ...baseTree } = tree;
-        this.form.patchValue({
-          ...baseTree,
-        });
-        tree.techniques.forEach((technique, rowIndex) => {
-          const techniqueGroup = this.fb.group({
-            oid: this.fb.control<string | undefined>(technique.oid),
-            comment: this.fb.control<string | undefined>(technique.comment),
-            technique: this.fb.control<string | undefined>(
-              technique.technique.id
-            ),
-            objective: this.fb.control<string | undefined>(
-              technique.objective.id
-            ),
-            stage: this.fb.control<string[]>(technique.stage.map((s) => s.id)),
-            period: this.fb.control<PeriodEnum[]>(technique.period),
+      .pipe(
+        take(1),
+        tap((tree) => {
+          const { techniques, ...baseTree } = tree;
+          this.form.patchValue({
+            ...baseTree,
           });
-          this.formTechniquesControlList.push(techniqueGroup);
-          this.formTechniques.addControl(technique.oid, techniqueGroup);
-        });
+        }),
+        map((tree) => {
+          return tree.techniques.map((technique, rowIndex) => {
+            const techniqueGroup = this.fb.group({
+              oid: this.fb.control<string | undefined>(technique.oid),
+              comment: this.fb.control<string | undefined>(technique.comment),
+              technique: this.fb.control<string | undefined>(
+                technique.technique.id
+              ),
+              objective: this.fb.control<string | undefined>(
+                technique.objective.id
+              ),
+              stage: this.fb.control<string[]>(
+                technique.stage.map((s) => s.id)
+              ),
+              period: this.fb.control<PeriodEnum[]>(technique.period),
+            });
+            this.formTechniques.addControl(technique.oid, techniqueGroup);
+            return techniqueGroup;
+          });
+        })
+      )
+      .subscribe((controls) => {
+        this.formTechniquesControlList$.next(controls);
       });
   }
 
@@ -204,5 +214,17 @@ export class TreeFormComponent implements OnInit {
     const formData = this.formTechniques.controls[oid];
     if (this.dataTable.isRowExpanded(formData))
       this.dataTable.toggleRow(formData);
+  }
+
+  public deeleteSelected() {
+    const selected = this.dataTable.selectionKeys as Record<string, number>;
+    const oidToRemove = Object.keys(selected);
+    const group = this.formTechniques as FormGroup;
+    oidToRemove.forEach((s) => group.removeControl(s));
+    this.formTechniquesControlList$.next(
+      this.formTechniquesControlList$.value.filter(
+        (c) => !oidToRemove.includes(c.controls.oid.value ?? '')
+      )
+    );
   }
 }

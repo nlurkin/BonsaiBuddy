@@ -111,229 +111,238 @@
     [headerStyleClass]="'my-accordion-header'"
   >
     <form [formGroup]="this.formTechniques">
-      <p-table
-        #techniqueDataTable
-        [value]="formTechniquesControlList"
-        dataKey="value.oid"
-        editMode="row"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th scope="col" style="width: 4rem">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
-            <th
-              scope="col"
-              pSortableColumn="value.technique"
-              class="min-w-250px"
-            >
-              Technique
-              <p-sortIcon field="value.technique"></p-sortIcon>
-            </th>
-            <th
-              scope="col"
-              class="min-w-250px"
-              pSortableColumn="value.objective"
-            >
-              Objective
-              <p-sortIcon field="value.objective"></p-sortIcon>
-            </th>
-            <th scope="col" class="min-w-250px">Stage</th>
-            <th scope="col" class="min-w-250px">Period</th>
-            <th scope="col" class="edit-column"></th>
-          </tr>
-        </ng-template>
-        <ng-template
-          pTemplate="body"
-          let-techniqueControl
-          let-editing="editing"
-          let-expanded="expanded"
+      <div>
+        <div class="flex flex-row justify-content-end">
+          <button class="btn btn-primary" (click)="deeleteSelected()">
+            Delete selected
+          </button>
+        </div>
+        <p-table
+          #techniqueDataTable
+          [value]="(formTechniquesControlList$ | async) ?? []"
+          dataKey="value.oid"
+          editMode="row"
         >
-          <ng-container *ngLet="techniqueControl.value as techniqueMapper">
-            <tr
-              [pEditableRow]="techniqueControl"
-              [formGroupName]="techniqueMapper.oid"
-            >
-              <td pFrozenColumn>
-                <div class="flex flex-row align-items-center">
-                  <p-tableCheckbox [value]="techniqueControl"></p-tableCheckbox>
-                  <button
-                    *ngIf="!editing"
-                    type="button"
-                    pButton
-                    pRipple
-                    [pRowToggler]="techniqueControl"
-                    class="p-button-text p-button-rounded p-button-plain button-small"
-                    [icon]="
-                      expanded
-                        ? 'fa-solid fa-chevron-down'
-                        : 'fa-solid fa-chevron-right'
-                    "
-                  ></button>
-                </div>
-              </td>
-              <td>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <p-dropdown
-                      [filter]="true"
-                      filterBy="label"
-                      formControlName="technique"
-                      [options]="(techniqueOptions$ | async) ?? []"
-                      [styleClass]="'inline-select'"
-                      [panelStyleClass]="'inline-select-panel'"
-                      optionLabel="label"
-                      optionValue="value"
-                      [resetFilterOnHide]="true"
-                    >
-                    </p-dropdown>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{
-                      techniqueMapper.technique
-                        | entityIdToName : "technique"
-                        | async
-                    }}
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <p-dropdown
-                      [filter]="true"
-                      filterBy="label"
-                      formControlName="objective"
-                      [options]="(objectiveOptions$ | async) ?? []"
-                      [styleClass]="'inline-select'"
-                      [panelStyleClass]="'inline-select-panel'"
-                      optionLabel="label"
-                      optionValue="value"
-                      [resetFilterOnHide]="true"
-                    >
-                    </p-dropdown>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{
-                      techniqueMapper.objective
-                        | entityIdToName : "objective"
-                        | async
-                    }}
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <p-multiSelect
-                      [filter]="true"
-                      filterBy="label"
-                      formControlName="stage"
-                      [options]="(stageOptions$ | async) ?? []"
-                      [styleClass]="'inline-select'"
-                      [panelStyleClass]="'inline-select-panel'"
-                      optionLabel="label"
-                      optionValue="value"
-                      [resetFilterOnHide]="true"
-                    >
-                    </p-multiSelect>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    <div *ngFor="let stage of techniqueMapper.stage">
-                      {{ stage | entityIdToName : "stage" | async }}
-                    </div>
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <p-multiSelect
-                      [filter]="true"
-                      filterBy="label"
-                      formControlName="period"
-                      [options]="periodOptions"
-                      [styleClass]="'inline-select'"
-                      [panelStyleClass]="'inline-select-panel'"
-                      optionLabel="label"
-                      optionValue="value"
-                      [resetFilterOnHide]="true"
-                    >
-                    </p-multiSelect>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{ techniqueMapper.period | periodIdToName }}
-                  </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <div
-                  class="flex align-items-center justify-content-center gap-2"
-                >
-                  <button
-                    *ngIf="!editing"
-                    pButton
-                    pRipple
-                    type="button"
-                    pInitEditableRow
-                    icon="fa-solid fa-pencil"
-                    class="p-button-rounded p-button-text"
-                    (click)="onRowEditInit(techniqueMapper.oid)"
-                  ></button>
-                  <button
-                    *ngIf="editing"
-                    pButton
-                    pRipple
-                    type="button"
-                    pSaveEditableRow
-                    icon="fa-solid fa-check"
-                    class="p-button-rounded p-button-text p-button-success mr-2"
-                    (click)="onRowEditSave(techniqueMapper.oid)"
-                  ></button>
-                  <button
-                    *ngIf="editing"
-                    pButton
-                    pRipple
-                    type="button"
-                    pCancelEditableRow
-                    icon="fa-solid fa-times"
-                    class="p-button-rounded p-button-text p-button-danger"
-                    (click)="onRowEditCancel(techniqueMapper.oid)"
-                  ></button>
-                </div>
-              </td>
+          <ng-template pTemplate="header">
+            <tr>
+              <th scope="col" style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th
+                scope="col"
+                pSortableColumn="value.technique"
+                class="min-w-250px"
+              >
+                Technique
+                <p-sortIcon field="value.technique"></p-sortIcon>
+              </th>
+              <th
+                scope="col"
+                class="min-w-250px"
+                pSortableColumn="value.objective"
+              >
+                Objective
+                <p-sortIcon field="value.objective"></p-sortIcon>
+              </th>
+              <th scope="col" class="min-w-250px">Stage</th>
+              <th scope="col" class="min-w-250px">Period</th>
+              <th scope="col" class="edit-column"></th>
             </tr>
-            <tr
-              [formGroupName]="techniqueMapper.oid"
-              [pEditableRow]="techniqueControl"
-              *ngIf="editing"
-            >
+          </ng-template>
+          <ng-template
+            pTemplate="body"
+            let-techniqueControl
+            let-editing="editing"
+            let-expanded="expanded"
+          >
+            <ng-container *ngLet="techniqueControl.value as techniqueMapper">
+              <tr
+                [pEditableRow]="techniqueControl"
+                [formGroupName]="techniqueMapper.oid"
+              >
+                <td pFrozenColumn>
+                  <div class="flex flex-row align-items-center">
+                    <p-tableCheckbox
+                      [value]="techniqueControl"
+                    ></p-tableCheckbox>
+                    <button
+                      *ngIf="!editing"
+                      type="button"
+                      pButton
+                      pRipple
+                      [pRowToggler]="techniqueControl"
+                      class="p-button-text p-button-rounded p-button-plain button-small"
+                      [icon]="
+                        expanded
+                          ? 'fa-solid fa-chevron-down'
+                          : 'fa-solid fa-chevron-right'
+                      "
+                    ></button>
+                  </div>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown
+                        [filter]="true"
+                        filterBy="label"
+                        formControlName="technique"
+                        [options]="(techniqueOptions$ | async) ?? []"
+                        [styleClass]="'inline-select'"
+                        [panelStyleClass]="'inline-select-panel'"
+                        optionLabel="label"
+                        optionValue="value"
+                        [resetFilterOnHide]="true"
+                      >
+                      </p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{
+                        techniqueMapper.technique
+                          | entityIdToName : "technique"
+                          | async
+                      }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-dropdown
+                        [filter]="true"
+                        filterBy="label"
+                        formControlName="objective"
+                        [options]="(objectiveOptions$ | async) ?? []"
+                        [styleClass]="'inline-select'"
+                        [panelStyleClass]="'inline-select-panel'"
+                        optionLabel="label"
+                        optionValue="value"
+                        [resetFilterOnHide]="true"
+                      >
+                      </p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{
+                        techniqueMapper.objective
+                          | entityIdToName : "objective"
+                          | async
+                      }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-multiSelect
+                        [filter]="true"
+                        filterBy="label"
+                        formControlName="stage"
+                        [options]="(stageOptions$ | async) ?? []"
+                        [styleClass]="'inline-select'"
+                        [panelStyleClass]="'inline-select-panel'"
+                        optionLabel="label"
+                        optionValue="value"
+                        [resetFilterOnHide]="true"
+                      >
+                      </p-multiSelect>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      <div *ngFor="let stage of techniqueMapper.stage">
+                        {{ stage | entityIdToName : "stage" | async }}
+                      </div>
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <p-multiSelect
+                        [filter]="true"
+                        filterBy="label"
+                        formControlName="period"
+                        [options]="periodOptions"
+                        [styleClass]="'inline-select'"
+                        [panelStyleClass]="'inline-select-panel'"
+                        optionLabel="label"
+                        optionValue="value"
+                        [resetFilterOnHide]="true"
+                      >
+                      </p-multiSelect>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{ techniqueMapper.period | periodIdToName }}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <div
+                    class="flex align-items-center justify-content-center gap-2"
+                  >
+                    <button
+                      *ngIf="!editing"
+                      pButton
+                      pRipple
+                      type="button"
+                      pInitEditableRow
+                      icon="fa-solid fa-pencil"
+                      class="p-button-rounded p-button-text"
+                      (click)="onRowEditInit(techniqueMapper.oid)"
+                    ></button>
+                    <button
+                      *ngIf="editing"
+                      pButton
+                      pRipple
+                      type="button"
+                      pSaveEditableRow
+                      icon="fa-solid fa-check"
+                      class="p-button-rounded p-button-text p-button-success mr-2"
+                      (click)="onRowEditSave(techniqueMapper.oid)"
+                    ></button>
+                    <button
+                      *ngIf="editing"
+                      pButton
+                      pRipple
+                      type="button"
+                      pCancelEditableRow
+                      icon="fa-solid fa-times"
+                      class="p-button-rounded p-button-text p-button-danger"
+                      (click)="onRowEditCancel(techniqueMapper.oid)"
+                    ></button>
+                  </div>
+                </td>
+              </tr>
+              <tr
+                [formGroupName]="techniqueMapper.oid"
+                [pEditableRow]="techniqueControl"
+                *ngIf="editing"
+              >
+                <td></td>
+                <td colspan="4">
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <textarea
+                        pInputTextarea
+                        formControlName="comment"
+                        [autoResize]="true"
+                        class="autosize-textarea"
+                      >
+                      </textarea>
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td></td>
+              </tr>
+            </ng-container>
+          </ng-template>
+          <ng-template pTemplate="rowexpansion" let-techniqueControl>
+            <tr>
               <td></td>
-              <td colspan="4">
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <textarea
-                      pInputTextarea
-                      formControlName="comment"
-                      [autoResize]="true"
-                      class="autosize-textarea"
-                    >
-                    </textarea>
-                  </ng-template>
-                </p-cellEditor>
-              </td>
+              <td colspan="4">{{ techniqueControl.value.comment }}</td>
               <td></td>
             </tr>
-          </ng-container>
-        </ng-template>
-        <ng-template pTemplate="rowexpansion" let-techniqueControl>
-          <tr>
-            <td></td>
-            <td colspan="4">{{ techniqueControl.value.comment }}</td>
-            <td></td>
-          </tr>
-        </ng-template>
-      </p-table>
+          </ng-template>
+        </p-table>
+      </div>
     </form>
   </p-accordionTab>
 </p-accordion>
