@@ -112,6 +112,7 @@
   >
     <form [formGroup]="form">
       <p-table
+        #techniqueDataTable
         [value]="formTechniques.controls"
         dataKey="value.oid"
         editMode="row"
@@ -147,6 +148,7 @@
           let-techniqueControl
           let-rowIndex="rowIndex"
           let-editing="editing"
+          let-expanded="expanded"
         >
           <ng-container
             formArrayName="techniques"
@@ -154,7 +156,22 @@
           >
             <tr [formGroupName]="rowIndex" [pEditableRow]="techniqueControl">
               <td pFrozenColumn>
-                <p-tableCheckbox [value]="techniqueControl"></p-tableCheckbox>
+                <div class="flex flex-row align-items-center">
+                  <p-tableCheckbox [value]="techniqueControl"></p-tableCheckbox>
+                  <button
+                    *ngIf="!editing"
+                    type="button"
+                    pButton
+                    pRipple
+                    [pRowToggler]="techniqueControl"
+                    class="p-button-text p-button-rounded p-button-plain button-small"
+                    [icon]="
+                      expanded
+                        ? 'fa-solid fa-chevron-down'
+                        : 'fa-solid fa-chevron-right'
+                    "
+                  ></button>
+                </div>
               </td>
               <td>
                 <p-cellEditor>
@@ -262,6 +279,7 @@
                     pInitEditableRow
                     icon="fa-solid fa-pencil"
                     class="p-button-rounded p-button-text"
+                    (click)="onRowEditInit(rowIndex)"
                   ></button>
                   <button
                     *ngIf="editing"
@@ -291,6 +309,7 @@
               [pEditableRow]="techniqueControl"
               *ngIf="editing"
             >
+              <td></td>
               <td colspan="4">
                 <p-cellEditor>
                   <ng-template pTemplate="input">
@@ -304,8 +323,16 @@
                   </ng-template>
                 </p-cellEditor>
               </td>
+              <td></td>
             </tr>
           </ng-container>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-techniqueControl>
+          <tr>
+            <td></td>
+            <td colspan="4">{{ techniqueControl.value.comment }}</td>
+            <td></td>
+          </tr>
         </ng-template>
       </p-table>
     </form>

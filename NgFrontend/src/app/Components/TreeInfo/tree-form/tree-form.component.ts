@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Table } from 'primeng/table';
 import { BehaviorSubject, Observable, map, take } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
 import {
@@ -31,6 +32,8 @@ type TechniqueMapperGroup = {
   styleUrls: ['./tree-form.component.scss'],
 })
 export class TreeFormComponent implements OnInit {
+  @ViewChild('techniqueDataTable', { static: true }) dataTable!: Table;
+
   public InputType = InputType;
   public form = this.fb.group({
     id: this.fb.control<string | undefined>(undefined),
@@ -186,7 +189,18 @@ export class TreeFormComponent implements OnInit {
       published: this.form.controls.published.value ?? false,
     };
   }
+
+  public onRowEditSave(rowIndex: number) {
+    console.log(this.formTechniques.at(rowIndex));
+  }
+
   public onRowEditCancel(rowIndex: number) {
     this.formTechniques.at(rowIndex).reset();
+  }
+
+  public onRowEditInit(rowIndex: number) {
+    const formData = this.formTechniques.at(rowIndex);
+    if (this.dataTable.isRowExpanded(formData))
+      this.dataTable.toggleRow(formData);
   }
 }
