@@ -17,7 +17,11 @@ export function getCountries(): CountryObject[] {
     .sort((a, b) => a.countryNameEn.localeCompare(b.countryNameEn));
 }
 
-export function periodIdToName(periodId: string): string | undefined {
+var periodIdsMap: Map<string, string> | undefined = undefined;
+
+export function allPeriodIds(): Map<string, string> {
+  if (periodIdsMap) return periodIdsMap;
+
   const seasons = ['Spring', 'Summer', 'Autumn', 'Winter'];
   const subsection = ['Early', 'Late'];
   const periods = seasons
@@ -29,7 +33,12 @@ export function periodIdToName(periodId: string): string | undefined {
     )
     .flat();
 
-  const periodMap = new Map(periods);
+  periodIdsMap = new Map(periods);
+  return periodIdsMap;
+}
+
+export function periodIdToName(periodId: string): string | undefined {
+  const periodMap = allPeriodIds();
   if (periodMap.has(periodId)) return periodMap.get(periodId);
   return periodId;
 }

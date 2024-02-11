@@ -1,14 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder } from '@angular/forms';
+import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable, take } from 'rxjs';
+import { BehaviorSubject, Observable, map, take } from 'rxjs';
+import { AdviceService } from 'src/app/Services/advice.service';
 import {
   BasicTreeInfo,
   TreeInfoService,
 } from 'src/app/Services/tree-info.service';
 import { bsonIdNull } from 'src/app/constants';
 import { RouterURL } from 'src/app/types';
-import { InputType } from '../../Generic/text-input/custom-input.component';
+import { allPeriodIds } from 'src/app/utils';
+import { PeriodEnum } from 'swagger-client';
+import {
+  InputType,
+  SelectOption,
+} from '../../Generic/text-input/custom-input.component';
+
+type TechniqueMapperGroup = {
+  oid: FormControl<string | undefined>;
+  comment: FormControl<string | undefined>;
+  technique: FormControl<string | undefined>;
+  objective: FormControl<string | undefined>;
+  stage: FormControl<string[]>;
+  period: FormControl<PeriodEnum[]>;
+};
 
 @Component({
   selector: 'app-tree-form',
@@ -31,7 +46,9 @@ export class TreeFormComponent implements OnInit {
     pests: this.fb.control<string | undefined>(undefined),
     published: this.fb.control<boolean>(false),
     delete: this.fb.control<boolean>(false),
+    techniques: this.fb.array<FormGroup<TechniqueMapperGroup>>([]),
   });
+  public formTechniques = this.form.controls.techniques;
 
   private treeIdName: BehaviorSubject<string | undefined> = new BehaviorSubject<
     string | undefined
@@ -42,7 +59,8 @@ export class TreeFormComponent implements OnInit {
     private fb: NonNullableFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private treeService: TreeInfoService
+    private treeService: TreeInfoService,
+    private adviceService: AdviceService
   ) {
     this.route.params.pipe(take(1)).subscribe((params) => {
       this.treeIdName.next(params['id']);
@@ -64,8 +82,27 @@ export class TreeFormComponent implements OnInit {
       .getTreeInfo(entityId)
       .pipe(take(1))
       .subscribe((tree) => {
+        const { techniques, ...baseTree } = tree;
         this.form.patchValue({
-          ...tree,
+          ...baseTree,
+        });
+        tree.techniques.forEach((technique) => {
+          this.formTechniques.push(
+            this.fb.group<TechniqueMapperGroup>({
+              oid: this.fb.control<string | undefined>(technique.oid),
+              comment: this.fb.control<string | undefined>(technique.comment),
+              technique: this.fb.control<string | undefined>(
+                technique.technique.id
+              ),
+              objective: this.fb.control<string | undefined>(
+                technique.objective.id
+              ),
+              stage: this.fb.control<string[]>(
+                technique.stage.map((s) => s.id)
+              ),
+              period: this.fb.control<PeriodEnum[]>(technique.period),
+            })
+          );
         });
       });
   }

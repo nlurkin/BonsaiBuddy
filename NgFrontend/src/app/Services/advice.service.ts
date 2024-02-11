@@ -133,6 +133,17 @@ export class AdviceService {
     );
   }
 
+  public getEntityById<T extends BonsaiEntity>(
+    id: string,
+    // retrieveFn: (id: string) => Observable<T>,
+    storeInitialized$: Observable<boolean>,
+    store: StoreType<T>
+  ): Observable<T | undefined> {
+    return storeInitialized$.pipe(
+      switchMap(() => store.pipe(selectEntity(id)))
+    );
+  }
+
   public updateEntity<T extends BonsaiEntity>(
     entity: T,
     updateFn: (short_name: string, e: T) => Observable<T>,
@@ -361,6 +372,14 @@ export class AdviceService {
     );
   }
 
+  public getTechniqueById(id: string): Observable<BonsaiTechnique | undefined> {
+    return this.getEntityById<BonsaiTechnique>(
+      id,
+      this.initializedTechniqueStore$,
+      techniqueStore
+    );
+  }
+
   public getObjective(name: string): Observable<BonsaiObjective | undefined> {
     return this.getEntity<BonsaiObjective>(
       name,
@@ -370,10 +389,26 @@ export class AdviceService {
     );
   }
 
+  public getObjectiveById(id: string): Observable<BonsaiObjective | undefined> {
+    return this.getEntityById<BonsaiObjective>(
+      id,
+      this.initializedObjectiveStore$,
+      objectiveStore
+    );
+  }
+
   public getStage(name: string): Observable<BonsaiStage | undefined> {
     return this.getEntity<BonsaiStage>(
       name,
       this.techniqueApiService.advicesStagesRetrieve,
+      this.initializedStageStore$,
+      stageStore
+    );
+  }
+
+  public getStageById(id: string): Observable<BonsaiStage | undefined> {
+    return this.getEntityById<BonsaiStage>(
+      id,
       this.initializedStageStore$,
       stageStore
     );

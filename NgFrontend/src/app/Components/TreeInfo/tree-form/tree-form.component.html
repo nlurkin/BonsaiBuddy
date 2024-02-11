@@ -110,5 +110,68 @@
     header="Techniques"
     [headerStyleClass]="'my-accordion-header'"
   >
+    <form [formGroup]="form">
+      <p-table
+        [value]="formTechniques.controls"
+        dataKey="value.oid"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              scope="col"
+              class="min-w-250px"
+            >
+              Technique 
+            </th>
+            <th
+              scope="col"
+              class="min-w-250px"
+            >
+              Objective 
+            </th>
+            <th scope="col" class="min-w-250px">Stage</th>
+            <th scope="col" class="min-w-250px">Period</th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-techniqueControl
+          let-rowIndex="rowIndex"
+        >
+          <ng-container
+            formArrayName="techniques"
+            *ngLet="techniqueControl.value as techniqueMapper"
+          >
+            <tr [formGroupName]="rowIndex"
+            >
+              <td>
+                    {{
+                      techniqueMapper.technique
+                        | entityIdToName : "technique"
+                        | async
+                    }}
+              </td>
+              <td>
+                    {{
+                      techniqueMapper.objective
+                        | entityIdToName : "objective"
+                        | async
+                    }}
+              </td>
+              <td>
+                    <div *ngFor="let stage of techniqueMapper.stage">
+                      {{ stage | entityIdToName : "stage" | async }}
+                    </div>
+              </td>
+              <td>
+                  <ng-template pTemplate="output">
+                    {{ techniqueMapper.period | periodIdToName }}
+                  </ng-template>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-template>
+      </p-table>
+    </form>
   </p-accordionTab>
 </p-accordion>
