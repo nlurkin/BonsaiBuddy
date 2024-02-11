@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  NonNullableFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Table } from 'primeng/table';
 import { BehaviorSubject, Observable, map, take, tap } from 'rxjs';
@@ -133,10 +138,12 @@ export class TreeFormComponent implements OnInit {
               oid: this.fb.control<string | undefined>(technique.oid),
               comment: this.fb.control<string | undefined>(technique.comment),
               technique: this.fb.control<string | undefined>(
-                technique.technique.id
+                technique.technique.id,
+                [Validators.required]
               ),
               objective: this.fb.control<string | undefined>(
-                technique.objective.id
+                technique.objective.id,
+                [Validators.required]
               ),
               stage: this.fb.control<string[]>(
                 technique.stage.map((s) => s.id)
