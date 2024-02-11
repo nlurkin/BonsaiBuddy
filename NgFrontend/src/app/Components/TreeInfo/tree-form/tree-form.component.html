@@ -118,6 +118,9 @@
       >
         <ng-template pTemplate="header">
           <tr>
+            <th scope="col" style="width: 4rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
             <th
               scope="col"
               pSortableColumn="value.technique"
@@ -150,6 +153,9 @@
             *ngLet="techniqueControl.value as techniqueMapper"
           >
             <tr [formGroupName]="rowIndex" [pEditableRow]="techniqueControl">
+              <td pFrozenColumn>
+                <p-tableCheckbox [value]="techniqueControl"></p-tableCheckbox>
+              </td>
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
