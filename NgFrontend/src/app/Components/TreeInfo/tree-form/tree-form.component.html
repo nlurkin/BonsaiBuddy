@@ -110,10 +110,10 @@
     header="Techniques"
     [headerStyleClass]="'my-accordion-header'"
   >
-    <form [formGroup]="form">
+    <form [formGroup]="this.formTechniques">
       <p-table
         #techniqueDataTable
-        [value]="formTechniques.controls"
+        [value]="formTechniquesControlList"
         dataKey="value.oid"
         editMode="row"
       >
@@ -146,15 +146,14 @@
         <ng-template
           pTemplate="body"
           let-techniqueControl
-          let-rowIndex="rowIndex"
           let-editing="editing"
           let-expanded="expanded"
         >
-          <ng-container
-            formArrayName="techniques"
-            *ngLet="techniqueControl.value as techniqueMapper"
-          >
-            <tr [formGroupName]="rowIndex" [pEditableRow]="techniqueControl">
+          <ng-container *ngLet="techniqueControl.value as techniqueMapper">
+            <tr
+              [pEditableRow]="techniqueControl"
+              [formGroupName]="techniqueMapper.oid"
+            >
               <td pFrozenColumn>
                 <div class="flex flex-row align-items-center">
                   <p-tableCheckbox [value]="techniqueControl"></p-tableCheckbox>
@@ -279,7 +278,7 @@
                     pInitEditableRow
                     icon="fa-solid fa-pencil"
                     class="p-button-rounded p-button-text"
-                    (click)="onRowEditInit(rowIndex)"
+                    (click)="onRowEditInit(techniqueMapper.oid)"
                   ></button>
                   <button
                     *ngIf="editing"
@@ -289,7 +288,7 @@
                     pSaveEditableRow
                     icon="fa-solid fa-check"
                     class="p-button-rounded p-button-text p-button-success mr-2"
-                    (click)="onRowEditSave(rowIndex)"
+                    (click)="onRowEditSave(techniqueMapper.oid)"
                   ></button>
                   <button
                     *ngIf="editing"
@@ -299,13 +298,13 @@
                     pCancelEditableRow
                     icon="fa-solid fa-times"
                     class="p-button-rounded p-button-text p-button-danger"
-                    (click)="onRowEditCancel(rowIndex)"
+                    (click)="onRowEditCancel(techniqueMapper.oid)"
                   ></button>
                 </div>
               </td>
             </tr>
             <tr
-              [formGroupName]="rowIndex"
+              [formGroupName]="techniqueMapper.oid"
               [pEditableRow]="techniqueControl"
               *ngIf="editing"
             >

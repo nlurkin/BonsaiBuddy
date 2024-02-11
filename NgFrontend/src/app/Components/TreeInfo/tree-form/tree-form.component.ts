@@ -17,13 +17,16 @@ import {
   SelectOption,
 } from '../../Generic/text-input/custom-input.component';
 
-type TechniqueMapperGroup = {
+type TechniqueMapperGroupControls = FormGroup<{
   oid: FormControl<string | undefined>;
   comment: FormControl<string | undefined>;
   technique: FormControl<string | undefined>;
   objective: FormControl<string | undefined>;
   stage: FormControl<string[]>;
   period: FormControl<PeriodEnum[]>;
+}>;
+type TechniqueMapperGroup = {
+  [oid: string]: TechniqueMapperGroupControls;
 };
 
 @Component({
@@ -49,9 +52,10 @@ export class TreeFormComponent implements OnInit {
     pests: this.fb.control<string | undefined>(undefined),
     published: this.fb.control<boolean>(false),
     delete: this.fb.control<boolean>(false),
-    techniques: this.fb.array<FormGroup<TechniqueMapperGroup>>([]),
+    techniques: this.fb.group<TechniqueMapperGroup>({}),
   });
   public formTechniques = this.form.controls.techniques;
+  public formTechniquesControlList: TechniqueMapperGroupControls[] = [];
 
   private treeIdName: BehaviorSubject<string | undefined> = new BehaviorSubject<
     string | undefined
@@ -120,23 +124,21 @@ export class TreeFormComponent implements OnInit {
         this.form.patchValue({
           ...baseTree,
         });
-        tree.techniques.forEach((technique) => {
-          this.formTechniques.push(
-            this.fb.group<TechniqueMapperGroup>({
-              oid: this.fb.control<string | undefined>(technique.oid),
-              comment: this.fb.control<string | undefined>(technique.comment),
-              technique: this.fb.control<string | undefined>(
-                technique.technique.id
-              ),
-              objective: this.fb.control<string | undefined>(
-                technique.objective.id
-              ),
-              stage: this.fb.control<string[]>(
-                technique.stage.map((s) => s.id)
-              ),
-              period: this.fb.control<PeriodEnum[]>(technique.period),
-            })
-          );
+        tree.techniques.forEach((technique, rowIndex) => {
+          const techniqueGroup = this.fb.group({
+            oid: this.fb.control<string | undefined>(technique.oid),
+            comment: this.fb.control<string | undefined>(technique.comment),
+            technique: this.fb.control<string | undefined>(
+              technique.technique.id
+            ),
+            objective: this.fb.control<string | undefined>(
+              technique.objective.id
+            ),
+            stage: this.fb.control<string[]>(technique.stage.map((s) => s.id)),
+            period: this.fb.control<PeriodEnum[]>(technique.period),
+          });
+          this.formTechniquesControlList.push(techniqueGroup);
+          this.formTechniques.addControl(technique.oid, techniqueGroup);
         });
       });
   }
@@ -190,16 +192,16 @@ export class TreeFormComponent implements OnInit {
     };
   }
 
-  public onRowEditSave(rowIndex: number) {
-    console.log(this.formTechniques.at(rowIndex));
+  public onRowEditSave(oid: string) {
+    console.log(oid, this.formTechniques.controls[oid]);
   }
 
-  public onRowEditCancel(rowIndex: number) {
-    this.formTechniques.at(rowIndex).reset();
+  public onRowEditCancel(oid: string) {
+    this.formTechniques.controls[oid].reset();
   }
 
-  public onRowEditInit(rowIndex: number) {
-    const formData = this.formTechniques.at(rowIndex);
+  public onRowEditInit(oid: string) {
+    const formData = this.formTechniques.controls[oid];
     if (this.dataTable.isRowExpanded(formData))
       this.dataTable.toggleRow(formData);
   }
