@@ -12,7 +12,7 @@ export class EntityIdToNamePipe implements PipeTransform {
     oid: string | undefined,
     entityType: 'technique' | 'objective' | 'stage'
   ): Observable<string> {
-    if (!oid) return of('');
+    if (!oid) return of('No data');
     if (entityType === 'technique') {
       return this.adviceService
         .getTechniqueById(oid)

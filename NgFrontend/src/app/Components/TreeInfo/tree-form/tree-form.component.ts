@@ -234,4 +234,30 @@ export class TreeFormComponent implements OnInit {
       )
     );
   }
+
+  private numberOfNewLines = 0;
+  public addTechnique() {
+    const oid = `${bsonIdNull}-${this.numberOfNewLines++}`;
+    const group = this.fb.group({
+      oid: this.fb.control<string | undefined>(oid),
+      comment: this.fb.control<string | undefined>(undefined),
+      technique: this.fb.control<string | undefined>(undefined, [
+        Validators.required,
+      ]),
+      objective: this.fb.control<string | undefined>(undefined, [
+        Validators.required,
+      ]),
+      stage: this.fb.control<string[]>([]),
+      period: this.fb.control<PeriodEnum[]>([]),
+    });
+    this.formTechniques.addControl(oid, group);
+    this.formTechniquesControlList$.next([
+      ...this.formTechniquesControlList$.value,
+      group,
+    ]);
+    this.dataTable.editingRowKeys = {
+      ...this.dataTable.editingRowKeys,
+      [oid]: true,
+    };
+  }
 }
