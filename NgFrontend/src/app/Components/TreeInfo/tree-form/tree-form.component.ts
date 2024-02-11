@@ -68,36 +68,40 @@ export class TreeFormComponent implements OnInit {
   >(undefined);
   private isCreating = false;
 
-  public readonly techniqueOptions$ = this.adviceService.getTechniques().pipe(
-    take(1),
-    map((techniques) =>
-      techniques
-        .filter((technique) => technique.display_name !== undefined)
-        .map((t): SelectOption => ({ label: t.display_name!, value: t.id }))
-    )
-  );
+  public readonly techniqueOptions$: Observable<SelectOption[]> =
+    this.adviceService.getTechniques().pipe(
+      take(1),
+      map((techniques) =>
+        techniques
+          .filter((technique) => technique.display_name !== undefined)
+          .map((t): SelectOption => ({ label: t.display_name!, value: t.id }))
+      )
+    );
 
-  public readonly objectiveOptions$ = this.adviceService.getObjectives().pipe(
-    take(1),
-    map((objectives) =>
-      objectives
-        .filter((objective) => objective.display_name !== undefined)
-        .map((o): SelectOption => ({ label: o.display_name!, value: o.id }))
-    )
-  );
+  public readonly objectiveOptions$: Observable<SelectOption[]> =
+    this.adviceService.getObjectives().pipe(
+      take(1),
+      map((objectives) =>
+        objectives
+          .filter((objective) => objective.display_name !== undefined)
+          .map((o): SelectOption => ({ label: o.display_name!, value: o.id }))
+      )
+    );
 
-  public readonly stageOptions$ = this.adviceService.getStages().pipe(
-    take(1),
-    map((stages) =>
-      stages
-        .filter((stage) => stage.display_name !== undefined)
-        .map((s): SelectOption => ({ label: s.display_name!, value: s.id }))
-    )
-  );
+  public readonly stageOptions$: Observable<SelectOption[]> = this.adviceService
+    .getStages()
+    .pipe(
+      take(1),
+      map((stages) =>
+        stages
+          .filter((stage) => stage.display_name !== undefined)
+          .map((s): SelectOption => ({ label: s.display_name!, value: s.id }))
+      )
+    );
 
-  public readonly periodOptions = Array.from(allPeriodIds()).map(
-    ([key, value]) => ({ label: value, value: key })
-  );
+  public readonly periodOptions: SelectOption[] = Array.from(
+    allPeriodIds()
+  ).map(([key, value]) => ({ label: value, value: key }));
 
   constructor(
     private fb: NonNullableFormBuilder,
@@ -132,9 +136,9 @@ export class TreeFormComponent implements OnInit {
             ...baseTree,
           });
         }),
-        map((tree) => {
+        map((tree): TechniqueMapperGroupControls[] => {
           return tree.techniques.map((technique, rowIndex) => {
-            const techniqueGroup = this.fb.group({
+            const techniqueGroup: TechniqueMapperGroupControls = this.fb.group({
               oid: this.fb.control<string | undefined>(technique.oid),
               comment: this.fb.control<string | undefined>(technique.comment),
               technique: this.fb.control<string | undefined>(
@@ -209,21 +213,22 @@ export class TreeFormComponent implements OnInit {
     };
   }
 
-  public onRowEditSave(oid: string) {
+  public onRowEditSave(oid: string): void {
     console.log(oid, this.formTechniques.controls[oid]);
   }
 
-  public onRowEditCancel(oid: string) {
+  public onRowEditCancel(oid: string): void {
     this.formTechniques.controls[oid].reset();
   }
 
-  public onRowEditInit(oid: string) {
-    const formData = this.formTechniques.controls[oid];
+  public onRowEditInit(oid: string): void {
+    const formData: TechniqueMapperGroupControls =
+      this.formTechniques.controls[oid];
     if (this.dataTable.isRowExpanded(formData))
       this.dataTable.toggleRow(formData);
   }
 
-  public deeleteSelected() {
+  public deeleteSelected(): void {
     const selected = this.dataTable.selectionKeys as Record<string, number>;
     const oidToRemove = Object.keys(selected);
     const group = this.formTechniques as FormGroup;
@@ -236,9 +241,9 @@ export class TreeFormComponent implements OnInit {
   }
 
   private numberOfNewLines = 0;
-  public addTechnique() {
+  public addTechnique(): void {
     const oid = `${bsonIdNull}-${this.numberOfNewLines++}`;
-    const group = this.fb.group({
+    const group: TechniqueMapperGroupControls = this.fb.group({
       oid: this.fb.control<string | undefined>(oid),
       comment: this.fb.control<string | undefined>(undefined),
       technique: this.fb.control<string | undefined>(undefined, [
