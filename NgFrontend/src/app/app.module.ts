@@ -10,6 +10,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
@@ -82,6 +83,7 @@ import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
     DropdownModule,
     AccordionModule,
     TableModule,
+    InputTextareaModule,
   ],
   providers: [
     {

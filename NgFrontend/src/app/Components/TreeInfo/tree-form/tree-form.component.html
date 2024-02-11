@@ -114,6 +114,7 @@
       <p-table
         [value]="formTechniques.controls"
         dataKey="value.oid"
+        editMode="row"
       >
         <ng-template pTemplate="header">
           <tr>
@@ -131,42 +132,167 @@
             </th>
             <th scope="col" class="min-w-250px">Stage</th>
             <th scope="col" class="min-w-250px">Period</th>
+            <th scope="col" class="edit-column"></th>
           </tr>
         </ng-template>
         <ng-template
           pTemplate="body"
           let-techniqueControl
           let-rowIndex="rowIndex"
+          let-editing="editing"
         >
           <ng-container
             formArrayName="techniques"
             *ngLet="techniqueControl.value as techniqueMapper"
           >
-            <tr [formGroupName]="rowIndex"
-            >
+            <tr [formGroupName]="rowIndex" [pEditableRow]="techniqueControl">
               <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-dropdown
+                      [filter]="true"
+                      filterBy="label"
+                      formControlName="technique"
+                      [options]="(techniqueOptions$ | async) ?? []"
+                      [styleClass]="'inline-select'"
+                      [panelStyleClass]="'inline-select-panel'"
+                      optionLabel="label"
+                      optionValue="value"
+                      [resetFilterOnHide]="true"
+                    >
+                    </p-dropdown>
+                  </ng-template>
+                  <ng-template pTemplate="output">
                     {{
                       techniqueMapper.technique
                         | entityIdToName : "technique"
                         | async
                     }}
+                  </ng-template>
+                </p-cellEditor>
               </td>
               <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-dropdown
+                      [filter]="true"
+                      filterBy="label"
+                      formControlName="objective"
+                      [options]="(objectiveOptions$ | async) ?? []"
+                      [styleClass]="'inline-select'"
+                      [panelStyleClass]="'inline-select-panel'"
+                      optionLabel="label"
+                      optionValue="value"
+                      [resetFilterOnHide]="true"
+                    >
+                    </p-dropdown>
+                  </ng-template>
+                  <ng-template pTemplate="output">
                     {{
                       techniqueMapper.objective
                         | entityIdToName : "objective"
                         | async
                     }}
+                  </ng-template>
+                </p-cellEditor>
               </td>
               <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-multiSelect
+                      [filter]="true"
+                      filterBy="label"
+                      formControlName="stage"
+                      [options]="(stageOptions$ | async) ?? []"
+                      [styleClass]="'inline-select'"
+                      [panelStyleClass]="'inline-select-panel'"
+                      optionLabel="label"
+                      optionValue="value"
+                      [resetFilterOnHide]="true"
+                    >
+                    </p-multiSelect>
+                  </ng-template>
+                  <ng-template pTemplate="output">
                     <div *ngFor="let stage of techniqueMapper.stage">
                       {{ stage | entityIdToName : "stage" | async }}
                     </div>
+                  </ng-template>
+                </p-cellEditor>
               </td>
               <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-multiSelect
+                      [filter]="true"
+                      filterBy="label"
+                      formControlName="period"
+                      [options]="periodOptions"
+                      [styleClass]="'inline-select'"
+                      [panelStyleClass]="'inline-select-panel'"
+                      optionLabel="label"
+                      optionValue="value"
+                      [resetFilterOnHide]="true"
+                    >
+                    </p-multiSelect>
+                  </ng-template>
                   <ng-template pTemplate="output">
                     {{ techniqueMapper.period | periodIdToName }}
                   </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <div
+                  class="flex align-items-center justify-content-center gap-2"
+                >
+                  <button
+                    *ngIf="!editing"
+                    pButton
+                    pRipple
+                    type="button"
+                    pInitEditableRow
+                    icon="fa-solid fa-pencil"
+                    class="p-button-rounded p-button-text"
+                  ></button>
+                  <button
+                    *ngIf="editing"
+                    pButton
+                    pRipple
+                    type="button"
+                    pSaveEditableRow
+                    icon="fa-solid fa-check"
+                    class="p-button-rounded p-button-text p-button-success mr-2"
+                    (click)="onRowEditSave(rowIndex)"
+                  ></button>
+                  <button
+                    *ngIf="editing"
+                    pButton
+                    pRipple
+                    type="button"
+                    pCancelEditableRow
+                    icon="fa-solid fa-times"
+                    class="p-button-rounded p-button-text p-button-danger"
+                    (click)="onRowEditCancel(rowIndex)"
+                  ></button>
+                </div>
+              </td>
+            </tr>
+            <tr
+              [formGroupName]="rowIndex"
+              [pEditableRow]="techniqueControl"
+              *ngIf="editing"
+            >
+              <td colspan="4">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <textarea
+                      pInputTextarea
+                      formControlName="comment"
+                      [autoResize]="true"
+                      class="autosize-textarea"
+                    >
+                    </textarea>
+                  </ng-template>
+                </p-cellEditor>
               </td>
             </tr>
           </ng-container>

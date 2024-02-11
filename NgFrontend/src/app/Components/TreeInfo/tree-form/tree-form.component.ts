@@ -55,6 +55,37 @@ export class TreeFormComponent implements OnInit {
   >(undefined);
   private isCreating = false;
 
+  public readonly techniqueOptions$ = this.adviceService.getTechniques().pipe(
+    take(1),
+    map((techniques) =>
+      techniques
+        .filter((technique) => technique.display_name !== undefined)
+        .map((t): SelectOption => ({ label: t.display_name!, value: t.id }))
+    )
+  );
+
+  public readonly objectiveOptions$ = this.adviceService.getObjectives().pipe(
+    take(1),
+    map((objectives) =>
+      objectives
+        .filter((objective) => objective.display_name !== undefined)
+        .map((o): SelectOption => ({ label: o.display_name!, value: o.id }))
+    )
+  );
+
+  public readonly stageOptions$ = this.adviceService.getStages().pipe(
+    take(1),
+    map((stages) =>
+      stages
+        .filter((stage) => stage.display_name !== undefined)
+        .map((s): SelectOption => ({ label: s.display_name!, value: s.id }))
+    )
+  );
+
+  public readonly periodOptions = Array.from(allPeriodIds()).map(
+    ([key, value]) => ({ label: value, value: key })
+  );
+
   constructor(
     private fb: NonNullableFormBuilder,
     private route: ActivatedRoute,
@@ -154,5 +185,8 @@ export class TreeFormComponent implements OnInit {
       pests: this.form.controls.pests.value ?? '',
       published: this.form.controls.published.value ?? false,
     };
+  }
+  public onRowEditCancel(rowIndex: number) {
+    this.formTechniques.at(rowIndex).reset();
   }
 }
