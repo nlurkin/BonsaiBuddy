@@ -29,6 +29,14 @@ class TechniqueMapperSerializer(serializers.EmbeddedDocumentSerializer):
         fields = ['oid', 'comment', 'technique',
                   'objective', 'stage', 'period']
 
+    def create(self, validated_data):
+        instance = TechniqueMapper(
+            technique=validated_data['technique']['id'], objective=validated_data['objective']['id'],
+            stage=[stage['id'] for stage in validated_data['stage']], period=validated_data['period'],
+            comment=validated_data["comment"])
+
+        return instance
+
 
 class TreeInfoSerializer(serializers.DocumentSerializer):
     id = ObjectIdFieldSerializer()
@@ -50,19 +58,22 @@ class TreeInfoSerializer(serializers.DocumentSerializer):
     def create_update_techniques(self, instance, techniques_data):
         if techniques_data is not None:
             for technique in techniques_data:
-                tree = instance.techniques.filter(oid=technique['oid']).first()
-                if tree:
+                technique_mapper = instance.techniques.filter(
+                    oid=technique['oid']).first()
+
+                if technique_mapper:
                     # Update existing tree
-                    TechniqueMapperSerializer().update(tree, technique)
+                    TechniqueMapperSerializer().update(technique_mapper, technique)
                 else:
                     # Create new tree and add it to instance.my_trees
                     new_tree = TechniqueMapperSerializer().create(technique)
-                    instance.my_trees.append(new_tree)
+                    instance.techniques.append(new_tree)
 
     def update(self, instance, validated_data):
-        techniques_data = validated_data.pop('techniques')
+        if 'techniques' in validated_data:
+            techniques_data = validated_data.pop('techniques')
 
-        self.create_update_techniques(instance, techniques_data)
+            self.create_update_techniques(instance, techniques_data)
 
         return super().update(instance, validated_data)
 
