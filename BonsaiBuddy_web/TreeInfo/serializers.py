@@ -22,6 +22,7 @@ class TechniqueMapperSerializer(serializers.EmbeddedDocumentSerializer):
     stage = LazyReferenceFieldSerializer(many=True)
     period = PeriodSerializer(
         choices=period_enum,)
+    comment = rest_serializers.CharField(allow_blank=True)
 
     class Meta:
         model = TechniqueMapper
