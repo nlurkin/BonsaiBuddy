@@ -16,7 +16,7 @@ import {
 import { bsonIdNull } from 'src/app/constants';
 import { RouterURL } from 'src/app/types';
 import { allPeriodIds } from 'src/app/utils';
-import { PeriodEnum } from 'swagger-client';
+import { PeriodEnum, TechniqueMapper } from 'swagger-client';
 import {
   InputType,
   SelectOption,
@@ -164,7 +164,7 @@ export class TreeFormComponent implements OnInit {
       });
   }
 
-  public onSubmit(): void {
+  public onSubmitBaseTree(): void {
     const name = this.form.controls.display_name.value?.toLowerCase() ?? '';
 
     if (this.form.controls.delete.value && name && !this.isCreating) {
@@ -264,5 +264,47 @@ export class TreeFormComponent implements OnInit {
       ...this.dataTable.editingRowKeys,
       [oid]: true,
     };
+  }
+
+  private techniqueFormToEntity(
+    form: TechniqueMapperGroupControls
+  ): TechniqueMapper | undefined {
+    if (!this.formTechniques.valid) return undefined;
+    const values = form.getRawValue();
+    const oid = values.oid?.includes(bsonIdNull) ? bsonIdNull : values.oid;
+    return {
+      oid: oid ?? bsonIdNull,
+      comment: values.comment ?? '',
+      // Validity of these values is guaranteed by the form validation
+      technique: { classname: 'BonsaiTechnique', id: values.technique! },
+      objective: { classname: 'BonsaiObjective', id: values.objective! },
+      stage: values.stage.map((s) => ({ classname: 'BonsaiStage', id: s })),
+      period: values.period,
+    };
+  }
+
+  private techniqueFormsToEntities(): TechniqueMapper[] | undefined {
+    if (!this.formTechniques.valid) return undefined;
+    return Object.values(this.formTechniques.controls)
+      .map((form: TechniqueMapperGroupControls) =>
+        this.techniqueFormToEntity(form)
+      )
+      .filter((t): t is TechniqueMapper => t !== undefined);
+  }
+
+  public onSubmitTechniques(): void {
+    const treeId = this.treeIdName.value;
+    if (treeId) {
+      const techniques = this.techniqueFormsToEntities();
+      console.log(techniques);
+      if (techniques) {
+        this.treeService
+          .updateTechniqueMapping(treeId, techniques)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.router.navigate(['..'], { relativeTo: this.route });
+          });
+      }
+    }
   }
 }

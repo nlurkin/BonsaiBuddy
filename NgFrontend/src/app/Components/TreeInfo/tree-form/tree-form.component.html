@@ -3,7 +3,7 @@
     header="Tree description"
     [headerStyleClass]="'my-accordion-header'"
   >
-    <form [formGroup]="form" class="row g-3" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" class="row g-3" (ngSubmit)="onSubmitBaseTree()">
       <app-custom-input
         name="display_name"
         placeholder="Tree name"
@@ -110,7 +110,7 @@
     header="Techniques"
     [headerStyleClass]="'my-accordion-header'"
   >
-    <form [formGroup]="formTechniques">
+    <form [formGroup]="formTechniques" (ngSubmit)="onSubmitTechniques()">
       <div>
         <span class="flex flex-row">
           <div class="flex flex-row justify-content-start flex-fill">
