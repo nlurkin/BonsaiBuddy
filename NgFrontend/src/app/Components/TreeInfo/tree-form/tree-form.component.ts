@@ -184,13 +184,13 @@ export class TreeFormComponent implements OnInit {
   }
 
   public done(updateObs: Observable<any>, returnUrl: RouterURL): void {
-    updateObs.pipe(take(1)).subscribe(() =>
+    updateObs.pipe(take(1)).subscribe(() => {
       this.router.navigate(returnUrl, {
         relativeTo: returnUrl.some((segment) => segment.includes('..'))
           ? this.route
           : undefined,
-      })
-    );
+      });
+    });
   }
 
   private getEntityFromForm(): BasicTreeInfo | undefined {
@@ -211,10 +211,6 @@ export class TreeFormComponent implements OnInit {
       pests: this.form.controls.pests.value ?? '',
       published: this.form.controls.published.value ?? false,
     };
-  }
-
-  public onRowEditSave(oid: string): void {
-    console.log(oid, this.formTechniques.controls[oid]);
   }
 
   public onRowEditCancel(oid: string): void {

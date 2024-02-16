@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TreeInfo, TreesAPI } from 'swagger-client';
+import { TechniqueMapper, TreeInfo, TreesAPI } from 'swagger-client';
 
 export type BasicTreeInfo = Omit<TreeInfo, 'techniques'>;
 
@@ -23,6 +23,13 @@ export class TreeInfoService {
     treeInfo: Partial<BasicTreeInfo>
   ): Observable<TreeInfo> {
     return this.treeInfoService.treesPartialUpdate(id, treeInfo);
+  }
+
+  public updateTechniqueMapping(
+    id: string,
+    techniques: TechniqueMapper[]
+  ): Observable<TreeInfo> {
+    return this.treeInfoService.treesPartialUpdate(id, { techniques });
   }
 
   public createTreeInfo(treeInfo: TreeInfo): Observable<TreeInfo> {
