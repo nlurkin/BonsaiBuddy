@@ -228,6 +228,31 @@ export class TreeFormComponent implements OnInit {
       this.dataTable.toggleRow(formData);
   }
 
+  public onRowClone(oid: string): void {
+    const form = this.formTechniques.controls[
+      oid
+    ] as TechniqueMapperGroupControls;
+    const newOid = `${bsonIdNull}-${this.numberOfNewLines++}`;
+    const clone = form.getRawValue();
+    const techniqueGroup: TechniqueMapperGroupControls = this.fb.group({
+      oid: this.fb.control<string | undefined>(newOid),
+      comment: this.fb.control<string | undefined>(clone.comment),
+      technique: this.fb.control<string | undefined>(clone.technique, [
+        Validators.required,
+      ]),
+      objective: this.fb.control<string | undefined>(clone.objective, [
+        Validators.required,
+      ]),
+      stage: this.fb.control<string[]>(clone.stage.map((s) => s)),
+      period: this.fb.control<PeriodEnum[]>(clone.period),
+    });
+    this.formTechniques.addControl(newOid, techniqueGroup);
+    this.formTechniquesControlList$.next([
+      ...this.formTechniquesControlList$.value,
+      this.formTechniques.controls[newOid] as TechniqueMapperGroupControls,
+    ]);
+  }
+
   public deeleteSelected(): void {
     const selected = this.dataTable.selectionKeys as Record<string, number>;
     const oidToRemove = Object.keys(selected);
