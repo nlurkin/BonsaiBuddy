@@ -67,6 +67,7 @@ export class TreeFormComponent implements OnInit {
     string | undefined
   >(undefined);
   private isCreating = false;
+  public importTreeName: string | undefined;
 
   public readonly techniqueOptions$: Observable<SelectOption[]> =
     this.adviceService.getTechniques().pipe(
@@ -103,6 +104,16 @@ export class TreeFormComponent implements OnInit {
     allPeriodIds()
   ).map(([key, value]) => ({ label: value, value: key }));
 
+  public readonly treeOptions$ = this.treeService.getAllTreeInfo().pipe(
+    take(1),
+    map((trees) =>
+      trees.map((tree) => ({
+        label: tree.display_name,
+        value: tree.name,
+      }))
+    )
+  );
+
   constructor(
     private fb: NonNullableFormBuilder,
     private route: ActivatedRoute,
@@ -125,6 +136,23 @@ export class TreeFormComponent implements OnInit {
     }
   }
 
+  private techniqueToFormGroup(
+    technique: TechniqueMapper
+  ): TechniqueMapperGroupControls {
+    return this.fb.group({
+      oid: this.fb.control<string | undefined>(technique.oid),
+      comment: this.fb.control<string | undefined>(technique.comment),
+      technique: this.fb.control<string | undefined>(technique.technique.id, [
+        Validators.required,
+      ]),
+      objective: this.fb.control<string | undefined>(technique.objective.id, [
+        Validators.required,
+      ]),
+      stage: this.fb.control<string[]>(technique.stage.map((s) => s.id)),
+      period: this.fb.control<PeriodEnum[]>(technique.period),
+    });
+  }
+
   public initializeEntity(entityId: string): void {
     this.treeService
       .getTreeInfo(entityId)
@@ -138,22 +166,7 @@ export class TreeFormComponent implements OnInit {
         }),
         map((tree): TechniqueMapperGroupControls[] => {
           return tree.techniques.map((technique, rowIndex) => {
-            const techniqueGroup: TechniqueMapperGroupControls = this.fb.group({
-              oid: this.fb.control<string | undefined>(technique.oid),
-              comment: this.fb.control<string | undefined>(technique.comment),
-              technique: this.fb.control<string | undefined>(
-                technique.technique.id,
-                [Validators.required]
-              ),
-              objective: this.fb.control<string | undefined>(
-                technique.objective.id,
-                [Validators.required]
-              ),
-              stage: this.fb.control<string[]>(
-                technique.stage.map((s) => s.id)
-              ),
-              period: this.fb.control<PeriodEnum[]>(technique.period),
-            });
+            const techniqueGroup = this.techniqueToFormGroup(technique);
             this.formTechniques.addControl(technique.oid, techniqueGroup);
             return techniqueGroup;
           });
@@ -327,5 +340,24 @@ export class TreeFormComponent implements OnInit {
           });
       }
     }
+  }
+
+  public importFromTree(): void {
+    if (!this.importTreeName) return;
+
+    this.treeService
+      .getTreeInfo(this.importTreeName)
+      .pipe(
+        take(1),
+        map((tree) => tree.techniques)
+      )
+      .subscribe((techniques) => {
+        const techniqueGroupControls = techniques.map((technique) => {
+          const techniqueGroup = this.techniqueToFormGroup(technique);
+          this.formTechniques.addControl(technique.oid, techniqueGroup);
+          return techniqueGroup;
+        });
+        this.formTechniquesControlList$.next(techniqueGroupControls);
+      });
   }
 }

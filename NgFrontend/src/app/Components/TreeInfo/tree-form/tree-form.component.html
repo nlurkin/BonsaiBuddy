@@ -130,6 +130,31 @@
             </span>
           </div>
           <div class="flex flex-row justify-content-end">
+            <span class="me-2 flex flex-row">
+              <p-dropdown
+                [filter]="true"
+                filterBy="label"
+                [options]="(treeOptions$ | async) ?? []"
+                [styleClass]="'inline-select'"
+                [panelStyleClass]="'inline-select-panel'"
+                optionLabel="label"
+                optionValue="value"
+                [resetFilterOnHide]="true"
+                placeholder="Import from another tree"
+                class="me-1"
+                [styleClass]="'large-dropdown'"
+                [(ngModel)]="importTreeName"
+                [ngModelOptions]="{ standalone: true }"
+              >
+              </p-dropdown>
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="importFromTree()"
+              >
+                Import
+              </button>
+            </span>
             <button
               type="button"
               class="btn btn-primary"
