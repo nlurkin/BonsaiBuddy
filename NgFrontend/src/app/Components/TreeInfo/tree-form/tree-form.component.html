@@ -185,8 +185,9 @@
                       type="button"
                       pInitEditableRow
                       icon="fa-solid fa-pencil"
-                      class="p-button-rounded p-button-text"
+                      class="p-button-rounded p-button-text button-small"
                       (click)="onRowEditInit(techniqueMapper.oid)"
+                      title="Edit"
                     ></button>
                     <button
                       *ngIf="editing"
@@ -195,8 +196,8 @@
                       type="button"
                       pSaveEditableRow
                       icon="fa-solid fa-check"
-                      class="p-button-rounded p-button-text p-button-success mr-2"
-                      (click)="onRowEditSave(techniqueMapper.oid)"
+                      class="p-button-rounded p-button-text p-button-success mr-2 button-small"
+                      title="Validate"
                     ></button>
                     <button
                       *ngIf="editing"
@@ -205,8 +206,9 @@
                       type="button"
                       pCancelEditableRow
                       icon="fa-solid fa-times"
-                      class="p-button-rounded p-button-text p-button-danger"
+                      class="p-button-rounded p-button-text p-button-danger button-small"
                       (click)="onRowEditCancel(techniqueMapper.oid)"
+                      title="Cancel"
                     ></button>
                     <button
                       *ngIf="!editing"
@@ -230,6 +232,7 @@
                           ? 'fa-solid fa-chevron-down'
                           : 'fa-solid fa-chevron-right'
                       "
+                      title="Expand"
                     ></button>
                   </div>
                 </td>
