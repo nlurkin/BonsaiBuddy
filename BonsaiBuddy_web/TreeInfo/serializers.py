@@ -29,6 +29,20 @@ class TechniqueMapperSerializer(serializers.EmbeddedDocumentSerializer):
         fields = ['oid', 'comment', 'technique',
                   'objective', 'stage', 'period']
 
+    def update(self, instance, validated_data):
+        if 'comment' in validated_data:
+            instance.comment = validated_data['comment']
+        if 'technique' in validated_data:
+            instance.technique = validated_data['technique']['id']
+        if 'objective' in validated_data:
+            instance.objective = validated_data['objective']['id']
+        if 'stage' in validated_data:
+            instance.stage = [stage['id'] for stage in validated_data['stage']]
+        if 'period' in validated_data:
+            instance.period = list(validated_data['period'])
+
+        return instance
+
     def create(self, validated_data):
         instance = TechniqueMapper(
             technique=validated_data['technique']['id'], objective=validated_data['objective']['id'],
