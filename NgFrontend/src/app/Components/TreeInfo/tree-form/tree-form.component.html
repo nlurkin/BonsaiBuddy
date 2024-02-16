@@ -102,7 +102,9 @@
         <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
           Submit
         </button>
-        <button class="btn btn-secondary" routerLink="..">Cancel</button>
+        <button class="btn btn-secondary" type="button" routerLink="..">
+          Cancel
+        </button>
       </div>
     </form>
   </p-accordionTab>
@@ -122,11 +124,17 @@
               >
                 Submit
               </button>
-              <button class="btn btn-secondary" routerLink="..">Cancel</button>
+              <button class="btn btn-secondary" type="button" routerLink="..">
+                Cancel
+              </button>
             </span>
           </div>
           <div class="flex flex-row justify-content-end">
-            <button class="btn btn-primary" (click)="deeleteSelected()">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="deleteSelected()"
+            >
               Delete selected
             </button>
           </div>
@@ -379,7 +387,9 @@
           >
             Submit
           </button>
-          <button class="btn btn-secondary" routerLink="..">Cancel</button>
+          <button class="btn btn-secondary" type="button" routerLink="..">
+            Cancel
+          </button>
         </div>
       </div>
     </form>
