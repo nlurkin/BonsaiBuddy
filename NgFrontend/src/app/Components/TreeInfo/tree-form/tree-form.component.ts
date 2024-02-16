@@ -249,16 +249,16 @@ export class TreeFormComponent implements OnInit {
     ]);
   }
 
-  public deeleteSelected(): void {
-    // const selected = this.dataTable.selectionKeys as Record<string, number>;
-    // const oidToRemove = Object.keys(selected);
-    // const group = this.formTechniques as FormGroup;
-    // oidToRemove.forEach((s) => group.removeControl(s));
-    // this.formTechniquesControlList$.next(
-    //   this.formTechniquesControlList$.value.filter(
-    //     (c) => !oidToRemove.includes(c.controls.oid.value ?? '')
-    //   )
-    // );
+  public deleteSelected(): void {
+    const selected = this.dataTable.selectionKeys as Record<string, number>;
+    const oidToRemove = Object.keys(selected);
+    const group = this.formTechniques as FormGroup;
+    oidToRemove.forEach((s) => group.removeControl(s));
+    this.formTechniquesControlList$.next(
+      this.formTechniquesControlList$.value.filter(
+        (c) => !oidToRemove.includes(c.controls.oid.value ?? '')
+      )
+    );
   }
 
   private numberOfNewLines = 0;

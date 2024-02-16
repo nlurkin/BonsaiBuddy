@@ -70,6 +70,7 @@ class TreeInfoSerializer(serializers.DocumentSerializer):
                   'fertilizing', 'pruning_wiring', 'repotting', 'propagation', 'pests', 'published', 'techniques']
 
     def create_update_techniques(self, instance, techniques_data):
+        existing_techniques = [_ for _ in instance.techniques]
         if techniques_data is not None:
             for technique in techniques_data:
                 technique_mapper = instance.techniques.filter(
@@ -82,6 +83,12 @@ class TreeInfoSerializer(serializers.DocumentSerializer):
                     # Create new tree and add it to instance.my_trees
                     new_tree = TechniqueMapperSerializer().create(technique)
                     instance.techniques.append(new_tree)
+        # Remove techniques that are not in the new list
+        updated_technique_ids = [technique['oid']
+                                 for technique in techniques_data]
+        for technique in existing_techniques:
+            if technique['oid'] not in updated_technique_ids:
+                instance.techniques.remove(technique)
 
     def update(self, instance, validated_data):
         if 'techniques' in validated_data:
