@@ -16,8 +16,10 @@ import {
 } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
 import { TreeInfoService } from 'src/app/Services/tree-info.service';
+import { filterDefined } from 'src/app/rxjs-util';
 import { periodIdToName } from 'src/app/utils';
 import {
+  AssociationSearch,
   BonsaiTechnique,
   PeriodEnum,
   TechniqueMapper,
@@ -44,7 +46,9 @@ export class WhichTechniqueComponent implements OnDestroy {
   public InputType = InputType;
   public form = this.fb.group({
     tree: this.fb.control<string | undefined>(undefined, [Validators.required]),
-    objective: this.fb.control<string | undefined>(undefined),
+    objective: this.fb.control<string | undefined>(undefined, [
+      Validators.required,
+    ]),
     period: this.fb.control<string | undefined>(undefined),
     stage: this.fb.control<string[]>([]),
   });
@@ -115,6 +119,14 @@ export class WhichTechniqueComponent implements OnDestroy {
         tree ? this.treeService.getTreeInfo(tree) : of(undefined)
       )
     );
+  private readonly selectedSearchTreeName$: BehaviorSubject<
+    string | undefined
+  > = new BehaviorSubject<string | undefined>(undefined);
+  private readonly selectedSearchTree$: Observable<TreeInfo | undefined> =
+    this.selectedSearchTreeName$.pipe(
+      filterDefined(),
+      switchMap((name) => this.treeService.getTreeInfo(name))
+    );
   private readonly mapperByOid$: Observable<TechniqueMapper | undefined> =
     combineLatest([
       this.initialOptions$.pipe(map(({ oid }) => oid)),
@@ -125,25 +137,39 @@ export class WhichTechniqueComponent implements OnDestroy {
         if (maybeMapper) this.showSearch$.next(false);
       })
     );
+  private readonly mapperBySearch$: BehaviorSubject<
+    TechniqueMapper[] | undefined
+  > = new BehaviorSubject<TechniqueMapper[] | undefined>(undefined);
 
-  public readonly selectedTree$ = this.initialSelectedTree$;
+  public readonly selectedTree$: Observable<TreeInfo> = combineLatest([
+    this.initialSelectedTree$,
+    this.selectedSearchTree$,
+  ]).pipe(
+    map(([initial, search]) => (search ? search : initial)),
+    filterDefined()
+  );
 
   public readonly mapperSelector$: Observable<MapperForDisplay[]> =
-    combineLatest([this.mapperByOid$]).pipe(
-      map(([byOid]) => (byOid ? [byOid] : [])),
+    combineLatest([this.mapperByOid$, this.mapperBySearch$]).pipe(
+      map(([byOid, bySearch]) =>
+        bySearch ? bySearch : byOid ? [byOid] : undefined
+      ),
+      filterDefined(),
       switchMap((mappers) =>
         forkJoin(
           mappers.map((mapper) => {
-            return combineLatest([
-              this.adviceService
-                .getTechniqueById(mapper.technique.id)
-                .pipe(take(1)),
-              forkJoin(
-                mapper.stage.map((stage) =>
-                  this.adviceService.getStageById(stage.id).pipe(take(1))
-                )
-              ),
-            ]).pipe(
+            const adviceRequest = this.adviceService
+              .getTechniqueById(mapper.technique.id)
+              .pipe(take(1));
+            const periodRequest =
+              mapper.stage.length > 0
+                ? forkJoin(
+                    mapper.stage.map((stage) =>
+                      this.adviceService.getStageById(stage.id).pipe(take(1))
+                    )
+                  )
+                : of([]);
+            return combineLatest([adviceRequest, periodRequest]).pipe(
               map(([technique, stages]) => ({
                 technique,
                 stages,
@@ -190,5 +216,26 @@ export class WhichTechniqueComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  public submitSearch() {
+    if (this.form.invalid) return;
+
+    const formValues = this.form.getRawValue();
+    const request: AssociationSearch = {
+      tree: formValues.tree!,
+      objective: formValues.objective!,
+      period: formValues.period,
+      stage: formValues.stage ?? [],
+    };
+
+    this.adviceService
+      .searchAssociations(request)
+      .pipe(take(1))
+      .subscribe((mappers) => {
+        this.selectedSearchTreeName$.next(formValues.tree);
+        this.mapperBySearch$.next(mappers.techniques);
+        this.showSearch$.next(false);
+      });
   }
 }

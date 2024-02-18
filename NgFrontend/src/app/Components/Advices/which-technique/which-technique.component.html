@@ -1,5 +1,5 @@
 <div *ngIf="showSearch$ | async">
-  <form [formGroup]="form" class="row g-3">
+  <form [formGroup]="form" class="row g-3" (ngSubmit)="submitSearch()">
     <app-custom-input
       [formName]="'tree'"
       [type]="InputType.SELECT"
@@ -63,11 +63,11 @@
         </ng-container>
       </div>
     </div>
-    <div *ngIf="false">
+    <div *ngIf="!mappers">
       <p>
         No techniques are applicable for
-        <!-- {{ tree.display_name }}  -->
-        ccording to your search criterion
+        {{ (selectedTree$ | async)?.display_name }}
+        according to your search criterion
       </p>
     </div>
   </div>
