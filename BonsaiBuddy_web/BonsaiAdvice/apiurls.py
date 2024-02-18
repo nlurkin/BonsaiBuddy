@@ -14,4 +14,6 @@ router.register(r'advices/stages', views.BonsaiStageViewSet,
 urlpatterns = [path('', include(router.urls)),
                path('advices/techniques_categories',
                     views.BonsaiTechniqueCategoriesView.as_view()),
+               path('advices/association_search',
+                    views.AssociationSearchView.as_view()),
                ]

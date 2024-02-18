@@ -6,9 +6,14 @@ from drf_spectacular.utils import (OpenApiParameter, extend_schema,
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_mongoengine import viewsets
 
-from BonsaiAdvice.serializers import (BonsaiObjectiveSerializer, BonsaiStageSerializer,
+from BonsaiAdvice.association import select_associations
+from BonsaiAdvice.serializers import (AssociationSearchResultSerializer,
+                                      AssociationSearchSerializer,
+                                      BonsaiObjectiveSerializer,
+                                      BonsaiStageSerializer,
                                       BonsaiTechniqueSerializer)
 from BonsaiBuddy.serializers import StringListSerializer
 from TreeInfo.models import TreeInfo
@@ -17,8 +22,7 @@ from utils import get_object_or_404, user_has_any_perms
 from .forms import AdviceConfigForm, ReqAdviceInfo
 from .menu import BonsaiAdviceMenuMixin
 from .models import (AdvicePermissionModelAPI, BonsaiObjective, BonsaiStage,
-                     BonsaiTechnique, get_technique_categories, make_timing,
-                     timing_matches)
+                     BonsaiTechnique, get_technique_categories)
 
 
 class IndexView(BonsaiAdviceMenuMixin, generic.ListView):
@@ -129,32 +133,9 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
 
         tree = self.get_queryset()
 
-        if self.info.oid is not None:
-            use_oid = True
-        else:
-            # Then get the list of valid advices according to the criteria in info
-            objective_document_id = BonsaiObjective.get(self.info.objective).id
-            stage_document_id = None if not self.info.stage else [
-                BonsaiStage.get(_).id for _ in self.info.stage]
-            period = None if not self.info.period else self.info.period.split(
-                ',')
+        selected_techniques = select_associations(
+            tree, self.info, show_unpublished)
 
-        selected_techniques = []
-        for technique in tree.techniques:
-            if use_oid:
-                if str(technique.oid) != self.info.oid:
-                    continue
-            else:
-                if technique.objective.id != objective_document_id:
-                    continue
-                if not timing_matches(stage_document_id, period, [_.id for _ in technique.stage], technique.period):
-                    continue
-            technique_doc = technique.technique.fetch()
-            if not show_unpublished and not technique_doc.published:
-                continue
-            selected_techniques.append({"technique": technique_doc,
-                                        "timing": make_timing([_.fetch() for _ in technique.stage], technique.period),
-                                        "comment": technique.comment})
         context["techniques"] = selected_techniques
         context["tree"] = tree
         return context
@@ -233,3 +214,28 @@ class BonsaiTechniqueCategoriesView(GenericAPIView):
         serializer = self.get_serializer(
             get_technique_categories(), many=True)
         return Response(serializer.data)
+
+
+class AssociationSearchView(APIView):
+    """
+    API endpoint that returns the list of technique categories
+    """
+    authentication_classes = []
+    permission_classes = []
+
+    @extend_schema(operation_id="adviceAssociationSearch", request=AssociationSearchSerializer, responses={200: AssociationSearchResultSerializer})
+    def post(self, request, *args, **kwargs):
+        input_serializer = AssociationSearchSerializer(data=request.data)
+        if input_serializer.is_valid():
+            # Process the data and create your output data
+            request_data = input_serializer.validated_data
+            tree = TreeInfo.get(request_data["tree"])
+            show_unpublished = user_has_any_perms(
+                self.request.user, ["BonsaiAdvice.change_content"])
+            output_data = select_associations(tree, ReqAdviceInfo(None,
+                                                                  serialized_data=request_data), show_unpublished, for_api=True)
+            output_serializer = AssociationSearchResultSerializer(
+                {'techniques': output_data})
+            return Response(output_serializer.data, status=200)
+        else:
+            return Response(input_serializer.errors, status=400)
