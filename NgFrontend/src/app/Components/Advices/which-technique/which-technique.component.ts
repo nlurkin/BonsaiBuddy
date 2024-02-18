@@ -27,6 +27,14 @@ import {
   InputType,
   SelectOption,
 } from '../../Generic/text-input/custom-input.component';
+
+type MapperForDisplay = {
+  technique: BonsaiTechnique | undefined;
+  stages: string[];
+  periods: string[];
+  comment: string | undefined;
+};
+
 @Component({
   selector: 'app-which-technique',
   templateUrl: './which-technique.component.html',
@@ -89,10 +97,98 @@ export class WhichTechniqueComponent implements OnDestroy {
       label: periodIdToName(stringKey) ?? '',
     };
   });
+
+  private initialOptions$: Observable<{
+    oid: string | null;
+    tree: string | null;
+  }> = this.route.queryParamMap.pipe(
+    map((params) => {
+      const tree = params.get('tree');
+      const oid = params.get('oid');
+      return { oid, tree };
+    })
+  );
+
+  private readonly initialSelectedTree$: Observable<TreeInfo | undefined> =
+    this.initialOptions$.pipe(
+      switchMap(({ tree }) =>
+        tree ? this.treeService.getTreeInfo(tree) : of(undefined)
+      )
+    );
+  private readonly mapperByOid$: Observable<TechniqueMapper | undefined> =
+    combineLatest([
+      this.initialOptions$.pipe(map(({ oid }) => oid)),
+      this.initialSelectedTree$,
+    ]).pipe(
+      map(([oid, tree]) => tree?.techniques.find((t) => t.oid === oid)),
+      tap((maybeMapper) => {
+        if (maybeMapper) this.showSearch$.next(false);
+      })
+    );
+
+  public readonly selectedTree$ = this.initialSelectedTree$;
+
+  public readonly mapperSelector$: Observable<MapperForDisplay[]> =
+    combineLatest([this.mapperByOid$]).pipe(
+      map(([byOid]) => (byOid ? [byOid] : [])),
+      switchMap((mappers) =>
+        forkJoin(
+          mappers.map((mapper) => {
+            return combineLatest([
+              this.adviceService
+                .getTechniqueById(mapper.technique.id)
+                .pipe(take(1)),
+              forkJoin(
+                mapper.stage.map((stage) =>
+                  this.adviceService.getStageById(stage.id).pipe(take(1))
+                )
+              ),
+            ]).pipe(
+              map(([technique, stages]) => ({
+                technique,
+                stages,
+                periods: mapper.period.map((period) => periodIdToName(period)),
+                comment: mapper.comment,
+              }))
+            );
+          })
+        )
+      ),
+      map((mappers) => {
+        return mappers.map(
+          ({ technique, stages, periods, comment }): MapperForDisplay => {
+            return {
+              technique,
+              stages: stages
+                .map((stage) => stage?.display_name)
+                .filter((stage): stage is string => !!stage),
+              periods: periods.filter((period): period is string => !!period),
+              comment,
+            };
+          }
+        );
+      })
+    );
+
+  public readonly showSearch$ = new BehaviorSubject<boolean>(true);
+
+  private destroy$ = new Subject<void>();
+
   constructor(
     private fb: NonNullableFormBuilder,
     private adviceService: AdviceService,
     private treeService: TreeInfoService,
     private route: ActivatedRoute
   ) {
+    this.initialOptions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ tree }) => {
+        if (tree) this.form.patchValue({ tree: tree });
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

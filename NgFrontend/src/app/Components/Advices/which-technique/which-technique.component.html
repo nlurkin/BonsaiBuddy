@@ -1,3 +1,4 @@
+<div *ngIf="showSearch$ | async">
   <form [formGroup]="form" class="row g-3">
     <app-custom-input
       [formName]="'tree'"
@@ -39,3 +40,35 @@
       </button>
     </div>
   </form>
+</div>
+
+<ng-container *ngLet="mapperSelector$ | async as mappers">
+  <div *ngIf="!(showSearch$ | async)">
+    <div *ngIf="mappers">
+      <h2>Advices for {{ (selectedTree$ | async)?.display_name }}</h2>
+      <p>The following techniques are applicable according to your criterion</p>
+      <div *ngFor="let mapper of mappers">
+        <h3>{{ mapper.technique?.display_name }}</h3>
+        <p>
+          {{ mapper.technique?.category | titlecase }}
+        </p>
+        <markdown [data]="mapper.technique?.description"></markdown>
+        <ng-container>
+          <p>
+            This technique is applicable generally in
+            {{ mapper.periods.join(", ") }} when the tree shows any of the
+            following states: {{ mapper.stages.join(", ") }}
+          </p>
+          <p>Specific for this tree: {{ mapper.comment }}</p>
+        </ng-container>
+      </div>
+    </div>
+    <div *ngIf="false">
+      <p>
+        No techniques are applicable for
+        <!-- {{ tree.display_name }}  -->
+        ccording to your search criterion
+      </p>
+    </div>
+  </div>
+</ng-container>
