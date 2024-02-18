@@ -65,6 +65,12 @@
               }}</span
               >)</ng-container
             >
+            <a
+              [routerLink]="'/advices/which_technique'"
+              [queryParams]="{ oid: mapper.oid, tree: tree_info?.name }"
+            >
+              more
+            </a>
           </ng-container>
         </ng-template>
 
@@ -109,7 +115,12 @@
     </ng-container>
   </div>
 
-  <p *ngIf="canEdit$ | async">
-    <a [routerLink]="'./update'">Update</a> -
+  <p *ngIf="canEdit$ | async"><a [routerLink]="'./update'">Update</a></p>
+  <p>
+    <a
+      [routerLink]="'/advices/which_technique'"
+      [queryParams]="{ tree: tree_info?.name }"
+      >See advice</a
+    >
   </p>
 </div>

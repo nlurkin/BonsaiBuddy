@@ -21,6 +21,7 @@ import { PasswordFormComponent } from './Components/Users/password-form/password
 import { MyTreesComponent } from './Components/Users/my-trees/my-trees.component';
 import { TreeDetailComponent } from './Components/TreeInfo/tree-detail/tree-detail.component';
 import { TreeFormComponent } from './Components/TreeInfo/tree-form/tree-form.component';
+import { WhichTechniqueComponent } from './Components/Advices/which-technique/which-technique.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthenticationComponent },
@@ -60,6 +61,11 @@ const routes: Routes = [
     canActivate: [hasPermissionsGuard],
     data: { permissions: 'BonsaiAdvice.change_content' },
     title: 'BonsaiBuddy - Techniques',
+  },
+  {
+    path: 'advices/which_technique',
+    component: WhichTechniqueComponent,
+    title: 'BonsaiBuddy - Advices',
   },
   {
     path: 'admin/technique/create',

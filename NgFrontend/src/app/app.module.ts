@@ -40,6 +40,7 @@ import { EntityIdToNamePipe } from './entity-id-to-name.pipe';
 import { ErrorInterceptor } from './error.interceptor';
 import { JwtInterceptor } from './jwt.interceptor';
 import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
+import { WhichTechniqueComponent } from './Components/Advices/which-technique/which-technique.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
     PeriodIdToNamePipe,
     TreeFormComponent,
     EntityIdToNamePipe,
+    WhichTechniqueComponent,
   ],
   imports: [
     BrowserModule,
