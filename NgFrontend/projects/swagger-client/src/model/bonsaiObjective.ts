@@ -16,9 +16,9 @@
  */
 export interface BonsaiObjective { 
     id: string;
+    description: string;
     short_name: string;
     display_name?: string;
-    description?: string;
     published?: boolean;
     sequence?: number;
 }

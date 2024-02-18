@@ -18,7 +18,7 @@ import { LazyReferenceField } from './lazyReferenceField';
  */
 export interface TechniqueMapper { 
     oid: string;
-    comment?: string;
+    comment: string;
     technique: LazyReferenceField;
     objective: LazyReferenceField;
     stage: Array<LazyReferenceField>;

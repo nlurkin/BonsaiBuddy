@@ -20,14 +20,14 @@ export interface TreeInfo {
     name: string;
     display_name: string;
     latin_name?: string;
-    description?: string;
-    placement?: string;
-    watering?: string;
-    fertilizing?: string;
-    pruning_wiring?: string;
-    repotting?: string;
-    propagation?: string;
-    pests?: string;
+    description: string;
+    placement: string;
+    watering: string;
+    fertilizing: string;
+    pruning_wiring: string;
+    repotting: string;
+    propagation: string;
+    pests: string;
     published?: boolean;
     techniques: Array<TechniqueMapper>;
 }

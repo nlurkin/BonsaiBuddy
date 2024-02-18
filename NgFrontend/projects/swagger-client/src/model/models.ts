@@ -1,3 +1,5 @@
+export * from './associationSearch';
+export * from './associationSearchResult';
 export * from './bonsaiObjective';
 export * from './bonsaiStage';
 export * from './bonsaiTechnique';

@@ -11,6 +11,8 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/associationSearch.ts
+model/associationSearchResult.ts
 model/bonsaiObjective.ts
 model/bonsaiStage.ts
 model/bonsaiTechnique.ts
