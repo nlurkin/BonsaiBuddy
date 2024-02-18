@@ -22,6 +22,8 @@ import {
 } from 'rxjs';
 import {
   AdvicesAPI,
+  AssociationSearch,
+  AssociationSearchResult,
   BonsaiObjective,
   BonsaiStage,
   BonsaiTechnique,
@@ -412,5 +414,11 @@ export class AdviceService {
       this.initializedStageStore$,
       stageStore
     );
+  }
+
+  public searchAssociations(
+    searchQuery: AssociationSearch
+  ): Observable<AssociationSearchResult> {
+    return this.techniqueApiService.adviceAssociationSearch(searchQuery);
   }
 }
