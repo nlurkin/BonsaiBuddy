@@ -40,8 +40,8 @@ export class CustomInputComponent {
 
   public validityCheck(): string {
     if (
-      (this.control?.invalid || this.invalid) &&
-      (this.control.dirty || this.control.touched)
+      (this.control?.invalid && (this.control.dirty || this.control.touched)) ||
+      this.invalid
     )
       return 'invalid';
     else return '';
