@@ -1,5 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
-import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  NonNullableFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
   BehaviorSubject,
@@ -44,14 +48,28 @@ type MapperForDisplay = {
 })
 export class WhichTechniqueComponent implements OnDestroy {
   public InputType = InputType;
-  public form = this.fb.group({
-    tree: this.fb.control<string | undefined>(undefined, [Validators.required]),
-    objective: this.fb.control<string | undefined>(undefined, [
-      Validators.required,
-    ]),
-    period: this.fb.control<string | undefined>(undefined),
-    stage: this.fb.control<string[]>([]),
-  });
+  public form = this.fb.group(
+    {
+      tree: this.fb.control<string | undefined>(undefined, [
+        Validators.required,
+      ]),
+      objective: this.fb.control<string | undefined>(undefined, [
+        Validators.required,
+      ]),
+      period: this.fb.control<string | undefined>(undefined),
+      stage: this.fb.control<string[]>([]),
+    },
+    {
+      validators: [
+        (control: AbstractControl) => {
+          const period: string | undefined = control.get('period')?.value;
+          const stage: string[] | undefined = control.get('stage')?.value;
+          if (period || (stage?.length ?? 0) > 0) return null;
+          return { periodAndStage: true };
+        },
+      ],
+    }
+  );
 
   public readonly treeOptions$: Observable<SelectOption[]> = this.treeService
     .getAllTreeInfo()

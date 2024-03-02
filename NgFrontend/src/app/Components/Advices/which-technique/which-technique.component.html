@@ -30,6 +30,7 @@
         [options]="periodOptions"
         [placeholder]="'Period'"
         class="col-md-6"
+        [invalid]="form.hasError('periodAndStage') && form.touched"
       ></app-custom-input>
 
       <app-custom-input
@@ -38,6 +39,7 @@
         [options]="(stageOptions$ | async) ?? []"
         [placeholder]="'Stage'"
         class="col-md-6"
+        [invalid]="form.hasError('periodAndStage') && form.touched"
       ></app-custom-input>
 
       <div class="col-12">
