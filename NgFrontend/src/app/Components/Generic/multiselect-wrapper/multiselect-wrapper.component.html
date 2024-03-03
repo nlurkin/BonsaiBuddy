@@ -1,0 +1,12 @@
+<p-multiSelect
+  [formControl]="control"
+  [options]="options"
+  optionLabel="label"
+  optionValue="value"
+  [display]="(displayMode | async) ?? 'chip'"
+  [styleClass]="styleClass"
+  [id]="id"
+  class="col-md"
+  [maxSelectedLabels]="maxItemsToDisplay"
+  [selectedItemsLabel]="selectedItemsLabel"
+></p-multiSelect>

@@ -40,6 +40,8 @@
         [placeholder]="'Stage'"
         class="col-md-6"
         [invalid]="form.hasError('periodAndStage') && form.touched"
+        [selectedItemsLabel]="'{0} stages selected'"
+        [maxItemsToDisplay]="3"
       ></app-custom-input>
 
       <div class="col-12">

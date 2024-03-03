@@ -24,6 +24,8 @@ export class CustomInputComponent {
   @Input() type: InputType = InputType.TEXT;
   @Input() options: SelectOption[] = [];
   @Input() invalid: boolean = false;
+  @Input() maxItemsToDisplay: number = 2;
+  @Input() selectedItemsLabel: string = '{0} items selected';
 
   public InputType = InputType;
   public showPassword: boolean = false;

@@ -70,16 +70,16 @@
   </ng-template>
 
   <ng-template #multiselectType>
-    <p-multiSelect
-      [formControl]="control"
+    <app-multiselect-wrapper
+      [control]="control"
       [options]="options"
-      optionLabel="label"
-      optionValue="value"
-      display="chip"
-      [styleClass]="'form-control'"
       [id]="'id_' + formName"
-      [maxSelectedLabels]="10"
-    ></p-multiSelect>
+      [maxItemsToDisplay]="maxItemsToDisplay"
+      [selectedItemsLabel]="selectedItemsLabel"
+      [styleClass]="'form-control'"
+      class="col-md"
+    >
+    </app-multiselect-wrapper>
   </ng-template>
 
   <!-- Selection of the template -->
