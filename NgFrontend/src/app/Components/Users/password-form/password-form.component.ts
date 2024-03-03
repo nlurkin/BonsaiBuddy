@@ -10,7 +10,7 @@ import { Observable, catchError, map, of, take } from 'rxjs';
 import { AuthenticationService } from 'src/app/Services/authentication.service';
 import { ToastingService } from 'src/app/Services/toasting.service';
 import { UserService } from 'src/app/Services/user.service';
-import { InputType } from '../../Generic/text-input/custom-input.component';
+import { InputType } from '../../Generic/custom-input/custom-input.component';
 
 const passwordMismatch: ValidatorFn = (
   control: AbstractControl

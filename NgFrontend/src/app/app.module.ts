@@ -23,7 +23,7 @@ import { StageComponent } from './Components/Advices/Stages/stage/stage.componen
 import { TechniqueFormComponent } from './Components/Advices/Technique/technique-form/technique-form.component';
 import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
 import { AdvicesComponent } from './Components/Advices/advices.component';
-import { CustomInputComponent } from './Components/Generic/text-input/custom-input.component';
+import { CustomInputComponent } from './Components/Generic/custom-input/custom-input.component';
 import { MenuComponent } from './Components/Menu/menu/menu.component';
 import { TreeDetailComponent } from './Components/TreeInfo/tree-detail/tree-detail.component';
 import { TreeFormComponent } from './Components/TreeInfo/tree-form/tree-form.component';
@@ -40,7 +40,6 @@ import { EntityIdToNamePipe } from './entity-id-to-name.pipe';
 import { ErrorInterceptor } from './error.interceptor';
 import { JwtInterceptor } from './jwt.interceptor';
 import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
-import { WhichTechniqueComponent } from './Components/Advices/which-technique/which-technique.component';
 
 @NgModule({
   declarations: [

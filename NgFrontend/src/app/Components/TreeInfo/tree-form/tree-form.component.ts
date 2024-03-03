@@ -20,7 +20,7 @@ import { PeriodEnum, TechniqueMapper } from 'swagger-client';
 import {
   InputType,
   SelectOption,
-} from '../../Generic/text-input/custom-input.component';
+} from '../../Generic/custom-input/custom-input.component';
 
 type TechniqueMapperGroupControls = FormGroup<{
   oid: FormControl<string | undefined>;

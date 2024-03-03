@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, take } from 'rxjs';
-import { SelectOption } from 'src/app/Components/Generic/text-input/custom-input.component';
+import { SelectOption } from 'src/app/Components/Generic/custom-input/custom-input.component';
 import { AdviceService } from 'src/app/Services/advice.service';
 import { BonsaiTechnique } from 'swagger-client';
 import { EntityForm, EntityType } from '../../entity-form';

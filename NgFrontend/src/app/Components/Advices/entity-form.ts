@@ -4,9 +4,9 @@ import { Component } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, take } from 'rxjs';
-import { RouterURL } from 'src/app/types';
-import { InputType } from '../Generic/text-input/custom-input.component';
 import { bsonIdNull } from 'src/app/constants';
+import { RouterURL } from 'src/app/types';
+import { InputType } from '../Generic/custom-input/custom-input.component';
 
 export type EntityType = 'technique' | 'objective' | 'stage';
 

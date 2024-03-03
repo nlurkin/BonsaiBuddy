@@ -32,7 +32,7 @@ import {
 import {
   InputType,
   SelectOption,
-} from '../../Generic/text-input/custom-input.component';
+} from '../../Generic/custom-input/custom-input.component';
 
 type MapperForDisplay = {
   technique: BonsaiTechnique | undefined;

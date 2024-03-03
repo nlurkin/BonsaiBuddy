@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { DropdownChangeEvent } from 'primeng/dropdown';
 import { combineLatestWith, map, take } from 'rxjs';
 import { AdviceService } from 'src/app/Services/advice.service';
 import { ToastingService } from 'src/app/Services/toasting.service';
@@ -9,8 +10,7 @@ import { filterDefined } from 'src/app/rxjs-util';
 import {
   InputType,
   SelectOption,
-} from '../../Generic/text-input/custom-input.component';
-import { DropdownChangeEvent } from 'primeng/dropdown';
+} from '../../Generic/custom-input/custom-input.component';
 
 @Component({
   selector: 'app-my-trees',

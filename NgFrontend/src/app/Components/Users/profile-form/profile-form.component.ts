@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { NonNullableFormBuilder } from '@angular/forms';
 import { take } from 'rxjs';
 import { UserService } from 'src/app/Services/user.service';
+import { CountryObject } from 'src/app/types';
 import { getCountries } from 'src/app/utils';
 import { PatchedProfile, Profile } from 'swagger-client';
-import { InputType } from '../../Generic/text-input/custom-input.component';
-import { CountryObject } from 'src/app/types';
+import { InputType } from '../../Generic/custom-input/custom-input.component';
 
 @Component({
   selector: 'app-profile-form',
