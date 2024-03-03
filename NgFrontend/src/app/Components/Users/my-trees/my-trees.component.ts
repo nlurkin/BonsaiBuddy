@@ -7,6 +7,7 @@ import { ToastingService } from 'src/app/Services/toasting.service';
 import { TreeInfoService } from 'src/app/Services/tree-info.service';
 import { UserService } from 'src/app/Services/user.service';
 import { filterDefined } from 'src/app/rxjs-util';
+import { getCurrentPeriods } from 'src/app/utils';
 import {
   InputType,
   SelectOption,
@@ -25,6 +26,7 @@ export class MyTreesComponent {
       Validators.required,
     ]),
   });
+  public currentPeriods = getCurrentPeriods();
 
   private profileTrees$ = this.userService.getCurrentUserProfile().pipe(
     filterDefined(),

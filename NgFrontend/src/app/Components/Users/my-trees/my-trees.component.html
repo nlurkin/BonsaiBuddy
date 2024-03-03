@@ -10,6 +10,17 @@
         [panelStyleClass]="'inline-select-panel'"
         (onChange)="updateTreeObjective(tree.oid, $event)"
       ></p-dropdown>
+
+      <a
+        [routerLink]="'/advices/which_technique'"
+        [queryParams]="{
+          tree: tree.tree?.name,
+          objective: tree.objective?.short_name,
+          period: currentPeriods.join(',')
+        }"
+      >
+        See advice</a
+      >
     </li>
   </ul>
   <p *ngIf="(resolvedTrees?.length ?? 0) == 0">No TreeInfo are available.</p>

@@ -123,11 +123,20 @@ export class WhichTechniqueComponent implements OnDestroy {
   private initialOptions$: Observable<{
     oid: string | null;
     tree: string | null;
+    period: PeriodEnum | null;
+    objective: string | null;
   }> = this.route.queryParamMap.pipe(
     map((params) => {
       const tree = params.get('tree');
       const oid = params.get('oid');
-      return { oid, tree };
+      const objective = params.get('objective');
+      // TODO: handle multiple periods ??
+      const period =
+        params
+          .get('period')
+          ?.split(',')
+          .map((period) => period as PeriodEnum)[0] ?? null;
+      return { oid, tree, period, objective };
     })
   );
 
@@ -226,8 +235,12 @@ export class WhichTechniqueComponent implements OnDestroy {
   ) {
     this.initialOptions$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ tree }) => {
-        if (tree) this.form.patchValue({ tree: tree });
+      .subscribe(({ tree, objective, period }) => {
+        this.form.patchValue({
+          tree: tree ?? undefined,
+          period: period ?? undefined,
+          objective: objective ?? undefined,
+        });
       });
   }
 
