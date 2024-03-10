@@ -8,8 +8,8 @@ class ReqAdviceInfo():
         if serialized_data:
             self.tree = serialized_data['tree']
             self.objective = serialized_data['objective']
-            self.period = serialized_data['period']
-            self.stage = serialized_data['stage']
+            self.period = serialized_data['period'] if 'period' in serialized_data else None
+            self.stage = serialized_data['stage'] if 'stage' in serialized_data else None
             self.oid = None
         else:
             self.tree = query.get("tree", None)
