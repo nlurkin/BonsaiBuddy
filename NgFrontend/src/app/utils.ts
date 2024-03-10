@@ -118,3 +118,16 @@ export function getCurrentPeriods(): string[] {
   const curr_month = new Date().getMonth() + 1;
   return monthToPeriod(curr_month);
 }
+
+export function getLocaleMonth(
+  month: number,
+  locales?: string | string[],
+  format: 'long' | 'short' = 'long'
+): string {
+  const year = new Date().getFullYear();
+  const formatter = new Intl.DateTimeFormat(locales, {
+    month: format,
+  });
+
+  return formatter.format(new Date(year, month - 1));
+}

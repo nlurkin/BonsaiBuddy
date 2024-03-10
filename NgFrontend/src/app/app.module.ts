@@ -14,6 +14,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
+import { TimelineModule } from 'primeng/timeline';
 import { ToastModule } from 'primeng/toast';
 import { AdminComponent } from './Components/Admin/admin/admin.component';
 import { ObjectiveFormComponent } from './Components/Advices/Objectives/objective-form/objective-form.component';
@@ -23,6 +24,7 @@ import { StageComponent } from './Components/Advices/Stages/stage/stage.componen
 import { TechniqueFormComponent } from './Components/Advices/Technique/technique-form/technique-form.component';
 import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
 import { AdvicesComponent } from './Components/Advices/advices.component';
+import { TimelineComponent } from './Components/Advices/timeline/timeline.component';
 import { WhichTechniqueComponent } from './Components/Advices/which-technique/which-technique.component';
 import { CustomInputComponent } from './Components/Generic/custom-input/custom-input.component';
 import { MultiselectWrapperComponent } from './Components/Generic/multiselect-wrapper/multiselect-wrapper.component';
@@ -69,6 +71,7 @@ import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
     EntityIdToNamePipe,
     WhichTechniqueComponent,
     MultiselectWrapperComponent,
+    TimelineComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,6 +91,7 @@ import { PeriodIdToNamePipe } from './period-id-to-name.pipe';
     AccordionModule,
     TableModule,
     InputTextareaModule,
+    TimelineModule,
   ],
   providers: [
     {

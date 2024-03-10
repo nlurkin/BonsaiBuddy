@@ -1,0 +1,17 @@
+<div class="container">
+  <p-timeline #timeline [value]="months" layout="horizontal">
+    <ng-template pTemplate="content" let-event>
+      <span id="label-{{ MonthEnum[event.month] }}" class="label">
+        {{ event.label }}
+      </span>
+    </ng-template>
+  </p-timeline>
+
+  <div
+    class="period-block {{ event.colour }}"
+    id="{{ event.eventId }}"
+    *ngFor="let event of eventsWithColour$ | async"
+  >
+    {{ event.eventId }}
+  </div>
+</div>

@@ -1,0 +1,49 @@
+.container {
+  width: 90%;
+  margin-top: max(20%, 200px);
+  min-width: 500px;
+  min-height: 200px;
+}
+
+.label {
+  position: relative;
+}
+
+.period-block {
+  position: absolute; /* This positions the div at a specified position relative to its nearest positioned ancestor */
+  border: 2px solid black; /* Add a border */
+  background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+  box-sizing: border-box; /* This makes sure the div's size includes the border */
+  opacity: 0.3;
+}
+
+.colour1 {
+  background-color: #ffadad;
+}
+.colour2 {
+  background-color: #ffd6a5;
+}
+.colour3 {
+  background-color: #fdffb6;
+}
+.colour4 {
+  background-color: #e4f1ee;
+}
+.colour5 {
+  background-color: #d9edf8;
+}
+.colour6 {
+  background-color: #dedaf4;
+}
+.colour7 {
+  background-color: #b0b5ed;
+}
+.colour8 {
+  background-color: #f7f5ff;
+}
+.colour8 {
+  background-color: #c5dbc4;
+}
+.colour8 {
+  background-color: #e4f4e3;
+}
