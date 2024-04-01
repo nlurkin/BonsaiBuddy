@@ -11,41 +11,39 @@
 
 .period-block {
   position: absolute; /* This positions the div at a specified position relative to its nearest positioned ancestor */
-  border: 2px solid black; /* Add a border */
-  background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+  border: 2px solid rgba(black, 0.3); /* Add a border */
   box-sizing: border-box; /* This makes sure the div's size includes the border */
-  opacity: 0.3;
 }
 
 .colour1 {
-  background-color: #ffadad;
+  background-color: rgba(#ffadad, 0.3);
 }
 .colour2 {
-  background-color: #ffd6a5;
+  background-color: rgba(#ffd6a5, 0.3);
 }
 .colour3 {
-  background-color: #fdffb6;
+  background-color: rgba(#fdffb6, 0.3);
 }
 .colour4 {
-  background-color: #e4f1ee;
+  background-color: rgba(#e4f1ee, 0.3);
 }
 .colour5 {
-  background-color: #d9edf8;
+  background-color: rgba(#d9edf8, 0.3);
 }
 .colour6 {
-  background-color: #dedaf4;
+  background-color: rgba(#dedaf4, 0.3);
 }
 .colour7 {
-  background-color: #b0b5ed;
+  background-color: rgba(#b0b5ed, 0.3);
 }
 .colour8 {
-  background-color: #f7f5ff;
+  background-color: rgba(#f7f5ff, 0.3);
 }
 .colour8 {
-  background-color: #c5dbc4;
+  background-color: rgba(#c5dbc4, 0.3);
 }
 .colour8 {
-  background-color: #e4f4e3;
+  background-color: rgba(#e4f4e3, 0.3);
 }
 
 ::ng-deep .simple-dropdown ul {
