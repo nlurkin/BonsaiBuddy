@@ -14,19 +14,19 @@ import {
   map,
   takeUntil,
 } from 'rxjs';
-import { Month } from 'src/app/types';
 import { getLocaleMonth } from 'src/app/utils';
 
 type LabelEvent = {
-  month: Month;
+  month: number;
   label: string;
 };
 
 export type PeriodEvent = {
-  startMonth: Month;
-  endMonth: Month;
+  startMonth: number;
+  endMonth: number;
   eventId: string;
   colour?: string;
+  height?: number;
 };
 
 @Component({
@@ -42,21 +42,18 @@ export class TimelineComponent implements OnInit {
     this.refresh$.next();
   }
 
-  public MonthEnum = Month;
-  public months: LabelEvent[] = Object.keys(Month)
-    .filter((key) => !isNaN(Number(key)))
-    .map((month) => {
-      const monthVal = Number(month);
-      return {
-        month: Month[month as keyof typeof Month] as Month,
-        label: getLocaleMonth(monthVal, 'en', 'short'),
-      } as LabelEvent;
-    });
+  public months: LabelEvent[] = range(1, 12).map((month) => {
+    return {
+      month: month,
+      label: getLocaleMonth(month, 'en', 'short'),
+    } as LabelEvent;
+  });
 
-  public eventsWithColour$!: Observable<PeriodEvent[]>;
+  public eventsWithColourAndHeight$!: Observable<PeriodEvent[]>;
   private mutationObserver?: MutationObserver;
   private refresh$ = new BehaviorSubject<void>(undefined);
   private destroy$ = new Subject<void>();
+  public readonly maxHeight$ = new BehaviorSubject<number>(0);
 
   constructor(private elementRef: ElementRef) {}
 
@@ -103,10 +100,7 @@ export class TimelineComponent implements OnInit {
     return colouredEvents;
   }
 
-  private positionPeriodBlock(
-    thisEvent: PeriodEvent,
-    blockHeight: number
-  ): void {
+  private positionPeriodBlock(thisEvent: PeriodEvent): void {
     // Get the element to position
     const periodBlock = document.getElementById(thisEvent.eventId);
 
@@ -121,6 +115,7 @@ export class TimelineComponent implements OnInit {
     const positionStart = startElement.getBoundingClientRect();
     const positionEnd = endElement.getBoundingClientRect();
     const scrollPosition = window.scrollY;
+    const blockHeight = thisEvent.height ?? 200;
 
     // Set the position of the period block
     const blockWidth = positionEnd.right - positionStart.left + 40;
@@ -133,25 +128,28 @@ export class TimelineComponent implements OnInit {
 
   private placeBlocks(events: PeriodEvent[]): void {
     events.forEach((event, index) => {
-      this.positionPeriodBlock(
-        event,
-        this.blockHeight(event, events.slice(index + 1))
-      );
+      this.positionPeriodBlock(event);
     });
   }
 
   ngOnInit() {
-    this.eventsWithColour$ = this.events$.pipe(
+    this.eventsWithColourAndHeight$ = this.events$.pipe(
       map((events) =>
         this.assignColours(
           range(1, 10).map((i) => 'colour' + i),
           events
         )
-      )
+      ),
+      map((events) => this.assignBlockHeight(events))
     );
-    combineLatest([this.eventsWithColour$, this.refresh$])
+    combineLatest([this.eventsWithColourAndHeight$, this.refresh$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([events]) => {
+        this.maxHeight$.next(
+          events.reduce((acc, event) => {
+            return Math.max(acc, event.height ?? 0);
+          }, 0)
+        );
         this.placeBlocks(events);
       });
 
