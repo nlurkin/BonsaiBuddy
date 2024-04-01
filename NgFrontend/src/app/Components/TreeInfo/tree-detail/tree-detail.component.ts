@@ -13,13 +13,15 @@ import { AdviceService, BonsaiEntity } from 'src/app/Services/advice.service';
 import { TreeInfoService } from 'src/app/Services/tree-info.service';
 import { UserService } from 'src/app/Services/user.service';
 import { filterNullish } from 'src/app/rxjs-util';
-import { standardEntitySort } from 'src/app/utils';
+import { periodToMonth, standardEntitySort } from 'src/app/utils';
 import {
+  BonsaiObjective,
   BonsaiStage,
   BonsaiTechnique,
   LazyReferenceField,
   TechniqueMapper,
 } from 'swagger-client';
+import { PeriodEvent } from '../../Advices/timeline/timeline.component';
 
 @Component({
   selector: 'app-tree-detail',
@@ -101,6 +103,7 @@ export class TreeDetailComponent {
       return mapByCategory;
     })
   );
+  public colourLessEvents$!: Observable<PeriodEvent[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -125,4 +128,76 @@ export class TreeDetailComponent {
       map((techniques) => new Map<string, T>(techniques))
     );
   }
+
+  ngOnInit() {
+    this.colourLessEvents$ = this.techniqueMappers$.pipe(
+      switchMap((techniqueMappers) => {
+        const val = techniqueMappers.map((techniqueMap) =>
+          combineLatest([
+            this.adviceService.getTechniqueById(techniqueMap.technique.id),
+            this.adviceService.getObjectiveById(techniqueMap.objective.id),
+          ]).pipe(
+            map(([technique, objective]) => ({
+              technique,
+              objective,
+              mapper: techniqueMap,
+            }))
+          )
+        );
+        return combineLatest(val);
+      }),
+      map((techniques) =>
+        techniques.filter(
+          (
+            technique
+          ): technique is {
+            technique: BonsaiTechnique;
+            objective: BonsaiObjective;
+            mapper: TechniqueMapper;
+          } => !!technique && !!technique.technique && !!technique.objective
+        )
+      ),
+      map((techniques) => this.techniqueToPeriodEvent(techniques).slice(0, 10))
+    );
+  }
+
+  private techniqueToPeriodEvent(
+    technique: {
+      technique: BonsaiTechnique;
+      objective: BonsaiObjective;
+      mapper: TechniqueMapper;
+    }[]
+  ): PeriodEvent[] {
+    return technique.flatMap((technique) => {
+      const periodsForTechnique = technique.mapper.period
+        .map((period): PeriodEvent => {
+          const months = periodToMonth(period);
+          return {
+            startMonth: months[0],
+            endMonth: months[months.length - 1],
+            eventId: technique.mapper.technique.id + period,
+            text:
+              technique.technique.display_name ??
+              technique.technique.short_name,
+            category: technique.technique.category ?? 'other',
+            objective:
+              technique.objective.display_name ??
+              technique.objective.short_name,
+          };
+        })
+        .sort((a, b) => a.startMonth - b.startMonth);
+
+      // Merge periods if they are contiguous
+      return periodsForTechnique.reduce((acc, period) => {
+        const last = acc[acc.length - 1];
+        if (last && last.endMonth === period.startMonth) {
+          last.endMonth = period.endMonth;
+        } else {
+          acc.push(period);
+        }
+        return acc;
+      }, [] as PeriodEvent[]);
+    });
+  }
+
 }

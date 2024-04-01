@@ -114,6 +114,9 @@
       </table>
     </ng-container>
   </div>
+  <div>
+    <app-timeline [events$]="colourLessEvents$"></app-timeline>
+  </div>
 
   <p *ngIf="canEdit$ | async"><a [routerLink]="'./update'">Update</a></p>
   <p>
