@@ -110,6 +110,13 @@ export function monthToPeriod(month: number): string[] {
   return periods;
 }
 
+export function periodToMonth(period: string): number[] {
+  const [qualifier, season] = period.split('_');
+  const seasonIndex = parseInt(season);
+  const month = seasonIndex * 3 + (qualifier === Qualifier.Late ? 2 : 0) + 1;
+  return [month, month + 1, month + 2];
+}
+
 function formatPeriod(season: Season, qualifier: Qualifier): string {
   return `${qualifier}_${season}`;
 }
