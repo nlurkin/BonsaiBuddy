@@ -157,7 +157,7 @@ export class TreeDetailComponent {
           } => !!technique && !!technique.technique && !!technique.objective
         )
       ),
-      map((techniques) => this.techniqueToPeriodEvent(techniques).slice(0, 10))
+      map((techniques) => this.techniqueToPeriodEvent(techniques))
     );
   }
 
@@ -199,5 +199,4 @@ export class TreeDetailComponent {
       }, [] as PeriodEvent[]);
     });
   }
-
 }
