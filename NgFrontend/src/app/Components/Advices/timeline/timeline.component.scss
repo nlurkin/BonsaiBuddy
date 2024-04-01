@@ -47,3 +47,8 @@
 .colour8 {
   background-color: #e4f4e3;
 }
+
+::ng-deep .simple-dropdown ul {
+  padding-left: 0;
+  margin-bottom: 0;
+}

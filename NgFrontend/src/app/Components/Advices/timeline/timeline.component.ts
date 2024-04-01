@@ -3,8 +3,10 @@ import {
   ElementRef,
   HostListener,
   Input,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
+import * as _ from 'lodash';
 import { range } from 'lodash';
 import {
   BehaviorSubject,
@@ -15,6 +17,7 @@ import {
   takeUntil,
 } from 'rxjs';
 import { getLocaleMonth } from 'src/app/utils';
+import { SelectOption } from '../../Generic/custom-input/custom-input.component';
 
 type LabelEvent = {
   month: number;
@@ -26,6 +29,8 @@ export type PeriodEvent = {
   endMonth: number;
   eventId: string;
   text: string;
+  category: string;
+  objective: string;
   colour?: string;
   height?: number;
 };
@@ -35,7 +40,7 @@ export type PeriodEvent = {
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss'],
 })
-export class TimelineComponent implements OnInit {
+export class TimelineComponent implements OnInit, OnDestroy {
   @Input() public events$!: Observable<PeriodEvent[]>;
 
   @HostListener('window:resize', ['$event'])
@@ -50,11 +55,16 @@ export class TimelineComponent implements OnInit {
     } as LabelEvent;
   });
 
+  private filteredEvents$!: Observable<PeriodEvent[]>;
   public eventsWithColourAndHeight$!: Observable<PeriodEvent[]>;
   private mutationObserver?: MutationObserver;
   private refresh$ = new BehaviorSubject<void>(undefined);
   private destroy$ = new Subject<void>();
   public readonly maxHeight$ = new BehaviorSubject<number>(0);
+  public categoryFilterOptions$ = new Observable<SelectOption[]>();
+  public objectiveFilterOptions$ = new Observable<SelectOption[]>();
+  private selectedCategory$ = new BehaviorSubject<string | null>(null);
+  private selectedObjective$ = new BehaviorSubject<string | null>(null);
 
   constructor(private elementRef: ElementRef) {}
 
@@ -137,7 +147,40 @@ export class TimelineComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.eventsWithColourAndHeight$ = this.events$.pipe(
+    this.categoryFilterOptions$ = this.events$.pipe(
+      map((events) =>
+        _.uniq(events.map((event) => event.category)).map((type) => ({
+          value: type,
+          label: type,
+        }))
+      )
+    );
+    this.objectiveFilterOptions$ = this.events$.pipe(
+      map((events) =>
+        _.uniq(events.map((event) => event.objective)).map((type) => ({
+          value: type,
+          label: type,
+        }))
+      )
+    );
+    this.filteredEvents$ = combineLatest([
+      this.events$,
+      this.selectedCategory$,
+      this.selectedObjective$,
+    ]).pipe(
+      map(([events, selectedCategory, selectedObjective]) =>
+        events
+          .filter(
+            (event) =>
+              selectedCategory == null || event.category == selectedCategory
+          )
+          .filter(
+            (event) =>
+              selectedObjective == null || event.objective == selectedObjective
+          )
+      )
+    );
+    this.eventsWithColourAndHeight$ = this.filteredEvents$.pipe(
       map((events) =>
         this.assignColours(
           range(1, 10).map((i) => 'colour' + i),
@@ -174,5 +217,12 @@ export class TimelineComponent implements OnInit {
     }
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  categoryFilterSelect(event: { originalEvent: Event; value: string }) {
+    this.selectedCategory$.next(event.value);
+  }
+  objectiveFilterSelect(event: { originalEvent: Event; value: string }) {
+    this.selectedObjective$.next(event.value);
   }
 }
