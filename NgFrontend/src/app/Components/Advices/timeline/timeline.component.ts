@@ -237,4 +237,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
   objectiveFilterSelect(event: { originalEvent: Event; value: string }) {
     this.selectedObjective$.next(event.value);
   }
+
+  public max = _.max;
 }
