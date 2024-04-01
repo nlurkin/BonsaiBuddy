@@ -15,6 +15,7 @@ import {
   combineLatest,
   map,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { getLocaleMonth } from 'src/app/utils';
 import { SelectOption } from '../../Generic/custom-input/custom-input.component';
@@ -68,8 +69,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
   public readonly maxHeight$ = new BehaviorSubject<number>(0);
   public categoryFilterOptions$ = new Observable<SelectOption[]>();
   public objectiveFilterOptions$ = new Observable<SelectOption[]>();
-  private selectedCategory$ = new BehaviorSubject<string | null>(null);
-  private selectedObjective$ = new BehaviorSubject<string | null>(null);
+  public readonly selectedCategory$ = new BehaviorSubject<string | null>(null);
+  public readonly selectedObjective$ = new BehaviorSubject<string | null>(null);
 
   constructor(private elementRef: ElementRef) {}
 
@@ -156,17 +157,23 @@ export class TimelineComponent implements OnInit, OnDestroy {
       map((events) =>
         _.uniq(events.map((event) => event.category)).map((type) => ({
           value: type,
-          label: type,
+          label: _.upperFirst(type),
         }))
-      )
+      ),
+      tap((options) => {
+        if (options.length > 0) this.selectedCategory$.next(options[0].value);
+      })
     );
     this.objectiveFilterOptions$ = this.events$.pipe(
       map((events) =>
         _.uniq(events.map((event) => event.objective)).map((type) => ({
           value: type,
-          label: type,
+          label: _.upperFirst(type),
         }))
-      )
+      ),
+      tap((options) => {
+        if (options.length > 0) this.selectedObjective$.next(options[0].value);
+      })
     );
     this.filteredEvents$ = combineLatest([
       this.events$,
@@ -177,11 +184,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
         events
           .filter(
             (event) =>
-              selectedCategory == null || event.category == selectedCategory
+              selectedCategory != null && event.category == selectedCategory
           )
           .filter(
             (event) =>
-              selectedObjective == null || event.objective == selectedObjective
+              selectedObjective != null && event.objective == selectedObjective
           )
       )
     );

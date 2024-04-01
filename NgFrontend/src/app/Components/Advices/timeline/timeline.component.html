@@ -12,6 +12,7 @@
       [optionValue]="'value'"
       [placeholder]="'Please select a value'"
       [styleClass]="'simple-dropdown'"
+      [ngModel]="selectedCategory$ | async"
     >
     </p-dropdown>
     <label for="id_filter_objective">Objective:</label>
@@ -23,6 +24,7 @@
       [optionValue]="'value'"
       [placeholder]="'Please select a value'"
       [styleClass]="'simple-dropdown'"
+      [ngModel]="selectedObjective$ | async"
     >
     </p-dropdown>
   </div>
