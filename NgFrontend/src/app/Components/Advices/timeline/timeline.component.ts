@@ -25,6 +25,7 @@ export type PeriodEvent = {
   startMonth: number;
   endMonth: number;
   eventId: string;
+  text: string;
   colour?: string;
   height?: number;
 };
@@ -65,19 +66,22 @@ export class TimelineComponent implements OnInit {
         event1.endMonth <= event2.endMonth)
     );
   }
-  private blockHeight(
-    thisEvent: PeriodEvent,
-    allEvents: PeriodEvent[]
-  ): number {
-    const otherEvents = allEvents.filter((event) => event !== thisEvent);
-    const baseHeight = 200;
-    const addHeight = 100;
-    // Compute the number of events that are overlapping fully or partially with this one
-    const containedEvents = otherEvents.filter((event) =>
-      this.isOverlapping(thisEvent, event)
-    );
+  private assignBlockHeight(events: PeriodEvent[]): PeriodEvent[] {
+    const baseHeight: number = 200;
+    const addHeight: number = 100;
 
-    return baseHeight + containedEvents.length * addHeight;
+    return events.map((event) => {
+      const overlappingEventsMaxHeight = events
+        .filter((otherEvent) => this.isOverlapping(event, otherEvent))
+        .map((event) => event.height ?? 0)
+        .reduce((a, b) => Math.max(a, b), 0);
+
+      event.height =
+        overlappingEventsMaxHeight == 0
+          ? baseHeight
+          : overlappingEventsMaxHeight + addHeight;
+      return event;
+    });
   }
 
   public assignColours(
