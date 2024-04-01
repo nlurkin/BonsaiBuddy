@@ -48,6 +48,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.refresh$.next();
   }
 
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: Event) {
+    this.refresh$.next();
+  }
+
   public months: LabelEvent[] = range(1, 12).map((month) => {
     return {
       month: month,
