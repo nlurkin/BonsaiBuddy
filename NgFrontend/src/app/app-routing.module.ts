@@ -8,7 +8,6 @@ import { StageComponent } from './Components/Advices/Stages/stage/stage.componen
 import { TechniqueFormComponent } from './Components/Advices/Technique/technique-form/technique-form.component';
 import { TechniqueComponent } from './Components/Advices/Technique/technique/technique.component';
 import { AdvicesComponent } from './Components/Advices/advices.component';
-import { TimelineComponent } from './Components/Advices/timeline/timeline.component';
 import { WhichTechniqueComponent } from './Components/Advices/which-technique/which-technique.component';
 import { TreeDetailComponent } from './Components/TreeInfo/tree-detail/tree-detail.component';
 import { TreeFormComponent } from './Components/TreeInfo/tree-form/tree-form.component';
