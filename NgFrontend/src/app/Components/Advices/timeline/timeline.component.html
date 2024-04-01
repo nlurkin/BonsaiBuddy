@@ -2,9 +2,11 @@
   *ngLet="((maxHeight$ | async) ?? 200) / 2 as maxHeight"
   class="flex flex-column"
 >
+  <div class="mt-3"><h2>Timeline filters</h2></div>
   <div class="flex flex-row align-items-baseline">
-    <label for="id_filter_category">Category:</label>
+    <label for="id_filter_category" class="me-2">Category:</label>
     <p-dropdown
+      class="me-3"
       id="id_filter_category"
       (onChange)="categoryFilterSelect($event)"
       [options]="(categoryFilterOptions$ | async) ?? []"
@@ -15,8 +17,9 @@
       [ngModel]="selectedCategory$ | async"
     >
     </p-dropdown>
-    <label for="id_filter_objective">Objective:</label>
+    <label for="id_filter_objective" class="me-2">Objective:</label>
     <p-dropdown
+      class="me-3"
       id="id_filter_objective"
       (onChange)="objectiveFilterSelect($event)"
       [options]="(objectiveFilterOptions$ | async) ?? []"
@@ -30,7 +33,10 @@
   </div>
   <div
     class="container"
-    [ngStyle]="{ 'margin-top.px': maxHeight, 'margin-bottom.px': maxHeight }"
+    [ngStyle]="{
+      'margin-top.px': maxHeight - 50,
+      'margin-bottom.px': maxHeight
+    }"
   >
     <p-timeline #timeline [value]="months" layout="horizontal">
       <ng-template pTemplate="content" let-event>
