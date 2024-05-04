@@ -190,7 +190,7 @@ export class TreeDetailComponent {
       // Merge periods if they are contiguous
       return periodsForTechnique.reduce((acc, period) => {
         const last = acc[acc.length - 1];
-        if (last && last.endMonth === period.startMonth) {
+        if (last && last.endMonth >= period.startMonth) {
           last.endMonth = period.endMonth;
         } else {
           acc.push(period);
