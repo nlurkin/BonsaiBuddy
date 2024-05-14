@@ -1,0 +1,60 @@
+<h2>Bonsai Objective</h2>
+
+<form class="row g-3" [formGroup]="combinedForm" (ngSubmit)="onSubmit()">
+  <app-custom-input
+    formName="short_name"
+    placeholder="Short name"
+    class="col-md-6"
+  ></app-custom-input>
+
+  <app-custom-input
+    formName="display_name"
+    placeholder="Display name"
+    class="col-md-6"
+  ></app-custom-input>
+
+  <app-custom-input
+    [type]="InputType.NUMBER"
+    formName="sequence"
+    placeholder="Sequence"
+    class="col-md-6"
+  ></app-custom-input>
+
+  <div class="form-floating col-12">
+    <app-custom-input
+      [type]="InputType.TEXTAREA"
+      formName="description"
+      placeholder="Description"
+      class="col-md-6 description-lg"
+    ></app-custom-input>
+  </div>
+
+  <div class="form-check form-check-inline" style="width: unset">
+    <app-custom-input
+      [type]="InputType.CHECKBOX"
+      formName="published"
+      placeholder="Published"
+    ></app-custom-input>
+  </div>
+
+  <div class="form-check form-check-inline" style="width: unset">
+    <app-custom-input
+      [type]="InputType.CHECKBOX"
+      formName="delete"
+      placeholder="Delete"
+    ></app-custom-input>
+  </div>
+
+  <div class="col-12">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!combinedForm.valid"
+    >
+      Submit
+    </button>
+    <button class="btn btn-secondary" type="button" routerLink="..">
+      Cancel
+    </button>
+  </div>
+</form>

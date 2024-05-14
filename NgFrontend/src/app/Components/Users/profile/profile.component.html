@@ -1,0 +1,19 @@
+<div *ngLet="userProfile$ | async as profile">
+  <ng-container *ngIf="profile">
+    <h1>User profile</h1>
+    <p>Username: {{ profile?.username }}</p>
+    <p>
+      Last password update:
+      {{ profile?.last_pwd_update | date : "MMM d, y, h:mm a" }}
+    </p>
+    <p>Last login: {{ profile?.last_login | date : "MMM d, y, h:mm a" }}</p>
+    <p>Country: {{ (profile?.country | country)?.countryNameEn }}</p>
+    <p>
+      <a [routerLink]="'./update'">Update profile</a
+      ><a [routerLink]="'./password'">Change password</a>
+    </p>
+  </ng-container>
+  <ng-container *ngIf="!profile">
+    <p>Profile not found</p>
+  </ng-container>
+</div>

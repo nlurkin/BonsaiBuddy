@@ -1,0 +1,52 @@
+.container {
+  width: 90%;
+  margin-top: max(20%, 200px);
+  min-width: 500px;
+  min-height: 200px;
+}
+
+.label {
+  position: relative;
+}
+
+.period-block {
+  position: absolute; /* This positions the div at a specified position relative to its nearest positioned ancestor */
+  border: 2px solid rgba(black, 0.3); /* Add a border */
+  box-sizing: border-box; /* This makes sure the div's size includes the border */
+}
+
+.colour1 {
+  background-color: rgba(#ffadad, 0.3);
+}
+.colour2 {
+  background-color: rgba(#ffd6a5, 0.3);
+}
+.colour3 {
+  background-color: rgba(#fdffb6, 0.3);
+}
+.colour4 {
+  background-color: rgba(#e4f1ee, 0.3);
+}
+.colour5 {
+  background-color: rgba(#d9edf8, 0.3);
+}
+.colour6 {
+  background-color: rgba(#dedaf4, 0.3);
+}
+.colour7 {
+  background-color: rgba(#b0b5ed, 0.3);
+}
+.colour8 {
+  background-color: rgba(#f7f5ff, 0.3);
+}
+.colour8 {
+  background-color: rgba(#c5dbc4, 0.3);
+}
+.colour8 {
+  background-color: rgba(#e4f4e3, 0.3);
+}
+
+::ng-deep .simple-dropdown ul {
+  padding-left: 0;
+  margin-bottom: 0;
+}

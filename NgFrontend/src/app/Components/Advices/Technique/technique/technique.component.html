@@ -1,0 +1,11 @@
+<a [routerLink]="['../..']">Back</a>
+<ng-container *ngLet="technique$ | async as technique">
+  <div *ngIf="technique">
+    <h1>{{ technique.display_name }}</h1>
+    <p>Technique category: {{ technique.category | titlecase }}</p>
+    <markdown [data]="technique.description"></markdown>
+    <p *ngIf="canEdit$ | async">
+      <a [routerLink]="'./update'">Update</a>
+    </p>
+  </div>
+</ng-container>

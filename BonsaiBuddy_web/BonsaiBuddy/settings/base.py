@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import datetime
 from pathlib import Path
 from django.forms.renderers import TemplatesSetting
 
@@ -33,11 +34,36 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.forms',
     'bootstrap5',
-    'widget_tweaks'
+    'widget_tweaks',
+    'rest_framework',
+    'rest_framework_mongoengine',
+    'rest_framework_simplejwt',
+    'drf_spectacular',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "rest_framework.authentication.SessionAuthentication"
+    ],
+}
+
+SPECTACULAR_SETTINGS = {
+    'ENUM_NAME_OVERRIDES': {
+        'PeriodEnum': 'BonsaiAdvice.models.period_enum',
+    }
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+}
+
 
 class CustomFormRenderer(TemplatesSetting):
     form_template_name = "form_template.html"
+
 
 # FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 FORM_RENDERER = "BonsaiBuddy.settings.base.CustomFormRenderer"
@@ -120,6 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/TreeInfo'
 LOGOUT_REDIRECT_URL = '/TreeInfo'
 
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend', "BonsaiUsers.auth.DjangoBackend"]
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', "BonsaiUsers.auth.DjangoBackend"]
 
 AUTH_USER_MODEL = "BonsaiUsers.User"

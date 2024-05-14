@@ -1,0 +1,48 @@
+<h2>Bonsai Techniques</h2>
+<div *ngLet="techniquesByCategories$ | async as techniques">
+  <ng-container *ngLet="techniqueCategories$ | async as categories">
+    <ul *ngIf="techniques">
+      <ng-container *ngFor="let category of categories">
+        <h3>
+          {{ category | titlecase }}
+        </h3>
+        <li *ngFor="let technique of techniques[category | lowercase]">
+          <a
+            [ngClass]="{ unpublished: !technique.published }"
+            [routerLink]="['technique', technique.short_name]"
+            >{{ technique.display_name }}</a
+          >
+        </li>
+      </ng-container>
+    </ul>
+    <p *ngIf="!techniques">No techniques are available.</p>
+  </ng-container>
+</div>
+
+<h2>Bonsai Objectives</h2>
+<div *ngLet="objectives$ | async as objectives">
+  <ul *ngIf="objectives">
+    <li *ngFor="let objective of objectives">
+      <a
+        [ngClass]="{ unpublished: !objective.published }"
+        [routerLink]="['objective', objective.short_name]"
+        >{{ objective.display_name }}</a
+      >
+    </li>
+  </ul>
+  <p *ngIf="!objectives">No objectives are available.</p>
+</div>
+
+<h2>Bonsai Stage</h2>
+<div *ngLet="stages$ | async as stages">
+  <ul *ngIf="stages">
+    <li *ngFor="let stage of stages">
+      <a
+        [ngClass]="{ unpublished: !stage.published }"
+        [routerLink]="['stage', stage.short_name]"
+        >{{ stage.display_name }}</a
+      >
+    </li>
+  </ul>
+  <p *ngIf="!stages">No stages are available.</p>
+</div>

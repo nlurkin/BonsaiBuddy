@@ -1,0 +1,124 @@
+<div
+  [ngClass]="{ 'form-floating': type !== InputType.CHECKBOX }"
+  class="input-group"
+>
+  <!-- Input types templates -->
+  <ng-template #textType>
+    <input
+      type="{{ type }}"
+      [formControl]="control"
+      class="form-control"
+      [placeholder]="placeholder"
+      [id]="'id_' + formName"
+    />
+  </ng-template>
+
+  <ng-template #passwordType>
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      [formControl]="control"
+      class="form-control"
+      [placeholder]="placeholder"
+      [id]="'id_' + formName"
+    />
+    <div class="input-group-append">
+      <span class="input-group-text eye-icon">
+        <i
+          class="fa"
+          [ngClass]="{
+            'fa-eye-slash': !showPassword,
+            'fa-eye': showPassword
+          }"
+          (click)="toggleShowPassword()"
+        ></i>
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-template #selectType>
+    <select
+      [formControl]="control"
+      class="form-control form-select"
+      [id]="'id_' + formName"
+    >
+      <option value disabled>Please select a value</option>
+
+      <option *ngFor="let option of options" value="{{ option.value }}">
+        {{ option.label }}
+      </option>
+    </select>
+  </ng-template>
+
+  <ng-template #textAreaType>
+    <textarea
+      cols="40"
+      rows="10"
+      class="form-control"
+      [placeholder]="placeholder"
+      [id]="'id_' + formName"
+      [formControl]="control"
+    ></textarea>
+  </ng-template>
+
+  <ng-template #checkBoxType>
+    <input
+      type="checkbox"
+      class="form-check-input"
+      [id]="'id_' + formName"
+      [formControl]="control"
+    />
+  </ng-template>
+
+  <ng-template #multiselectType>
+    <app-multiselect-wrapper
+      [control]="control"
+      [options]="options"
+      [id]="'id_' + formName"
+      [maxItemsToDisplay]="maxItemsToDisplay"
+      [selectedItemsLabel]="selectedItemsLabel"
+      [styleClass]="'form-control'"
+      class="col-md"
+    >
+    </app-multiselect-wrapper>
+  </ng-template>
+
+  <!-- Selection of the template -->
+  <ng-template #optionPassword>
+    <ng-container *ngIf="type === InputType.PASSWORD; else textType">
+      <ng-container *ngTemplateOutlet="passwordType"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #optionMultiSelect>
+    <ng-container *ngIf="type === InputType.MULTISELECT; else optionPassword">
+      <ng-container *ngTemplateOutlet="multiselectType"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #optionCheckBox>
+    <ng-container *ngIf="type === InputType.CHECKBOX; else optionMultiSelect">
+      <ng-container *ngTemplateOutlet="checkBoxType"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #optionTextArea>
+    <ng-container *ngIf="type === InputType.TEXTAREA; else optionCheckBox">
+      <ng-container *ngTemplateOutlet="textAreaType"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ng-container *ngIf="type === InputType.SELECT; else optionTextArea">
+    <ng-container *ngTemplateOutlet="selectType"></ng-container>
+  </ng-container>
+
+  <label
+    [for]="'id_' + formName"
+    class="floating-label"
+    [ngClass]="{
+      'form-label': type !== InputType.CHECKBOX,
+    }"
+    [class]="validityCheck()"
+    >{{ placeholder }}
+    <span *ngIf="isRequired()">*</span>
+  </label>
+</div>

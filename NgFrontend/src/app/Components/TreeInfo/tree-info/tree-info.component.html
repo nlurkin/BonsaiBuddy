@@ -1,0 +1,12 @@
+<div *ngLet="treeInfos$ | async as treeInfos">
+  <ul *ngIf="treeInfos">
+    <li *ngFor="let treeInfo of treeInfos">
+      <a
+        [ngClass]="{ unpublished: !treeInfo.published }"
+        [routerLink]="treeInfo.name"
+        >{{ treeInfo.display_name }}</a
+      >
+    </li>
+  </ul>
+  <p *ngIf="!treeInfos">No TreeInfo are available.</p>
+</div>

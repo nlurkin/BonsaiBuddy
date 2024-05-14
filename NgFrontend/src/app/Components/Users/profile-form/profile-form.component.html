@@ -1,0 +1,24 @@
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <div class="form-floating col-md-6">
+    <app-custom-input
+      [type]="InputType.SELECT"
+      formName="country"
+      placeholder="Country"
+      class="col-md-6"
+      [options]="countryOptions"
+    ></app-custom-input>
+  </div>
+
+  <div class="col-12">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!profileForm.valid"
+    >
+      Submit
+    </button>
+    <button class="btn btn-secondary" type="button" routerLink="..">
+      Cancel
+    </button>
+  </div>
+</form>

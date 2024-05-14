@@ -1,0 +1,11 @@
+<a [routerLink]="['../..']">Back</a>
+<ng-container *ngLet="stage$ | async as stage">
+  <div *ngIf="stage">
+    <h1>{{ stage.display_name }}</h1>
+    <markdown [data]="stage.description"></markdown>
+    <p>Relevant periods: {{ stage.global_period | periodIdToName }}</p>
+    <p *ngIf="canEdit$ | async">
+      <a [routerLink]="'./update'">Update</a>
+    </p>
+  </div>
+</ng-container>

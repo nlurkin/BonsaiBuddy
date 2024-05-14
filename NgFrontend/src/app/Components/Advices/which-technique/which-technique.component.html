@@ -1,0 +1,91 @@
+<p-accordion
+  [activeIndex]="(showSearch$ | async) ? [0] : [1]"
+  [multiple]="true"
+>
+  <p-accordionTab
+    [header]="'Search pane'"
+    [headerStyleClass]="'my-accordion-header'"
+  >
+    <form [formGroup]="form" class="row g-3" (ngSubmit)="submitSearch()">
+      <app-custom-input
+        [formName]="'tree'"
+        [type]="InputType.SELECT"
+        [options]="(treeOptions$ | async) ?? []"
+        [placeholder]="'Select a tree species'"
+        class="col-md-6"
+      >
+      </app-custom-input>
+
+      <app-custom-input
+        [formName]="'objective'"
+        [type]="InputType.SELECT"
+        [options]="(objectiveOptions$ | async) ?? []"
+        [placeholder]="'Objective'"
+        class="col-12"
+      ></app-custom-input>
+
+      <app-custom-input
+        [formName]="'period'"
+        [type]="InputType.SELECT"
+        [options]="periodOptions"
+        [placeholder]="'Period'"
+        class="col-md-6"
+        [invalid]="form.hasError('periodAndStage') && form.touched"
+      ></app-custom-input>
+
+      <app-custom-input
+        [formName]="'stage'"
+        [type]="InputType.MULTISELECT"
+        [options]="(stageOptions$ | async) ?? []"
+        [placeholder]="'Stage'"
+        class="col-md-6"
+        [invalid]="form.hasError('periodAndStage') && form.touched"
+        [selectedItemsLabel]="'{0} stages selected'"
+        [maxItemsToDisplay]="3"
+      ></app-custom-input>
+
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
+          Search
+        </button>
+      </div>
+    </form>
+  </p-accordionTab>
+
+  <p-accordionTab
+    *ngIf="!(showSearch$ | async)"
+    [headerStyleClass]="'my-accordion-header'"
+    [header]="'Search result'"
+  >
+    <ng-container *ngLet="mapperSelector$ | async as mappers">
+      <div *ngIf="mappers">
+        <h2>Advices for {{ (selectedTree$ | async)?.display_name }}</h2>
+        <p>
+          The following techniques are applicable according to your criterion
+        </p>
+        <div *ngFor="let mapper of mappers">
+          <h3>{{ mapper.technique?.display_name }}</h3>
+          <p>
+            {{ mapper.technique?.category | titlecase }}
+          </p>
+          <markdown [data]="mapper.technique?.description"></markdown>
+          <ng-container>
+            <p>
+              This technique is applicable generally in
+              {{ mapper.periods.join(", ") }} when the tree shows any of the
+              following states: {{ mapper.stages.join(", ") }}
+            </p>
+            <p>Specific for this tree: {{ mapper.comment }}</p>
+          </ng-container>
+        </div>
+      </div>
+      <div *ngIf="!mappers">
+        <p>
+          No techniques are applicable for
+          {{ (selectedTree$ | async)?.display_name }}
+          according to your search criterion
+        </p>
+      </div>
+    </ng-container>
+  </p-accordionTab>
+</p-accordion>

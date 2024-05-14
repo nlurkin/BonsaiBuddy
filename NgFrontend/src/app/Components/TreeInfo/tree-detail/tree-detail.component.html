@@ -1,0 +1,129 @@
+<div *ngLet="tree$ | async as tree_info">
+  <h1>{{ tree_info?.display_name }}</h1>
+  {{ tree_info?.latin_name }}
+  <p>{{ tree_info?.description }}</p>
+
+  <p *ngIf="(tree_info?.placement?.length ?? 0) > 0">
+    <strong>Placement: </strong>
+  </p>
+  <markdown [data]="tree_info?.placement"></markdown>
+
+  <p *ngIf="(tree_info?.watering?.length ?? 0) > 0">
+    <strong>Watering: </strong>
+  </p>
+  <markdown [data]="tree_info?.watering"></markdown>
+
+  <p *ngIf="(tree_info?.fertilizing?.length ?? 0) > 0">
+    <strong>Fertilizing: </strong>
+  </p>
+  <markdown [data]="tree_info?.fertilizing"></markdown>
+
+  <p *ngIf="(tree_info?.pruning_wiring?.length ?? 0) > 0">
+    <strong>Pruning and wiring: </strong>
+  </p>
+  <markdown [data]="tree_info?.pruning_wiring"></markdown>
+
+  <p *ngIf="(tree_info?.repotting?.length ?? 0) > 0">
+    <strong>Repotting: </strong>
+  </p>
+  <markdown [data]="tree_info?.repotting"></markdown>
+
+  <p *ngIf="(tree_info?.propagation?.length ?? 0) > 0">
+    <strong>Propagation: </strong>
+  </p>
+  <markdown [data]="tree_info?.propagation"></markdown>
+
+  <p *ngIf="(tree_info?.pests?.length ?? 0) > 0">
+    <strong>Pests: </strong>
+  </p>
+  <markdown [data]="tree_info?.pests"></markdown>
+
+  <div
+    *ngLet="
+      techniqueMapperGeoupedByTechniqueAndObjective$ | async as techniques
+    "
+  >
+    <ng-container *ngIf="!!techniques">
+      <p id="techniqueMapping">Applicable techniques for this species:</p>
+      <table
+        class="table table-striped"
+        *ngLet="stageForTree$ | async as stages"
+        aria-describedby="techniqueMapping"
+      >
+        <!-- Template for the cell content -->
+        <ng-template
+          #cell
+          let-technique="technique"
+          let-techniqueName="techniqueName"
+        >
+          <ng-container *ngFor="let mapper of technique.values[techniqueName]">
+            {{ mapper.period | periodIdToName }}
+            <ng-container *ngIf="mapper.stage.length > 0"
+              >(
+              <span *ngFor="let stage of mapper.stage">{{
+                stages?.get(stage.id)?.display_name
+              }}</span
+              >)</ng-container
+            >
+            <a
+              [routerLink]="'/advices/which_technique'"
+              [queryParams]="{ oid: mapper.oid, tree: tree_info?.name }"
+            >
+              more
+            </a>
+          </ng-container>
+        </ng-template>
+
+        <tbody *ngLet="sortedObjectives$ | async as objectives">
+          <tr>
+            <th scope="col"></th>
+            <th scope="col" *ngFor="let objective of objectives">
+              {{ objective.display_name }}
+            </th>
+          </tr>
+          <!-- Container for technique category group -->
+          <ng-container *ngFor="let category of techniques">
+            <tr>
+              <th scope="row" [attr.colspan]="(objectives?.length ?? 0) + 1">
+                {{ category.category | titlecase }}
+              </th>
+            </tr>
+            <tr *ngFor="let technique of category.values">
+              <th scope="row">
+                <a
+                  [routerLink]="[
+                    '/advices/technique',
+                    technique.technique?.short_name
+                  ]"
+                >
+                  {{ technique.technique?.display_name }}
+                </a>
+              </th>
+              <td *ngFor="let objective of objectives">
+                <ng-container
+                  [ngTemplateOutlet]="cell"
+                  [ngTemplateOutletContext]="{
+                    technique,
+                    techniqueName: objective.display_name
+                  }"
+                ></ng-container>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+  <div>
+    <app-timeline [events$]="colourLessEvents$"></app-timeline>
+  </div>
+
+  <p *ngIf="canEdit$ | async"><a [routerLink]="'./update'">Update</a></p>
+  <p>
+    <a
+      [routerLink]="'/advices/which_technique'"
+      [queryParams]="{ tree: tree_info?.name }"
+      >See advice</a
+    >
+  </p>
+</div>

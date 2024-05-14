@@ -1,0 +1,80 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+/* Importing Datepicker SCSS file. */
+@import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
+
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+.flex {
+  display: flex;
+}
+
+.unpublished {
+  color: red;
+}
+
+.text-line-breaks {
+  white-space: pre-wrap;
+}
+
+p-multiselect > .form-control {
+  padding-top: 1.625rem;
+  display: flex;
+}
+.p-multiselect.p-multiselect-chip .p-multiselect-token {
+  padding: 0.05rem 0.25rem 0.05rem 0.5rem;
+}
+
+.p-multiselect .p-multiselect-label {
+  padding: 0;
+}
+
+.form-floating > app-multiselect-wrapper ~ label {
+  color: rgba(var(--bs-body-color-rgb), 0.65);
+  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+.inline-select {
+  width: 200px;
+  span {
+    padding: 0px 0px 0px 10px;
+  }
+}
+
+.inline-select-panel > div > ul {
+  padding: 0px;
+}
+
+.description-lg textarea {
+  height: 400px !important;
+}
+
+.description-std textarea {
+  height: 100px !important;
+}
+
+.my-accordion-header {
+  color: #0c63e4;
+  background-color: #e7f1ff;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.125);
+  text-decoration: none;
+}
+
+.min-w-250px {
+  min-width: 250px;
+}
+
+.large-dropdown {
+  width: 300px;
+  span {
+    padding: 0.3rem 0.3rem;
+  }
+}
+
+.p-timeline-event-connector {
+  height: 10px;
+}
