@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://bonsai-buddy-inky.vercel.app/api/:path*"
+    },
+    {
+      "source": "/api/:path*/",
+      "destination": "https://bonsai-buddy-inky.vercel.app/api/:path*/"
     }
   ]
 }
