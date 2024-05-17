@@ -8,7 +8,7 @@ from .base import *
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DJANGO_DEBUG") == "TRUE"
 
-EXTERNAL_HOSTNAME = os.environ.get("VERCEL_URL")
+EXTERNAL_HOSTNAME = os.environ.get("VERCEL_PROJECT_PRODUCTION_URL")
 if EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(EXTERNAL_HOSTNAME)
 
