@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework_mongoengine import viewsets
 
 from BonsaiAdvice.models import get_current_period
-from BonsaiBuddy.views import CreateUpdateView
+from BonsaiBuddy.views import APIUnquoteMixin, CreateUpdateView
 from utils import get_object_or_404
 
 from .forms import (
@@ -156,7 +156,7 @@ class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView
         }
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet, APIUnquoteMixin):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, OwnProfilePermission | IsAdminUser]
     lookup_field = "username"
@@ -172,7 +172,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             return User.objects.filter(id=user.id)
 
 
-class ProfileViewSet(viewsets.ModelViewSet):
+class ProfileViewSet(viewsets.ModelViewSet, APIUnquoteMixin):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated, OwnProfilePermission | IsAdminUser]
     lookup_field = "username"
@@ -188,7 +188,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
             return UserProfile.objects.filter(username=user.username)
 
 
-class ChangePasswordView(generics.UpdateAPIView):
+class ChangePasswordView(generics.UpdateAPIView, APIUnquoteMixin):
     permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
     lookup_field = "username"

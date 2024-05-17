@@ -1,4 +1,6 @@
 # Create your views here.
+from urllib.parse import unquote
+
 from django.shortcuts import render
 from django.views import View, generic
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -6,6 +8,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_mongoengine import viewsets
 
 from BonsaiAdvice.models import periodid_to_name
+from BonsaiBuddy.views import APIUnquoteMixin
 from utils import get_object_or_404, user_has_any_perms
 
 from .menu import TreeInfoMenuMixin
@@ -34,7 +37,7 @@ class DetailView(TreeInfoMenuMixin, View):
     context_object_name = "tree_info"
 
     def get(self, request, pk):
-        print(pk)
+        pk = unquote(pk)
         tree = get_object_or_404(self.model, name=pk)
         return render(
             request,
@@ -118,7 +121,7 @@ class DetailView(TreeInfoMenuMixin, View):
         parameters=[OpenApiParameter("name", str, OpenApiParameter.PATH)]
     )
 )
-class TreeInfoViewSet(viewsets.ModelViewSet):
+class TreeInfoViewSet(viewsets.ModelViewSet, APIUnquoteMixin):
     """
     API endpoint that allows TreeInfo to be viewed or edited.
     """

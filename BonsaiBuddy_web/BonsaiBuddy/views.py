@@ -1,7 +1,11 @@
+from urllib.parse import unquote
+
 from django.contrib import messages
 from django.urls import reverse
 from django.views.generic import FormView
 from mongoengine.errors import NotUniqueError
+from rest_framework_mongoengine import viewsets
+
 from utils import get_object_or_404
 
 
@@ -75,3 +79,9 @@ class CreateUpdateView(FormView):
     def form_valid(self, form):
         self.process_form(form)
         return super().form_valid(form)
+
+
+class APIUnquoteMixin(viewsets.GenericAPIView):
+    def get_object(self):
+        lookup_field_value = unquote(self.kwargs[self.lookup_field])
+        return self.get_queryset().get(**{self.lookup_field: lookup_field_value})

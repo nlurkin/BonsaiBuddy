@@ -17,6 +17,7 @@ from BonsaiAdvice.serializers import (
     BonsaiTechniqueSerializer,
 )
 from BonsaiBuddy.serializers import StringListSerializer
+from BonsaiBuddy.views import APIUnquoteMixin
 from TreeInfo.models import TreeInfo
 from utils import get_object_or_404, user_has_any_perms
 
@@ -195,7 +196,7 @@ class WhichTechniqueDisplay(BonsaiAdviceMenuMixin, generic.ListView):
         parameters=[OpenApiParameter("short_name", str, OpenApiParameter.PATH)]
     )
 )
-class BonsaiTechniqueViewSet(viewsets.ModelViewSet):
+class BonsaiTechniqueViewSet(viewsets.ModelViewSet, APIUnquoteMixin):
     """
     API endpoint that allows BonsaiTechnique to be viewed or edited.
     """
@@ -220,7 +221,7 @@ class BonsaiTechniqueViewSet(viewsets.ModelViewSet):
         parameters=[OpenApiParameter("short_name", str, OpenApiParameter.PATH)]
     )
 )
-class BonsaiObjectiveViewSet(viewsets.ModelViewSet):
+class BonsaiObjectiveViewSet(viewsets.ModelViewSet, APIUnquoteMixin):
     """
     API endpoint that allows BonsaiObjective to be viewed or edited.
     """
@@ -245,7 +246,7 @@ class BonsaiObjectiveViewSet(viewsets.ModelViewSet):
         parameters=[OpenApiParameter("short_name", str, OpenApiParameter.PATH)]
     )
 )
-class BonsaiStageViewSet(viewsets.ModelViewSet):
+class BonsaiStageViewSet(viewsets.ModelViewSet, APIUnquoteMixin):
     """
     API endpoint that allows BonsaiStage to be viewed or edited.
     """
