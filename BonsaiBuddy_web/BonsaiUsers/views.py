@@ -18,12 +18,15 @@ from BonsaiAdvice.models import get_current_period
 from BonsaiBuddy.views import CreateUpdateView
 from utils import get_object_or_404
 
-from .forms import (CustomUserCreationForm, ModifyPasswordForm, MyTreeForm,
-                    UpdateUserProfileForm)
+from .forms import (
+    CustomUserCreationForm,
+    ModifyPasswordForm,
+    MyTreeForm,
+    UpdateUserProfileForm,
+)
 from .menu import BonsaiUsersMenuMixin
 from .models import OwnProfilePermission, TreeCollection, User, UserProfile
-from .serializers import (ChangePasswordSerializer, ProfileSerializer,
-                          UserSerializer)
+from .serializers import ChangePasswordSerializer, ProfileSerializer, UserSerializer
 
 
 class DetailView(BonsaiUsersMenuMixin, LoginRequiredMixin, View):
@@ -33,11 +36,21 @@ class DetailView(BonsaiUsersMenuMixin, LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-            profile = get_object_or_404(
-                self.model, username=request.user.username)
+            profile = get_object_or_404(self.model, username=request.user.username)
         except Http404:
-            return render(request, "BonsaiUsers/not_found.html", {**self.build_menu_context(request), self.context_object_name: request.user})
-        return render(request, self.template_name, {**self.build_menu_context(request), self.context_object_name: profile})
+            return render(
+                request,
+                "BonsaiUsers/not_found.html",
+                {
+                    **self.build_menu_context(request),
+                    self.context_object_name: request.user,
+                },
+            )
+        return render(
+            request,
+            self.template_name,
+            {**self.build_menu_context(request), self.context_object_name: profile},
+        )
 
 
 class SignupView(BonsaiUsersMenuMixin, generic.FormView):
@@ -47,8 +60,7 @@ class SignupView(BonsaiUsersMenuMixin, generic.FormView):
 
     def form_valid(self, form):
         up = form.save()
-        user = authenticate(
-            self.request, username=up.username, password=up.password)
+        user = authenticate(self.request, username=up.username, password=up.password)
         login(self.request, user)
         return super().form_valid(form)
 
@@ -59,16 +71,15 @@ class MyLoginView(BonsaiUsersMenuMixin, views.LoginView):
 
 class ProfileUpdateView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormView):
     success_url = reverse_lazy("Profile:detail")
-    template_name = 'BonsaiUsers/profile_form.html'
+    template_name = "BonsaiUsers/profile_form.html"
     form_class = UpdateUserProfileForm
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
         user = UserProfile.get_user(request.user.username)
-        form = self.form_class(
-            initial={**user.to_mongo().to_dict(), "update": True})
-        context['form'] = form
+        form = self.form_class(initial={**user.to_mongo().to_dict(), "update": True})
+        context["form"] = form
 
         return self.render_to_response(context)
 
@@ -84,7 +95,7 @@ class ModifyPasswordView(BonsaiUsersMenuMixin, LoginRequiredMixin, generic.FormV
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs.update({'user': self.request.user})
+        kwargs.update({"user": self.request.user})
         return kwargs
 
     def form_valid(self, form):
@@ -134,17 +145,21 @@ class MyTreesFormView(BonsaiUsersMenuMixin, LoginRequiredMixin, CreateUpdateView
             return tree
 
         raise Http404(
-            f"TreeCollection {tree.oid} does not exist for user {self.request.user.username}")
+            f"TreeCollection {tree.oid} does not exist for user {self.request.user.username}"
+        )
 
     def obj_to_dict(self, obj):
-        return {"oid": obj.oid, "tree_name": obj.treeReference.name, "objective": obj.objective.short_name}
+        return {
+            "oid": obj.oid,
+            "tree_name": obj.treeReference.name,
+            "objective": obj.objective.short_name,
+        }
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated,
-                          OwnProfilePermission | IsAdminUser]
-    lookup_field = 'username'
+    permission_classes = [IsAuthenticated, OwnProfilePermission | IsAdminUser]
+    lookup_field = "username"
 
     def get_queryset(self):
         """
@@ -159,9 +174,8 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated,
-                          OwnProfilePermission | IsAdminUser]
-    lookup_field = 'username'
+    permission_classes = [IsAuthenticated, OwnProfilePermission | IsAdminUser]
+    lookup_field = "username"
 
     def get_queryset(self):
         """
@@ -177,7 +191,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
-    lookup_field = 'username'
+    lookup_field = "username"
 
     def get_queryset(self):
         """
@@ -196,16 +210,28 @@ class CheckPasswordValidityView(APIView):
 
     @extend_schema(
         operation_id="userProfileCheckPasswordValidity",
-        request=inline_serializer(name='PasswordCheckQuery', fields={
-                                  'password': serializers.CharField()}, required=True),
-        responses={200: inline_serializer(name="PasswordCheckResponse", fields={'status': serializers.BooleanField(),
-                                                                                'message': serializers.ListField(child=serializers.CharField())})}
+        request=inline_serializer(
+            name="PasswordCheckQuery",
+            fields={"password": serializers.CharField()},
+            required=True,
+        ),
+        responses={
+            200: inline_serializer(
+                name="PasswordCheckResponse",
+                fields={
+                    "status": serializers.BooleanField(),
+                    "message": serializers.ListField(child=serializers.CharField()),
+                },
+            )
+        },
     )
     def post(self, request: Request):
-        password = request.data.get('password')
+        password = request.data.get("password")
         try:
             password_validation.validate_password(password, None)
         except ValidationError as e:
-            return Response({'status': False, 'message': [_.code for _ in e.error_list]})
+            return Response(
+                {"status": False, "message": [_.code for _ in e.error_list]}
+            )
 
-        return Response({'status': True, 'message': 'Password is valid'})
+        return Response({"status": True, "message": "Password is valid"})

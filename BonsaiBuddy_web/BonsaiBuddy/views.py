@@ -34,14 +34,15 @@ class CreateUpdateView(FormView):
         kwargs = {self.index_name: pk}
         obj_instance = self.get_object(pk, **kwargs)
         form = self.form_class(
-            initial={**self.obj_to_dict(obj_instance), "update": True})
+            initial={**self.obj_to_dict(obj_instance), "update": True}
+        )
         form.fields[self.index_name].widget.attrs["readonly"] = True
         return form
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if "pk" in context:
-            context['form'] = self.init_form(context["pk"])
+            context["form"] = self.init_form(context["pk"])
 
         return self.render_to_response(context)
 
@@ -49,12 +50,15 @@ class CreateUpdateView(FormView):
         if self.object_is_valid and "pk" in self.kwargs:
             if self.return_to_form_on_update_success:
                 # Go back to form
-                return reverse(f"{self.app_name}:{self.url_update_name}", kwargs={"pk": self.kwargs["pk"]})
+                return reverse(
+                    f"{self.app_name}:{self.url_update_name}",
+                    kwargs={"pk": self.kwargs["pk"]},
+                )
             elif self.display_url:
                 # Go the display
                 return reverse(self.display_url, kwargs={"pk": self.kwargs["pk"]})
 
-        return super().get_success_url() # success_url as defined in the child class
+        return super().get_success_url()  # success_url as defined in the child class
 
     def process_form(self, form, **kwargs):
         try:
@@ -63,7 +67,9 @@ class CreateUpdateView(FormView):
                 self.object_is_valid = False
         except NotUniqueError:
             messages.error(
-                self.request, f"{self.object_class.__name__} already exists in database.")
+                self.request,
+                f"{self.object_class.__name__} already exists in database.",
+            )
             return super().form_invalid(form)
 
     def form_valid(self, form):
